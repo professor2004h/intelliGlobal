@@ -1,0 +1,6 @@
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "subject": "SMTP Test Email",
+  "message": "This is a test message to verify the SMTP email system is working correctly. If you receive this email, the integration is successful!"
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Official Test - UPI & Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .success { border-color: #4CAF50; background-color: #f8fff8; }
+        .warning { border-color: #ff9800; background-color: #fff8f0; }
+        .error { border-color: #f44336; background-color: #fff5f5; }
+        button {
+            background: #3399cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #2980b9; }
+        .test-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .card-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3399cc;
+        }
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Razorpay Official Test - UPI & Cards</h1>
+        <p><strong>Purpose:</strong> Test UPI and card payments using official Razorpay documentation standards</p>
+        
+        <div class="test-section warning">
+            <h3>⚠️ Current Issues Being Tested</h3>
+            <ul>
+                <li><strong>UPI Not Showing:</strong> Testing official UPI configuration</li>
+                <li><strong>Card Failures:</strong> Testing domestic vs international cards</li>
+                <li><strong>Account Limitations:</strong> Verifying test account capabilities</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 Test Scenarios</h3>
+            
+            <h4>1. Official UPI Test (INR Currency)</h4>
+            <button onclick="testUPIPayment()">Test UPI Payment (₹500)</button>
+            <p><strong>Expected:</strong> UPI options should appear if account supports it</p>
+            <p><strong>Test UPI ID:</strong> <code>success@razorpay</code></p>
+            
+            <h4>2. Domestic Card Test</h4>
+            <button onclick="testDomesticCard()">Test Domestic Cards (₹500)</button>
+            <p><strong>Expected:</strong> Should work with Indian test cards</p>
+            
+            <h4>3. International Card Test</h4>
+            <button onclick="testInternationalCard()">Test International Cards (₹500)</button>
+            <p><strong>Expected:</strong> May fail if account doesn't support international cards</p>
+        </div>
+
+        <div class="test-section">
+            <h3>💳 Official Test Card Numbers</h3>
+            <div class="test-cards">
+                <div class="card-info">
+                    <h4>🇮🇳 Indian Domestic Cards</h4>
+                    <p><strong>Visa:</strong> 4000000000000051</p>
+                    <p><strong>Mastercard:</strong> 5267318210075788</p>
+                    <p><strong>RuPay:</strong> 6521566521566521</p>
+                    <p><strong>Expiry:</strong> Any future date (12/25)</p>
+                    <p><strong>CVV:</strong> Any 3 digits (123)</p>
+                </div>
+                <div class="card-info">
+                    <h4>🌍 International Cards</h4>
+                    <p><strong>Visa:</strong> 4111111111111111</p>
+                    <p><strong>Mastercard:</strong> 5555555555554444</p>
+                    <p><strong>Expiry:</strong> Any future date (12/25)</p>
+                    <p><strong>CVV:</strong> Any 3 digits (123)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Test Results Log</h3>
+            <div id="log" class="log">Ready to test...\n</div>
+            <button onclick="clearLog()">Clear Log</button>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const RAZORPAY_KEY = 'rzp_test_tuQ7OPOieO2QPl'; // Your test key
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = 'Log cleared...\n';
+        }
+
+        // Create order function (simulated)
+        async function createOrder(amount, currency = 'INR') {
+            log(`🔄 Creating order: ₹${amount/100} (${currency})`);
+            
+            // Simulate order creation
+            const order = {
+                id: `order_${Date.now()}`,
+                amount: amount,
+                currency: currency
+            };
+            
+            log(`✅ Order created: ${order.id}`);
+            return order;
+        }
+
+        // Test UPI Payment
+        async function testUPIPayment() {
+            try {
+                log('🚀 Starting UPI Payment Test...');
+                
+                const order = await createOrder(50000, 'INR'); // ₹500
+                
+                const options = {
+                    key: RAZORPAY_KEY,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'EventNext Test',
+                    description: 'UPI Payment Test',
+                    order_id: order.id,
+                    
+                    // Prefill for better conversion
+                    prefill: {
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        contact: '9999999999'
+                    },
+                    
+                    // Theme
+                    theme: {
+                        color: '#3399cc'
+                    },
+                    
+                    // Handler
+                    handler: function (response) {
+                        log('✅ UPI Payment Success!');
+                        log(`Payment ID: ${response.razorpay_payment_id}`);
+                        log(`Order ID: ${response.razorpay_order_id}`);
+                        log(`Signature: ${response.razorpay_signature}`);
+                    },
+                    
+                    // Modal settings
+                    modal: {
+                        ondismiss: function() {
+                            log('💔 UPI Payment modal dismissed');
+                        }
+                    }
+                };
+                
+                log('🔧 Opening Razorpay with UPI configuration...');
+                log(`Key: ${options.key}`);
+                log(`Amount: ${options.amount} (₹${options.amount/100})`);
+                log(`Currency: ${options.currency}`);
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (error) {
+                log(`❌ UPI Test Error: ${error.message}`);
+            }
+        }
+
+        // Test Domestic Cards
+        async function testDomesticCard() {
+            try {
+                log('🚀 Starting Domestic Card Test...');
+                
+                const order = await createOrder(50000, 'INR'); // ₹500
+                
+                const options = {
+                    key: RAZORPAY_KEY,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'EventNext Test',
+                    description: 'Domestic Card Test',
+                    order_id: order.id,
+                    
+                    prefill: {
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        contact: '9999999999',
+                        method: 'card' // Pre-select card
+                    },
+                    
+                    theme: {
+                        color: '#3399cc'
+                    },
+                    
+                    handler: function (response) {
+                        log('✅ Domestic Card Payment Success!');
+                        log(`Payment ID: ${response.razorpay_payment_id}`);
+                    },
+                    
+                    modal: {
+                        ondismiss: function() {
+                            log('💔 Domestic card payment modal dismissed');
+                        }
+                    }
+                };
+                
+                log('🔧 Opening Razorpay for domestic card test...');
+                log('💳 Use: 4000000000000051 (Indian Visa)');
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (error) {
+                log(`❌ Domestic Card Test Error: ${error.message}`);
+            }
+        }
+
+        // Test International Cards
+        async function testInternationalCard() {
+            try {
+                log('🚀 Starting International Card Test...');
+                
+                const order = await createOrder(50000, 'INR'); // ₹500
+                
+                const options = {
+                    key: RAZORPAY_KEY,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'EventNext Test',
+                    description: 'International Card Test',
+                    order_id: order.id,
+                    
+                    prefill: {
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        contact: '9999999999',
+                        method: 'card'
+                    },
+                    
+                    theme: {
+                        color: '#3399cc'
+                    },
+                    
+                    handler: function (response) {
+                        log('✅ International Card Payment Success!');
+                        log(`Payment ID: ${response.razorpay_payment_id}`);
+                    },
+                    
+                    modal: {
+                        ondismiss: function() {
+                            log('💔 International card payment modal dismissed');
+                        }
+                    }
+                };
+                
+                log('🔧 Opening Razorpay for international card test...');
+                log('💳 Use: 4111111111111111 (International Visa)');
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (error) {
+                log(`❌ International Card Test Error: ${error.message}`);
+            }
+        }
+
+        // Initialize
+        log('🎯 Razorpay Official Test Page Loaded');
+        log(`🔑 Using Key: ${RAZORPAY_KEY}`);
+        log('📋 Ready to test UPI and card payments');
+    </script>
+</body>
+</html>

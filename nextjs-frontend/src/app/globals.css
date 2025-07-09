@@ -1,0 +1,2609 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Enhanced loading states for dynamic CMS content */
+.loading-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+.loading-text {
+  @apply h-4 bg-gray-200 rounded animate-pulse;
+}
+
+.loading-dropdown {
+  @apply h-10 bg-gray-200 rounded animate-pulse;
+}
+
+/* Dynamic content transition effects */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Performance optimizations */
+@layer base {
+  /* Improve font rendering */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+  }
+
+  /* Optimize scrolling performance */
+  * {
+    scroll-behavior: smooth;
+  }
+
+  /* Reduce layout shifts */
+  img, video {
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Optimize animations */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Performance-optimized utilities */
+@layer utilities {
+  /* GPU acceleration for transforms */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Optimized animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .animate-fade-in-right {
+    animation: fadeInRight 0.5s ease-out;
+  }
+
+  /* Content visibility for better performance */
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+  }
+
+  /* Line clamping */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-6 {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Optimized keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ===== COMPACT STATISTICS SECTION - UNIFIED DESKTOP SIZING ===== */
+
+/* Desktop Compact Layout (1024px+) - Consistent Professional Design */
+@media (min-width: 1024px) {
+  .statistics-section {
+    padding: 1.5rem 2rem;
+  }
+
+  .statistics-section h3 {
+    font-size: 1.125rem;
+    font-weight: 700; 
+    margin-bottom: 0.75rem;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .statistics-section .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-width: 440px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .statistics-section .stats-item {
+    width: 100%;
+    max-width: 200px;
+    min-height: 90px;
+    padding: 0.875rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .statistics-section .stats-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .statistics-section .stats-item > div:first-child {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    color: #fb923c;
+  }
+
+  .statistics-section .stats-item > div:last-child {
+    font-size: 0.625rem;
+    line-height: 1.1;
+    font-weight: 500;
+    color: #dbeafe;
+    text-align: center;
+  }
+}
+
+/* Large Desktop (1280px+) - Consistent Compact Layout */
+@media (min-width: 1280px) {
+  .statistics-section {
+    padding: 1.75rem 3rem;
+  }
+
+  .statistics-section .grid {
+    gap: 0.875rem;
+    max-width: 460px;
+  }
+
+  .statistics-section .stats-item {
+    max-width: 210px;
+    min-height: 95px;
+    padding: 1rem 0.625rem;
+  }
+
+  .statistics-section .stats-item > div:first-child {
+    font-size: 1.25rem;
+  }
+
+  .statistics-section .stats-item > div:last-child {
+    font-size: 0.6875rem;
+  }
+}
+
+/* Extra Large Desktop (1440px+) - Unified Compact Layout */
+@media (min-width: 1440px) {
+  .statistics-section {
+    padding: 2rem 4rem;
+  }
+
+  .statistics-section .grid {
+    gap: 1rem;
+    max-width: 480px;
+  }
+
+  .statistics-section .stats-item {
+    max-width: 220px;
+    min-height: 100px;
+    padding: 1.125rem 0.75rem;
+  }
+
+  .statistics-section .stats-item > div:first-child {
+    font-size: 1.375rem;
+  }
+
+  .statistics-section .stats-item > div:last-child {
+    font-size: 0.75rem;
+  }
+}
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+:root {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Brand Colors */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-secondary: #f97316;
+  --color-secondary-dark: #ea580c;
+  --color-accent: #8b5cf6;
+
+  /* Typography */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* ===== RESET & BASE STYLES ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-900);
+  background-color: var(--color-white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-gray-900);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1.125rem; }
+
+p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-gray-700);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  h4 { font-size: 1.125rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.875rem; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive Hero Section - Full Screen Layout */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Full screen height for immersive experience */
+  height: 100vh;
+  min-height: 600px;
+  /* Fallback background for when slideshow is not loaded */
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #1e40af 100%);
+}
+
+/* Removed the blue overlay - now using dynamic overlay from Sanity */
+
+/* Smooth animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Optimized zoom animation for conference photos - Mobile and Desktop */
+@keyframes zoom-in {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+.animate-zoom-in {
+  animation: zoom-in ease-out;
+  animation-fill-mode: forwards;
+  /* Default transform-origin for mobile (center center) */
+  transform-origin: center center;
+}
+
+/* Desktop-specific zoom animation with top positioning */
+@media (min-width: 641px) {
+  .animate-zoom-in {
+    transform-origin: center top;
+  }
+}
+
+/* Professional gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced button hover effects */
+.btn-primary {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Professional stats animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stats-item {
+  animation: countUp 0.6s ease-out;
+}
+
+/* Fade in animations for statistics */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Statistics responsive grid utilities */
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* ===== MOBILE & TABLET STATISTICS SECTION (PRESERVED) ===== */
+/* Lightweight base styles for mobile and tablet only */
+
+/* Mobile-specific optimizations (< 640px) */
+@media (max-width: 639px) {
+  .statistics-section {
+    padding: 2rem 1rem;
+  }
+
+  .statistics-section .grid {
+    gap: 1rem;
+  }
+
+  .statistics-section .stats-item {
+    padding: 1.5rem 1rem;
+    min-height: 120px;
+  }
+
+  .statistics-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Tablet-specific optimizations (640px-1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .statistics-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .statistics-section .grid {
+    gap: 1.5rem;
+  }
+
+  .statistics-section .stats-item {
+    padding: 2rem 1.5rem;
+    min-height: 140px;
+  }
+
+  .statistics-section h3 {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Hero Section Text Styling */
+.hero-section h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .hero-buttons-container {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+/* ===== MOBILE HERO OPTIMIZATION (320px-640px) ===== */
+@media (max-width: 640px) {
+  .hero-section {
+    /* Mobile: 16:9 aspect ratio for proper image display */
+    height: 56.25vw;
+    min-height: 320px; /* Minimum for very small screens */
+    max-height: 500px; /* Maximum to prevent excessive height */
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* Professional gradient background for letterboxing areas */
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    /* Ensure hero section spans full width with no gaps */
+    margin: 0;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+
+  /* Mobile Welcome Text Sizing */
+  .hero-section h1,
+  .hero-welcome-text {
+    font-size: 1.75rem !important; /* 28px */
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+    padding: 0 1rem;
+    /* Enhanced text shadow for mobile readability */
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Mobile Subtitle Text Sizing */
+  .hero-subtitle-text {
+    font-size: 0.875rem !important; /* 14px */
+    line-height: 1.5 !important;
+    margin-bottom: 1.5rem !important;
+    padding: 0 1rem;
+    letter-spacing: 0.5px !important;
+    /* Enhanced text shadow for mobile readability */
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Mobile: Button container - Vertical stack with proper spacing */
+  .hero-buttons-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+    margin-top: 0 !important;
+  }
+
+  /* Mobile: Button styling - Professional touch targets */
+  .hero-buttons-container a {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    min-height: 48px !important;
+    padding: 14px 24px !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+  }
+
+  /* Mobile: Button hover effects */
+  .hero-buttons-container a:hover,
+  .hero-buttons-container a:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  /* Mobile: Full image visibility without cropping */
+  .hero-image-responsive {
+    object-fit: contain !important;
+    object-position: center center !important;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Mobile: Hide navigation dots for clean interface */
+  .hero-section [role="tablist"],
+  .hero-section div[role="tablist"],
+  .hero-section .absolute.bottom-4,
+  .hero-section .absolute.bottom-6,
+  .hero-section .absolute.bottom-8,
+  .hero-section .absolute.bottom-8.left-1\/2,
+  .hero-section .absolute.bottom-8.left-1\/2.transform,
+  .hero-section .absolute.bottom-8.left-1\/2.transform.-translate-x-1\/2,
+  .hero-section .absolute.bottom-8.left-1\/2.transform.-translate-x-1\/2.z-20,
+  .hero-section button[aria-label*="View image"],
+  .hero-section .swiper-pagination,
+  .hero-section .swiper-pagination-bullet,
+  .hero-section .navigation-dots,
+  .hero-section .slideshow-dots {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* Additional specific targeting for navigation dots with exact classes */
+  .absolute.bottom-8.left-1\/2.transform.-translate-x-1\/2.z-20.hidden.lg\\:flex.space-x-2,
+  .absolute.bottom-8.left-1\/2.transform.-translate-x-1\/2.z-20,
+  .hero-section .absolute.bottom-8.left-1\/2.transform.-translate-x-1\/2.z-20.space-x-2,
+  .hero-section div[class*="absolute"][class*="bottom-8"][class*="left-1/2"],
+  .hero-section div[class*="absolute bottom-8 left-1/2"],
+  .hero-section .absolute[class*="bottom-8"][class*="left-1/2"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* Comprehensive mobile navigation dots hiding - catch all approaches */
+  .hero-section .absolute[class*="bottom-"],
+  .hero-section div[class*="z-20"][class*="absolute"],
+  .hero-section div[class*="space-x-2"],
+  .hero-section .absolute.z-20,
+  .hero-section [class*="transform"][class*="-translate-x-1/2"],
+  .hero-section [class*="left-1/2"][class*="absolute"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* Mobile: Content container optimization */
+  .hero-section .container {
+    padding: 1.5rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile: Text content container */
+  .hero-section .relative {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    padding: 1rem;
+  }
+
+  /* Mobile: Image container spans full dimensions */
+  .hero-section .absolute.inset-0 {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Mobile: Content positioning - centered and accessible */
+  .hero-section .relative.z-10,
+  .relative.bg-gradient-to-br .relative.z-10 {
+    align-items: center;
+    padding: 1.5rem 1rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Mobile spacing after hero */
+  .hero-section + * {
+    /* Minimal spacing on mobile */
+    margin-top: 1rem;
+  }
+
+  /* Header height compensation for mobile */
+  .header-container {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Reduce header height on mobile for more banner space */
+  .header-container nav {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Mobile Conference Grid Optimizations */
+  .conference-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .conference-card {
+    min-height: 280px;
+  }
+
+  .conference-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  .conference-button {
+    min-height: 40px;
+    font-size: 0.875rem;
+  }
+
+  /* Contact Form Mobile Optimizations */
+  .contact-form-container {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .contact-form-input {
+    min-height: 48px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem 1rem;
+  }
+
+  .contact-form-textarea {
+    min-height: 120px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem 1rem;
+  }
+
+  .contact-form-button {
+    min-height: 48px;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* General mobile optimizations */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .text-responsive {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  /* Adjust content overlay for mobile - Better spacing */
+  .hero-section .hero-content-overlay {
+    margin: 0.75rem;
+    padding: 1.25rem !important;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+  }
+
+  /* Mobile: Optimized text sizing for readability */
+  .hero-section h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.2;
+    margin-bottom: 1rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .hero-section p {
+    font-size: 1rem !important;
+    line-height: 1.5;
+    margin-bottom: 1.5rem !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    color: #f1f5f9;
+  }
+
+  /* Mobile: Touch-friendly button container */
+  .hero-section .flex-col {
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  /* Mobile: Enhanced touch targets (minimum 44px) */
+  .hero-section a {
+    padding: 14px 24px !important;
+    font-size: 0.95rem !important;
+    min-height: 44px !important; /* WCAG AA compliance */
+    min-width: 200px !important;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  /* Stats section mobile optimization */
+  .hero-section .grid {
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .hero-section .grid > div {
+    padding: 1rem;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  /* Mobile header optimizations */
+  .mobile-header-bar {
+    font-size: 13px;
+    line-height: 1.1;
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  .mobile-header-bar a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-header-bar .flex-shrink {
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: 240px;
+  }
+
+  .mobile-header-bar .flex-shrink-0 {
+    flex-shrink: 0;
+  }
+
+  .mobile-header-bar .flex-grow {
+    flex-grow: 1;
+  }
+
+  /* Social media icons spacing - tight clustering for all icons */
+  .social-icons-tight {
+    gap: 0;
+  }
+
+  .social-icons-tight > * {
+    margin-left: -6px;
+  }
+
+  .social-icons-tight > *:first-child {
+    margin-left: 0;
+  }
+
+  /* Small mobile devices (320px - 375px) */
+  @media (max-width: 374px) {
+    .mobile-header-bar {
+      font-size: 12px;
+      gap: 3px;
+      padding: 0 3px;
+    }
+
+    .mobile-header-bar .flex-shrink {
+      max-width: 200px;
+    }
+  }
+
+  /* Medium mobile devices (375px - 414px) */
+  @media (min-width: 375px) and (max-width: 414px) {
+    .mobile-header-bar {
+      font-size: 13px;
+      gap: 4px;
+      padding: 0 4px;
+    }
+
+    .mobile-header-bar .flex-shrink {
+      max-width: 240px;
+    }
+  }
+
+  /* Large mobile devices (414px+) */
+  @media (min-width: 414px) and (max-width: 639px) {
+    .mobile-header-bar {
+      font-size: 13px;
+      gap: 5px;
+      padding: 0 5px;
+    }
+
+    .mobile-header-bar .flex-shrink {
+      max-width: 260px;
+    }
+  }
+
+  /* Ensure proper spacing between header elements */
+  .mobile-header-bar > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-header-bar svg {
+    flex-shrink: 0;
+  }
+
+  /* Social media hover effects for both mobile and desktop */
+  .mobile-header-bar a:hover svg,
+  .desktop-social a:hover svg {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
+
+  /* Desktop social media icons */
+  .desktop-social svg {
+    transition: transform 0.2s ease;
+  }
+}
+
+/* Professional card hover effects */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Professional loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced gradient backgrounds */
+.bg-professional-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 25%, #1e40af 50%, #1e3a8a 75%, #0f172a 100%);
+}
+
+/* Professional text shadows */
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced button animations */
+.btn-professional {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-professional::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-professional:hover::before {
+  left: 100%;
+}
+
+/* Professional section spacing - Reduced for more compact layout */
+.section-spacing {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* Compact layout utilities for better vertical rhythm */
+.compact-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .compact-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Reduced margins for content blocks */
+.content-block {
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .content-block {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Tighter spacing for text elements */
+.text-block h2 {
+  margin-bottom: 1rem;
+}
+
+.text-block p {
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .text-block h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .text-block p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+a, button, input, textarea, select {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus styles */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.6s ease-out;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--secondary), #ea580c);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Header Integration Styles */
+.header-container {
+  transition: all 0.3s ease;
+}
+
+/* Logo container constraints */
+.header-container nav {
+  overflow: hidden;
+}
+
+.header-container nav > div {
+  overflow: hidden;
+}
+
+/* Ensure logo stays within bounds */
+.header-container img {
+  max-height: 100% !important;
+  max-width: 100% !important;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Ensure proper spacing between header and hero section - merged with main rule above */
+
+/* Responsive Hero Image Container - Desktop Cover, Mobile Contain */
+.hero-image-responsive {
+  width: 100%;
+  height: 100%;
+  /* Desktop: Cover with bottom positioning to crop top and show people/speakers at bottom */
+  object-fit: cover;
+  object-position: center bottom;
+  transition: opacity 0.3s ease-in-out;
+  /* Ensure image quality and performance */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  /* Handle various aspect ratios gracefully */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Mobile Responsive Design - Full Image Visibility with 16:9 Aspect Ratio */
+/* This is consolidated with the main mobile breakpoint above */
+
+/* Tablet Responsive Design - Transition between mobile and desktop */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .hero-section {
+    /* Tablet: Gradual transition to desktop layout */
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    transition: height 0.3s ease-in-out;
+  }
+
+  .hero-image-responsive {
+    /* Tablet: Start transitioning to cover layout with bottom positioning */
+    object-fit: cover;
+    object-position: center bottom;
+    transition: object-fit 0.3s ease-in-out, object-position 0.3s ease-in-out;
+  }
+
+  /* Tablet Welcome Text Styling - White Color with Enhanced Shadow */
+  .hero-section h1 {
+    color: #ffffff !important;
+    text-align: center;
+    margin-bottom: 2.25rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 2rem;
+    line-height: 1.4;
+  }
+
+  /* Tablet Button Container - Horizontal Layout */
+  .hero-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 1.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Tablet Button Styling - Transition to Desktop Size */
+  .hero-buttons-container a {
+    flex: 0 0 auto !important;
+    min-width: 200px !important;
+    max-width: 240px !important;
+    min-height: 50px !important;
+    padding: 14px 28px !important;
+    font-size: 0.95rem !important;
+    text-align: center !important;
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    cursor: pointer !important;
+  }
+
+  /* Tablet Button Hover Effects */
+  .hero-buttons-container a:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* ===== DESKTOP HERO OPTIMIZATION (1024px+) ===== */
+@media (min-width: 1024px) {
+  .hero-section {
+    /* Desktop: Reduced height to show content below */
+    height: 75vh;
+    min-height: 600px;
+    max-height: 800px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* Smooth transitions for responsive changes */
+    transition: height 0.3s ease-in-out;
+    margin-bottom: 0;
+  }
+
+  /* Desktop: Cover with top cropping to show bottom portion (people/speakers) */
+  .hero-image-responsive {
+    object-fit: cover !important;
+    object-position: center bottom !important; /* Bottom positioning to show people/speakers */
+    width: 100%;
+    height: 100%;
+    transition: object-fit 0.3s ease-in-out, object-position 0.3s ease-in-out;
+  }
+
+  /* Desktop Welcome Text Sizing */
+  .hero-section h1,
+  .hero-welcome-text {
+    font-size: 3rem !important; /* 48px */
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: 1px;
+  }
+
+  /* Desktop Subtitle Text Sizing */
+  .hero-subtitle-text {
+    font-size: 1.125rem !important; /* 18px */
+    line-height: 1.6 !important;
+    margin-bottom: 2.5rem !important;
+    letter-spacing: 1px !important;
+  }
+}
+
+/* ===== TABLET HERO OPTIMIZATION (641px-1023px) ===== */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .hero-section h1,
+  .hero-welcome-text {
+    font-size: 2.25rem !important; /* 36px */
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: 0.75px;
+  }
+
+  .hero-subtitle-text {
+    font-size: 1rem !important; /* 16px */
+    line-height: 1.5 !important;
+    margin-bottom: 2rem !important;
+    letter-spacing: 0.75px !important;
+  }
+}
+
+/* ===== ULTRA-WIDE DESKTOP (1440px+) ===== */
+@media (min-width: 1440px) {
+  .hero-section h1,
+  .hero-welcome-text {
+    font-size: 3.5rem !important; /* 56px */
+    line-height: 1.1 !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: 1.5px;
+  }
+
+  .hero-subtitle-text {
+    font-size: 1.25rem !important; /* 20px */
+    line-height: 1.6 !important;
+    margin-bottom: 3rem !important;
+    letter-spacing: 1.5px !important;
+  }
+}
+
+/* Ultra-wide screens (1920px+) - Premium professional experience */
+@media (min-width: 1920px) {
+  .hero-section {
+    /* Ultra-wide: Maintain professional proportions */
+    height: 65vh;
+    min-height: 600px;
+    max-height: 800px;
+    /* Reduced spacing for more compact layout */
+    margin-bottom: 1rem;
+  }
+
+  .hero-image-responsive {
+    /* Ultra-wide: Bottom positioning to show people/speakers at bottom */
+    object-position: center bottom;
+  }
+
+  /* Ultra-wide Welcome Text Styling - Premium Typography */
+  .hero-section h1 {
+    color: #ffffff !important;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    letter-spacing: 0.75px;
+    font-size: 3rem;
+    line-height: 1.3;
+  }
+
+  /* Ultra-wide Button Container - Enhanced Spacing */
+  .hero-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 24px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 3rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Ultra-wide Button Styling - Premium Design */
+  .hero-buttons-container a {
+    flex: 0 0 auto !important;
+    min-width: 260px !important;
+    max-width: 320px !important;
+    min-height: 60px !important;
+    padding: 18px 36px !important;
+    font-size: 1.1rem !important;
+    text-align: center !important;
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.12) !important;
+    cursor: pointer !important;
+  }
+
+  /* Ultra-wide Button Hover Effects */
+  .hero-buttons-container a:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.18) !important;
+  }
+}
+
+
+
+/* Professional Spacing and Visual Hierarchy - Reduced for compact layout */
+.hero-section + * {
+  /* Reduced spacing after hero section for more compact layout */
+  margin-top: 1.5rem;
+}
+
+/* Mobile spacing consolidated above */
+
+/* Hero overlay for better text visibility */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* Hero Content Positioning - Center welcome text vertically and horizontally */
+.hero-section .relative.z-10 {
+  /* Ensure content container adapts to new hero heights */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Hero Section Welcome Text - Enhanced Dynamic Styles */
+.hero-section h1,
+.hero-welcome-text {
+  color: #ffffff !important;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  font-size: 2.5rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  font-family: inherit;
+  /* Ensure text is always readable */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hero Section Subtitle Text - Professional Styling */
+.hero-subtitle-text {
+  color: #ffffff !important;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-family: inherit;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  /* Ensure text is always readable */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base Button Container Styling - Applied to All Breakpoints */
+.hero-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: nowrap;
+  gap: 1rem;
+}
+
+/* Base Button Styling - Applied to All Breakpoints */
+.hero-buttons-container a {
+  text-align: center;
+  border-radius: 9999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  min-height: 56px;
+  min-width: 200px;
+}
+
+/* Fallback hero section styling */
+.relative.bg-gradient-to-br {
+  /* Apply hero section styles to fallback */
+  height: 70vh;
+  min-height: 500px;
+  max-height: 700px;
+}
+
+.relative.bg-gradient-to-br .relative.z-10 {
+  /* Center content in fallback hero */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile hero positioning consolidated above */
+
+@media (min-width: 1024px) {
+  .hero-section .relative.z-10 {
+    /* Desktop: Center content vertically and horizontally */
+    align-items: center;
+    padding: 3rem 0;
+  }
+
+  /* Desktop: Optimized text styling for readability */
+  .hero-section h1 {
+    color: #ffffff !important;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 2.5rem;
+    line-height: 1.3;
+  }
+
+  /* Desktop: Button container with proper spacing */
+  .hero-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 24px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 2rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Desktop: Professional button design */
+  .hero-buttons-container a {
+    flex: 0 0 auto !important;
+    min-width: 240px !important;
+    max-width: 300px !important;
+    min-height: 56px !important;
+    padding: 18px 36px !important;
+    font-size: 1.1rem !important;
+    text-align: center !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.75px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    cursor: pointer !important;
+  }
+
+  /* Desktop: Enhanced hover effects */
+  .hero-buttons-container a:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.18) !important;
+  }
+}
+
+/* Header mobile styles consolidated above */
+
+/* Mobile conference grid styles consolidated above */
+
+/* Small mobile devices (320px - 375px) - Extra tight spacing */
+@media (max-width: 374px) {
+  .conference-grid {
+    gap: 0.75rem;
+  }
+
+  .conference-card {
+    min-height: 260px;
+  }
+
+  .conference-description {
+    font-size: 0.9rem;
+  }
+}
+
+/* Medium mobile devices (375px - 414px) - Balanced spacing */
+@media (min-width: 375px) and (max-width: 414px) {
+  .conference-grid {
+    gap: 1rem;
+  }
+
+  .conference-card {
+    min-height: 290px;
+  }
+}
+
+/* Large mobile devices (414px - 640px) - More comfortable spacing */
+@media (min-width: 414px) and (max-width: 639px) {
+  .conference-grid {
+    gap: 1.25rem;
+  }
+
+  .conference-card {
+    min-height: 300px;
+  }
+}
+
+/* Contact form mobile styles consolidated above */
+
+/* Small mobile devices (320px - 374px) - Extra compact */
+@media (max-width: 374px) {
+  .contact-form-container {
+    padding: 0.75rem;
+  }
+
+  .contact-form-input,
+  .contact-form-textarea {
+    font-size: 14px;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .contact-form-button {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.25rem;
+  }
+}
+
+/* Medium mobile devices (375px - 414px) - Balanced */
+@media (min-width: 375px) and (max-width: 414px) {
+  .contact-form-grid {
+    gap: 1rem;
+  }
+}
+
+/* Large mobile devices (414px - 640px) - More comfortable */
+@media (min-width: 414px) and (max-width: 639px) {
+  .contact-form-container {
+    padding: 1.25rem;
+  }
+
+  .contact-form-grid {
+    gap: 1.25rem;
+  }
+
+  .contact-form-input,
+  .contact-form-textarea {
+    padding: 1rem 1.25rem;
+  }
+}
+
+/* Contact section layout optimizations */
+@media (max-width: 1023px) {
+  .contact-section-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-info-section {
+    order: 1;
+  }
+
+  .contact-form-section {
+    order: 2;
+  }
+}
+
+/* Desktop contact section */
+@media (min-width: 1024px) {
+  .contact-section-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-info-section {
+    order: 1;
+  }
+
+  .contact-form-section {
+    order: 2;
+  }
+}
+
+/* Mobile optimizations consolidated above */
+
+/* Tablet optimizations - Removed conflicting height rules */
+/* Height is now controlled by the main tablet breakpoint above */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Tablet hero section height is controlled by main responsive rules */
+
+  .hero-section h1 {
+    font-size: 2.2rem; /* Reduced from 2.75rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-section p {
+    font-size: 1rem; /* Reduced from 1.25rem (20% reduction) */
+    line-height: 1.4;
+    margin-bottom: 1.6rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-section a {
+    padding: 1rem 2.4rem;
+    font-size: 1rem; /* Reduced from 1.25rem (20% reduction) */
+    min-height: 48px;
+  }
+
+  .hero-section .hero-content-overlay {
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Desktop text scaling (1024px-1439px) - Reduced by 15-20% */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .hero-section h1 {
+    font-size: 2.6rem; /* Reduced from 3.25rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero-section p {
+    font-size: 1.1rem; /* Reduced from 1.375rem (20% reduction) */
+    line-height: 1.5;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-section a {
+    padding: 1.1rem 2.8rem;
+    font-size: 1.1rem; /* Reduced from 1.375rem (20% reduction) */
+    min-height: 52px;
+  }
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .mobile-padding {
+    padding: 0.75rem;
+  }
+
+  /* Conference grid mobile layout - 2 columns as requested */
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Ensure conference cards work well in 2-column mobile layout */
+  .card-hover {
+    transform: none;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Better image aspect ratios */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+/* Cross-device compatibility enhancements */
+
+/* Large desktop screens (1440px+) - Enhanced Professional Design */
+@media (min-width: 1440px) {
+  /* Large desktop hero section height is controlled by main responsive rules */
+
+  /* Large Desktop Welcome Text Styling - Enhanced Typography */
+  .hero-section h1 {
+    color: #ffffff !important;
+    text-align: center;
+    margin-bottom: 2.75rem;
+    text-shadow: 0 3px 7px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    font-size: 2.75rem;
+    line-height: 1.35;
+  }
+
+  /* Large Desktop Button Container - Professional Spacing */
+  .hero-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 22px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 2.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Large Desktop Button Styling - Premium Professional Design */
+  .hero-buttons-container a {
+    flex: 0 0 auto !important;
+    min-width: 240px !important;
+    max-width: 300px !important;
+    min-height: 58px !important;
+    padding: 17px 34px !important;
+    font-size: 1.05rem !important;
+    text-align: center !important;
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.12) !important;
+    cursor: pointer !important;
+  }
+
+  /* Large Desktop Button Hover Effects */
+  .hero-buttons-container a:hover {
+    transform: translateY(-2.5px) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.22), 0 5px 10px rgba(0, 0, 0, 0.16) !important;
+  }
+
+  .hero-section h1 {
+    font-size: 3.2rem; /* Reduced from 4rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 1.6rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-section p {
+    font-size: 1.2rem; /* Reduced from 1.5rem (20% reduction) */
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  }
+
+  .hero-section a {
+    padding: 1.2rem 3.2rem;
+    font-size: 1.2rem; /* Reduced from 1.5rem (20% reduction) */
+    min-height: 56px;
+  }
+
+  .hero-section .hero-content-overlay {
+    padding: 3rem;
+    backdrop-filter: blur(15px);
+  }
+}
+
+/* Ultra-wide screens - Removed conflicting height rules */
+/* Height is now controlled by the main ultra-wide breakpoint above */
+@media (min-width: 1920px) {
+  /* Ultra-wide hero section height is controlled by main responsive rules */
+
+  .hero-section .hero-content-overlay {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Enhanced responsive text scaling across all breakpoints */
+
+/* Extra small mobile devices (320px-374px) - Removed conflicting height rules */
+/* Height is now controlled by the main mobile breakpoint above */
+@media (max-width: 374px) {
+  /* Extra small mobile hero section height is controlled by main responsive rules */
+
+  .hero-section h1 {
+    font-size: 1.3rem !important; /* Reduced from 1.625rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 0.8rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-section p {
+    font-size: 0.8rem !important; /* Reduced from 1rem (20% reduction) */
+    line-height: 1.4;
+    margin-bottom: 1.2rem !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-section .hero-content-overlay {
+    margin: 0.75rem;
+    padding: 1rem !important; /* Slightly reduced padding */
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-section a {
+    padding: 0.8rem 1.6rem !important;
+    font-size: 0.8rem !important; /* Reduced from 1rem (20% reduction) */
+    min-height: 44px;
+  }
+}
+
+/* Small mobile devices (375px-413px) - Removed conflicting height rules */
+/* Height is now controlled by the main mobile breakpoint above */
+@media (min-width: 375px) and (max-width: 413px) {
+  /* Small mobile hero section height is controlled by main responsive rules */
+
+  .hero-section h1 {
+    font-size: 1.4rem !important; /* Reduced from 1.75rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 0.9rem !important;
+  }
+
+  .hero-section p {
+    font-size: 0.85rem !important; /* Reduced from 1.0625rem (20% reduction) */
+    line-height: 1.4;
+    margin-bottom: 1.3rem !important;
+  }
+
+  .hero-section a {
+    padding: 0.85rem 1.8rem !important;
+    font-size: 0.85rem !important; /* Reduced from 1.0625rem (20% reduction) */
+    min-height: 44px;
+  }
+}
+
+/* Medium mobile devices (414px-640px) - Removed conflicting height rules */
+/* Height is now controlled by the main mobile breakpoint above */
+@media (min-width: 414px) and (max-width: 640px) {
+  /* Medium mobile hero section height is controlled by main responsive rules */
+
+  .hero-section h1 {
+    font-size: 1.5rem !important; /* Reduced from 1.875rem (20% reduction) */
+    line-height: 1.1;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-section p {
+    font-size: 0.9rem !important; /* Reduced from 1.125rem (20% reduction) */
+    line-height: 1.4;
+    margin-bottom: 1.4rem !important;
+  }
+
+  .hero-section a {
+    padding: 0.9rem 2rem !important;
+    font-size: 0.9rem !important; /* Reduced from 1.125rem (20% reduction) */
+    min-height: 48px;
+  }
+}
+
+/* Mobile orientation optimizations - Removed conflicting height rules */
+/* Height is now controlled by the main mobile breakpoint above */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Mobile landscape hero section height is controlled by main responsive rules */
+
+  .hero-image-responsive {
+    /* Landscape uses same responsive rules as main breakpoints */
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  .hero-section .hero-content-overlay {
+    padding: 0.8rem !important; /* Compact padding for landscape */
+  }
+
+  .hero-section h1 {
+    font-size: 1.4rem !important; /* Optimized for landscape viewing */
+  }
+
+  .hero-section p {
+    font-size: 0.8rem !important; /* Compact text for landscape */
+  }
+}
+
+/* Portrait mobile orientation - Removed conflicting height rules */
+/* Height is now controlled by the main mobile breakpoint above */
+@media (max-width: 768px) and (orientation: portrait) {
+  /* Mobile portrait hero section height is controlled by main responsive rules */
+
+  /* Portrait mode uses the responsive breakpoint rules defined above */
+}
+
+/* High DPI displays - Enhanced image quality */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .hero-image-responsive {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Zoom animation compatibility with responsive positioning - handled above */
+
+/* Tablet landscape optimization - Removed conflicting height rules */
+/* Height is now controlled by the main tablet breakpoint above */
+@media (min-width: 641px) and (max-width: 1023px) and (orientation: landscape) {
+  /* Tablet landscape hero section height is controlled by main responsive rules */
+
+  .hero-image-responsive {
+    /* Landscape uses same responsive rules as main breakpoints */
+    object-fit: cover;
+    object-position: center bottom;
+  }
+}
+
+/* Image loading handled by .hero-image-responsive class */
+
+/* Hero slideshow animations */
+@keyframes zoom-in {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-zoom {
+  animation: zoom-in 5s ease-out forwards;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .hero-image-responsive,
+  .hero-section .transition-opacity,
+  .animate-zoom {
+    transition: none;
+    animation: none;
+  }
+
+  .animate-fade-in-up,
+  .animate-zoom-in {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .hero-section {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    page-break-inside: avoid;
+  }
+
+  .hero-section .hero-content-overlay {
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+  }
+}
+
+  /* Desktop: Navigation dots - professional and accessible */
+  .hero-section button[aria-label*="View image"] {
+    min-width: 32px !important;
+    min-height: 32px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 6px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-section button[aria-label*="View image"]:focus {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
+    background: rgba(249, 115, 22, 0.2);
+    border-color: #f97316;
+  }
+
+  .hero-section button[aria-label*="View image"]:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+  }
+
+  .hero-section button[aria-label*="View image"].active {
+    background: rgba(249, 115, 22, 0.8);
+    border-color: #f97316;
+  }
+
+  /* Desktop: Navigation dots container positioning */
+  .hero-section .absolute.bottom-8 {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    z-index: 30;
+  }
+
+  /* Desktop: Content positioning and overlay */
+  .hero-section .relative.z-10 {
+    align-items: center;
+    padding: 3rem 2rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+/* Mobile dots hiding consolidated above */
+
+/* Final responsive validation - Consistent layout across all breakpoints */
+@media (max-width: 320px) {
+  .hero-section {
+    /* Small mobile: Use same 16:9 aspect ratio as other mobile breakpoints */
+    height: 56.25vw;
+    min-height: 280px;
+    max-height: 350px;
+  }
+
+  /* Small mobile welcome text */
+  .hero-section h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.3;
+  }
+
+  /* Small mobile buttons */
+  .hero-buttons-container a {
+    font-size: 0.75rem !important;
+    padding: 10px 12px !important;
+    max-width: 160px;
+  }
+}
+
+/* Mobile welcome text sizing - consolidated with main mobile breakpoint above */
+
+/* Enhanced Mobile Touch Targets and Accessibility */
+@media (max-width: 640px) {
+  /* Ensure all interactive elements meet minimum touch target size */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Enhanced mobile navigation */
+  .mobile-nav-item {
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Mobile form improvements */
+  input[type="text"], input[type="email"], input[type="tel"], textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+
+  /* Mobile card improvements */
+  .card, .conference-card {
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Mobile spacing improvements */
+  .section-spacing {
+    padding: 24px 16px;
+  }
+
+  /* Mobile typography improvements */
+  h1 { font-size: 1.75rem; line-height: 1.2; }
+  h2 { font-size: 1.5rem; line-height: 1.3; }
+  h3 { font-size: 1.25rem; line-height: 1.4; }
+  p { font-size: 1rem; line-height: 1.6; }
+
+  /* Mobile button improvements */
+  .btn-primary, .btn-secondary {
+    padding: 14px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+
+/* Desktop UI Enhancements */
+@media (min-width: 1024px) {
+  /* Enhanced desktop spacing and typography */
+  .section-spacing {
+    padding: 48px 24px;
+  }
+
+  /* Desktop card improvements */
+  .card, .conference-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card:hover, .conference-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Desktop button improvements */
+  .btn-primary, .btn-secondary {
+    padding: 16px 32px;
+    font-size: 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover, .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Desktop typography improvements */
+  h1 { font-size: 2.5rem; line-height: 1.2; }
+  h2 { font-size: 2rem; line-height: 1.3; }
+  h3 { font-size: 1.5rem; line-height: 1.4; }
+  p { font-size: 1.125rem; line-height: 1.7; }
+
+  /* Desktop grid improvements */
+  .grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 32px;
+  }
+
+  /* Desktop navigation improvements */
+  .nav-item {
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-item:hover {
+    background-color: rgba(249, 115, 22, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+@media (min-width: 2560px) {
+  .hero-section {
+    /* Ultra-wide: Professional controlled height */
+    height: 65vh;
+    min-height: 600px;
+    max-height: 900px;
+  }
+
+  .hero-image-responsive {
+    object-fit: cover;
+    object-position: center bottom;
+    /* Ultra-wide coverage with bottom positioning to show people/speakers */
+  }
+}
+
+/* ===== PAST CONFERENCES SECTION - HERO PROPORTIONAL STYLING ===== */
+/* Match Hero section dimensional proportions with proper content visibility */
+
+.past-conferences-section {
+  /* Mobile: Ensure all content is visible */
+  min-height: 100vh;
+  padding: 3rem 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tablet: Balanced proportions with content visibility */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .past-conferences-section {
+    min-height: 90vh;
+    padding: 4rem 0;
+    align-items: center;
+  }
+}
+
+/* Desktop: Hero-like proportions with full content visibility */
+@media (min-width: 1024px) {
+  .past-conferences-section {
+    min-height: 85vh;
+    max-height: none;
+    padding: 5rem 0;
+    align-items: center;
+  }
+}
+
+/* Ultra-wide: Optimized proportions */
+@media (min-width: 1920px) {
+  .past-conferences-section {
+    min-height: 80vh;
+    padding: 6rem 0;
+  }
+}
+
+/* Background image optimization for Past Conferences section */
+.past-conferences-section {
+  background-attachment: fixed;
+}
+
+@media (max-width: 1023px) {
+  .past-conferences-section {
+    /* Mobile/Tablet: Disable fixed attachment for better performance */
+    background-attachment: scroll;
+  }
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.line-clamp-6 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+}
+
+/* Additional responsive utilities */
+.container-responsive {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    max-width: 640px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-responsive {
+    max-width: 768px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-responsive {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container-responsive {
+    max-width: 1536px;
+  }
+}
+
+/* Button utilities for consistent styling */
+.btn-responsive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 44px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .btn-responsive {
+    padding: 1rem 2rem;
+    min-height: 48px;
+  }
+}
+
+/* Focus states for accessibility */
+.btn-responsive:focus,
+.btn-responsive:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading state utilities */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
