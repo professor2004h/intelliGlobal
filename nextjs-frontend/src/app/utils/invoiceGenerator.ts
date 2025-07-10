@@ -1,5 +1,3 @@
-import jsPDF from 'jspdf';
-
 interface InvoiceData {
   invoiceNumber: string;
   paymentData: {
@@ -23,6 +21,8 @@ interface InvoiceData {
 }
 
 export async function generateInvoicePDF(data: InvoiceData): Promise<Buffer> {
+  // Dynamic import to reduce initial bundle size
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;

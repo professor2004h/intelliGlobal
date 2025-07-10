@@ -110,8 +110,15 @@ export default async function RootLayout({
   let siteSettings = null;
 
   try {
+    // Run connection test and site settings fetch in parallel
+    const [connectionResult, settingsResult] = await Promise.allSettled([
+      process.env.NODE_ENV === 'development' ? testSanityConnectionWithRetry(3) : Promise.resolve(true),
+      process.env.NODE_ENV === 'development' ? getSiteSettingsFresh() : getSiteSettingsSSR()
+    ]);
+
+    // Handle connection result
     if (process.env.NODE_ENV === 'development') {
-      isConnected = await testSanityConnectionWithRetry(3);
+      isConnected = connectionResult.status === 'fulfilled' ? connectionResult.value : false;
       if (!isConnected) {
         console.error('⚠️ Sanity connection failed after retries. Please check your configuration.');
         console.error('🔧 Make sure Sanity Studio is running on port 3334');
@@ -120,10 +127,11 @@ export default async function RootLayout({
       }
     }
 
-    // Get site settings for favicon management with error handling
-    siteSettings = process.env.NODE_ENV === 'development'
-      ? await getSiteSettingsFresh()
-      : await getSiteSettingsSSR();
+    // Handle site settings result
+    siteSettings = settingsResult.status === 'fulfilled' ? settingsResult.value : null;
+    if (settingsResult.status === 'rejected' && process.env.NODE_ENV === 'development') {
+      console.error('⚠️ Failed to fetch site settings:', settingsResult.reason);
+    }
   } catch (error) {
     console.error('Error in layout initialization:', error);
     // Continue with null siteSettings to allow fallback rendering
@@ -144,11 +152,15 @@ export default async function RootLayout({
                 enableOverlay={true}
               >
                 <PerformanceInit />
-                <PerformanceMonitor enabled={process.env.NODE_ENV === 'development'} />
+                {process.env.NODE_ENV === 'development' && (
+                  <>
+                    <PerformanceMonitor enabled={true} />
+                    <AutoRefresh interval={30000} enabled={true} />
+                    <ConnectionStatus />
+                  </>
+                )}
                 <CacheBuster />
                 <FaviconManager faviconUrl={faviconUrl} />
-                <AutoRefresh interval={30000} enabled={process.env.NODE_ENV === 'development'} />
-                <ConnectionStatus />
 
                 {/* Header */}
                 <HeaderWrapper />

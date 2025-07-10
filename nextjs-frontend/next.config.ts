@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
 
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['@portabletext/react', 'next-sanity'],
+    optimizePackageImports: ['@portabletext/react', 'next-sanity', 'jspdf'],
   },
 
   // Turbopack configuration (stable)

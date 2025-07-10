@@ -38,7 +38,9 @@ export default async function HomePage() {
   const startTime = performance.now();
 
   try {
-    console.log('🏠 HomePage: Starting data fetch...');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🏠 HomePage: Starting data fetch...');
+    }
 
     // Batch fetch all data in parallel for better performance
     const [
@@ -65,35 +67,20 @@ export default async function HomePage() {
       getCustomContentSectionData()
     ]);
 
-    console.log('🏠 HomePage: Data fetch results:', {
-      events: events.status,
-      pastConferences: pastConferences.status,
-      about: about.status,
-      hero: hero.status,
-      conference: conference.status,
-      statistics: statistics.status,
-      siteSettings: siteSettings.status,
-      pastConferencesStyling: pastConferencesStyling.status,
-      journalStyling: journalStyling.status,
-      customContentData: customContentData.status
-    });
+    // Only log detailed results in development
+    if (process.env.NODE_ENV === 'development') {
+      const failedFetches = [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData]
+        .map((result, index) => {
+          const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData'];
+          return result.status === 'rejected' ? names[index] : null;
+        })
+        .filter(Boolean);
 
-    if (pastConferencesStyling.status === 'fulfilled') {
-      console.log('✅ HomePage: Past Conferences Styling Data Retrieved:', JSON.stringify(pastConferencesStyling.value, null, 2));
-    } else {
-      console.error('❌ HomePage: Past Conferences Styling Failed:', pastConferencesStyling.reason);
-    }
-
-    if (journalStyling.status === 'fulfilled') {
-      console.log('✅ HomePage: Journal Styling Data Retrieved:', JSON.stringify(journalStyling.value, null, 2));
-    } else {
-      console.error('❌ HomePage: Journal Styling Failed:', journalStyling.reason);
-    }
-
-    if (customContentData.status === 'fulfilled') {
-      console.log('✅ HomePage: Custom Content Data Retrieved:', JSON.stringify(customContentData.value, null, 2));
-    } else {
-      console.error('❌ HomePage: Custom Content Data Failed:', customContentData.reason);
+      if (failedFetches.length > 0) {
+        console.warn('⚠️ HomePage: Failed fetches:', failedFetches.join(', '));
+      } else {
+        console.log('✅ HomePage: All data fetched successfully');
+      }
     }
 
     const endTime = performance.now();
@@ -116,15 +103,7 @@ export default async function HomePage() {
       customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null
     };
 
-    // Log any failures in development
-    if (process.env.NODE_ENV === 'development') {
-      [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData].forEach((result, index) => {
-        const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData'];
-        if (result.status === 'rejected') {
-          console.error(`❌ Failed to fetch ${names[index]}:`, result.reason);
-        }
-      });
-    }
+
 
     return <HomePageContent {...pageData} />;
   } catch (error) {
