@@ -63,14 +63,22 @@ export interface SiteSettings {
   };
 }
 
-// Cache for site settings with timestamp
-let siteSettingsCache: { data: SiteSettings | null; timestamp: number } | null = null;
-const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5 * 1000 : 30 * 1000; // 5 seconds in dev, 30 seconds in production
+// Cache for site settings with timestamp and version
+let siteSettingsCache: { 
+  data: SiteSettings | null; 
+  timestamp: number;
+  version: string;
+} | null = null;
+
+const CACHE_DURATION = process.env.NODE_ENV === 'development' ? 5 * 1000 : 30 * 1000;
+const CACHE_VERSION = '1.0'; // Increment this when making breaking changes
 
 export async function getSiteSettings(forceRefresh = false): Promise<SiteSettings | null> {
   try {
-    // Check if we have valid cached data (skip cache if force refresh)
-    if (!forceRefresh && siteSettingsCache &&
+    // Check if we have valid cached data
+    if (!forceRefresh && 
+        siteSettingsCache?.data && 
+        siteSettingsCache.version === CACHE_VERSION &&
         Date.now() - siteSettingsCache.timestamp < CACHE_DURATION) {
       return siteSettingsCache.data;
     }
@@ -120,33 +128,31 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
       },
     });
 
-    // Update cache
+    // Update cache with version
     siteSettingsCache = {
       data: siteSettings,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      version: CACHE_VERSION
     };
 
-    return siteSettings;
+    // Validate the data structure
+    if (siteSettings && typeof siteSettings === 'object') {
+      return siteSettings;
+    }
+
+    throw new Error('Invalid site settings data structure');
+
   } catch (error) {
     console.error("Error fetching site settings:", error);
 
-    // Log additional error details for debugging
-    if (error instanceof Error) {
-      console.error("Error details:", {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      });
-    }
-
-    // Return cached data if available, even if expired
-    if (siteSettingsCache?.data) {
+    // Only return cached data if it exists and has the current version
+    if (siteSettingsCache?.data && siteSettingsCache.version === CACHE_VERSION) {
       console.warn("Returning cached site settings due to fetch error");
       return siteSettingsCache.data;
     }
 
-    // Return null if no cached data available
-    console.warn("No cached site settings available, returning null");
+    // If cache is stale or invalid, return null and force a reload
+    console.warn("No valid cached site settings available");
     return null;
   }
 }

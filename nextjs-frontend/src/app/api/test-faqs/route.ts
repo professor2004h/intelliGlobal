@@ -23,7 +23,7 @@ export async function GET() {
   } catch (error) {
     console.error('❌ API Error:', error);
     return NextResponse.json({ 
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       timestamp: new Date().toISOString()
     }, { status: 500 });
   }

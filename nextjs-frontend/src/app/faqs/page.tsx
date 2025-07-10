@@ -49,7 +49,7 @@ export default async function FAQsPage() {
     console.log('✅ Server: FAQ data processed');
   } catch (error) {
     console.error('❌ Server: Error fetching FAQs:', error);
-    debugInfo = `Server error: ${error.message}`;
+    debugInfo = `Server error: ${error instanceof Error ? error.message : String(error)}`;
   }
 
   return (
