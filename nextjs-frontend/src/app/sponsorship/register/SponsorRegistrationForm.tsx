@@ -952,13 +952,16 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                      required
+                      className={`w-full px-4 py-3 md:py-4 rounded-lg border-2 bg-white transition-all duration-300 focus:outline-none text-gray-900 placeholder-gray-500 text-sm md:text-base ${
+                        errors.phone
+                          ? 'border-red-300 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'
+                          : 'border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200'
                       }`}
                       placeholder="Enter phone number"
                     />
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                      <p className="mt-1 text-sm text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200">{errors.phone}</p>
                     )}
                   </div>
 

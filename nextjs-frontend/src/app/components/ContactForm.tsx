@@ -44,6 +44,12 @@ export default function ContactForm() {
       errors.email = 'Please enter a valid email address';
     }
 
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (!/^[\+]?[0-9\s\-\(\)]{7,20}$/.test(formData.phone.trim())) {
+      errors.phone = 'Please enter a valid phone number';
+    }
+
     if (!formData.subject.trim()) {
       errors.subject = 'Subject is required';
     }
@@ -152,11 +158,19 @@ export default function ContactForm() {
             <input
               type="tel"
               name="phone"
-              placeholder="Phone Number (Optional)"
+              placeholder="Phone Number *"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-4 py-3 md:py-4 rounded-lg border-2 border-gray-300 bg-white transition-all duration-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 focus:outline-none text-gray-900 placeholder-gray-500 text-sm md:text-base"
+              required
+              className={`w-full px-4 py-3 md:py-4 rounded-lg border-2 transition-all duration-300 focus:outline-none text-gray-900 placeholder-gray-500 text-sm md:text-base ${
+                validationErrors.phone
+                  ? 'border-red-300 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'
+                  : 'border-gray-300 bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200'
+              }`}
             />
+            {validationErrors.phone && (
+              <p className="mt-1 text-sm text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200">{validationErrors.phone}</p>
+            )}
           </div>
         </div>
 

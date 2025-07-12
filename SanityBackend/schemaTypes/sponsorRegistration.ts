@@ -114,7 +114,7 @@ const sponsorRegistration = defineType({
           name: 'phone',
           title: 'Phone Number',
           type: 'string',
-          validation: (Rule) => Rule.regex(/^[\+]?[0-9\s\-\(\)]{7,20}$/),
+          validation: (Rule) => Rule.required().regex(/^[\+]?[0-9\s\-\(\)]{7,20}$/).error('A valid phone number is required'),
         },
         {
           name: 'alternateEmail',

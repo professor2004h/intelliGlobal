@@ -54,7 +54,7 @@ export interface SponsorRegistration {
     lastName: string;
     title?: string;
     email: string;
-    phone?: string;
+    phone: string;
     alternateEmail?: string;
   };
   billingAddress: {

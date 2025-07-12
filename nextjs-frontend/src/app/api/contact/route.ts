@@ -19,20 +19,29 @@ export async function POST(request: NextRequest) {
     const formData: ContactFormData = await request.json();
     
     // Validate required fields
-    const { name, email, subject, message } = formData;
-    
-    if (!name || !email || !subject || !message) {
+    const { name, email, phone, subject, message } = formData;
+
+    if (!name || !email || !phone || !subject || !message) {
       return NextResponse.json(
-        { error: 'Missing required fields. Name, email, subject, and message are required.' },
+        { error: 'Missing required fields. Name, email, phone number, subject, and message are required.' },
         { status: 400, headers: corsHeaders }
       );
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format.' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{7,20}$/;
+    if (!phoneRegex.test(phone.trim())) {
+      return NextResponse.json(
+        { error: 'Invalid phone number format.' },
         { status: 400, headers: corsHeaders }
       );
     }
