@@ -59,7 +59,7 @@ export async function GET(_request: NextRequest) {
         console.log('✅ Test order created successfully:', testOrder.id);
       } catch (error) {
         // Enhanced error logging: log everything
-        let errorDetails = {};
+        let errorDetails: any = {};
         if (error && typeof error === 'object') {
           errorDetails = { ...error };
         }
