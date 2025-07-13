@@ -37,14 +37,18 @@ export async function GET(_request: NextRequest) {
     let orderCreationTest = null;
     if (razorpayInstance) {
       try {
-        const testOrder = await razorpayInstance.orders.create({
+        console.log('🧪 Attempting to create test order...');
+        const orderData = {
           amount: 10000, // ₹100 in paise
           currency: 'INR',
           receipt: `test_receipt_${Date.now()}`,
           notes: {
             test: 'razorpay_connection_test'
           }
-        });
+        };
+        console.log('📋 Order data:', orderData);
+
+        const testOrder = await razorpayInstance.orders.create(orderData);
         
         orderCreationTest = {
           success: true,
@@ -54,11 +58,24 @@ export async function GET(_request: NextRequest) {
         };
         console.log('✅ Test order created successfully:', testOrder.id);
       } catch (error) {
+        const errorDetails = {
+          message: error instanceof Error ? error.message : 'Unknown order creation error',
+          code: (error as any)?.code,
+          description: (error as any)?.description,
+          source: (error as any)?.source,
+          step: (error as any)?.step,
+          reason: (error as any)?.reason,
+          field: (error as any)?.field,
+          statusCode: (error as any)?.statusCode
+        };
+
         orderCreationTest = {
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown order creation error'
+          error: errorDetails.message,
+          errorDetails
         };
         console.error('❌ Test order creation failed:', error);
+        console.error('❌ Detailed error info:', errorDetails);
       }
     }
 
