@@ -4,14 +4,33 @@ import crypto from 'crypto';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      razorpay_order_id, 
-      razorpay_payment_id, 
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
       razorpay_signature,
-      sponsorshipData 
+      sponsorshipData
     } = body;
 
-    // Validate required fields
+    console.log('🔍 Payment verification request:', {
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      hasSignature: !!razorpay_signature
+    });
+
+    // Handle mock payments
+    if (razorpay_order_id?.startsWith('order_mock_')) {
+      console.log('🧪 Processing mock payment verification...');
+      return NextResponse.json({
+        success: true,
+        verified: true,
+        mock: true,
+        message: 'Mock payment verified successfully',
+        paymentId: razorpay_payment_id || `pay_mock_${Date.now()}`,
+        orderId: razorpay_order_id
+      });
+    }
+
+    // Validate required fields for real payments
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
         { error: 'Missing required payment verification data' },
