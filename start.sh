@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "🚀 Starting Event Website..."
+echo "🚀 Starting Event Website v2..."
 echo "📊 Environment: $NODE_ENV"
 echo "🌐 Port: $PORT"
 echo "🏠 Hostname: $HOSTNAME"
