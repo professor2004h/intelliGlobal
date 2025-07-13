@@ -1,30 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
+// import Razorpay from 'razorpay'; // Temporarily disabled
 
-// Initialize Razorpay only if environment variables are available
-let razorpay: Razorpay | null = null;
-
-if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) {
-  razorpay = new Razorpay({
-    key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_SECRET_KEY,
-  });
-}
+// Razorpay initialization temporarily disabled
+// let razorpay: Razorpay | null = null;
+// if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) {
+//   razorpay = new Razorpay({
+//     key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+//     key_secret: process.env.RAZORPAY_SECRET_KEY,
+//   });
+// }
 
 export async function POST(request: NextRequest) {
   try {
     console.log('💳 Payment order creation request received');
-    console.log('Environment check:', {
-      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ? 'SET' : 'NOT SET',
-      secretKey: process.env.RAZORPAY_SECRET_KEY ? 'SET' : 'NOT SET',
-      nodeEnv: process.env.NODE_ENV
-    });
 
     const body = await request.json();
     const { amount, currency = 'INR', receipt, notes } = body;
 
+    console.log('📋 Request data:', { amount, currency, receipt });
+
     // Validate required fields
     if (!amount || amount <= 0) {
+      console.log('❌ Invalid amount:', amount);
       return NextResponse.json(
         { error: 'Invalid amount provided' },
         { status: 400 }
@@ -32,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // TEMPORARY: Always use mock payment for now to fix the issue
-    console.log('🧪 Using mock payment system due to Razorpay issues...');
+    console.log('🧪 Creating mock payment order...');
 
     const mockOrder = {
       id: `order_mock_${Date.now()}`,
