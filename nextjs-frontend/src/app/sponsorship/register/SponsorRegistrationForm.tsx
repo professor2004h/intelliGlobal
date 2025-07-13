@@ -598,12 +598,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           max_count: 3
         },
         timeout: 900, // 15 minutes timeout
-        remember_customer: false,
-        readonly: {
-          email: true,
-          contact: true,
-          name: true
-        }
+        remember_customer: false
       };
 
       // Debug Razorpay configuration before opening

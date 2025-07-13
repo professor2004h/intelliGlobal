@@ -49,7 +49,7 @@ export async function GET(_request: NextRequest) {
         console.log('📋 Order data:', orderData);
 
         const testOrder = await razorpayInstance.orders.create(orderData);
-        
+
         orderCreationTest = {
           success: true,
           orderId: testOrder.id,
@@ -58,16 +58,13 @@ export async function GET(_request: NextRequest) {
         };
         console.log('✅ Test order created successfully:', testOrder.id);
       } catch (error) {
-        const errorDetails = {
-          message: error instanceof Error ? error.message : 'Unknown order creation error',
-          code: (error as any)?.code,
-          description: (error as any)?.description,
-          source: (error as any)?.source,
-          step: (error as any)?.step,
-          reason: (error as any)?.reason,
-          field: (error as any)?.field,
-          statusCode: (error as any)?.statusCode
-        };
+        // Enhanced error logging: log everything
+        let errorDetails = {};
+        if (error && typeof error === 'object') {
+          errorDetails = { ...error };
+        }
+        errorDetails.message = error instanceof Error ? error.message : JSON.stringify(error);
+        errorDetails.stack = error instanceof Error ? error.stack : undefined;
 
         orderCreationTest = {
           success: false,
