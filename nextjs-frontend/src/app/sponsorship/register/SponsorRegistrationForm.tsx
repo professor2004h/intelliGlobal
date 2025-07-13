@@ -436,9 +436,27 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
       console.log('🔧 Order created:', order);
       console.log('🔑 Razorpay Key:', process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
 
+      // Validate Razorpay key before initialization
+      const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      if (!razorpayKey) {
+        console.error('❌ Razorpay key not found in environment variables');
+        setPaymentError('Payment configuration error. Please contact support.');
+        setPaymentLoading(false);
+        return;
+      }
+
+      if (!razorpayKey.startsWith('rzp_')) {
+        console.error('❌ Invalid Razorpay key format:', razorpayKey);
+        setPaymentError('Invalid payment configuration. Please contact support.');
+        setPaymentLoading(false);
+        return;
+      }
+
+      console.log('✅ Razorpay key validated:', razorpayKey.substring(0, 8) + '...');
+
       // Configure Razorpay options following official documentation
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: razorpayKey,
         amount: order.amount,
         currency: order.currency, // INR for UPI compatibility
         name: 'Intelli Global Conferences',
@@ -622,8 +640,16 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         razorpayKey: options.key?.substring(0, 10) + '...'
       });
 
-      // Open Razorpay checkout
-      const rzp = new window.Razorpay(options);
+      // Open Razorpay checkout with error handling
+      try {
+        console.log('🚀 Initializing Razorpay with validated options...');
+
+        if (!window.Razorpay) {
+          throw new Error('Razorpay library not loaded');
+        }
+
+        const rzp = new window.Razorpay(options);
+        console.log('✅ Razorpay instance created successfully');
 
       // Add event listeners for debugging
       rzp.on('payment.failed', function (response: any) {
@@ -631,7 +657,15 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
       });
 
       console.log('🔓 Opening Razorpay modal...');
-      rzp.open();
+        rzp.open();
+        console.log('✅ Razorpay modal opened successfully');
+
+      } catch (razorpayError) {
+        console.error('❌ Razorpay initialization failed:', razorpayError);
+        setPaymentError('Payment system initialization failed. Please refresh and try again.');
+        setPaymentLoading(false);
+        return;
+      }
 
     } catch (error) {
       console.error('❌ Error initiating payment:', error);
