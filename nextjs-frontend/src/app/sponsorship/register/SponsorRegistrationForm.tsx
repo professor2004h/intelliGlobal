@@ -440,14 +440,14 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
       const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
       if (!razorpayKey) {
         console.error('❌ Razorpay key not found in environment variables');
-        setPaymentError('Payment configuration error. Please contact support.');
+        alert('Payment configuration error. Please contact support.');
         setPaymentLoading(false);
         return;
       }
 
       if (!razorpayKey.startsWith('rzp_')) {
         console.error('❌ Invalid Razorpay key format:', razorpayKey);
-        setPaymentError('Invalid payment configuration. Please contact support.');
+        alert('Invalid payment configuration. Please contact support.');
         setPaymentLoading(false);
         return;
       }
@@ -688,7 +688,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
       } catch (razorpayError) {
         console.error('❌ Razorpay initialization failed:', razorpayError);
-        setPaymentError('Payment system initialization failed. Please refresh and try again.');
+        alert('Payment system initialization failed. Please refresh and try again.');
         setPaymentLoading(false);
         return;
       }
