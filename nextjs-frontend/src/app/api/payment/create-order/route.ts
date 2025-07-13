@@ -15,7 +15,17 @@ export async function POST(request: NextRequest) {
   try {
     console.log('💳 Payment order creation request received');
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error('❌ Failed to parse request body:', parseError);
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { amount, currency = 'INR', receipt, notes } = body;
 
     console.log('📋 Request data:', { amount, currency, receipt });
@@ -119,26 +129,39 @@ export async function POST(request: NextRequest) {
     // Fallback to mock payment if Razorpay fails
     console.log('🔄 Razorpay failed, using fallback mock payment...');
 
-    const body = await request.json();
-    const { amount, currency = 'INR', receipt, notes } = body;
+    try {
+      const body = await request.json();
+      const { amount, currency = 'INR', receipt, notes } = body;
 
-    const fallbackOrder = {
-      id: `order_fallback_${Date.now()}`,
-      amount: Math.round(amount * 100),
-      currency: currency,
-      receipt: receipt || `fallback_receipt_${Date.now()}`,
-      status: 'created',
-      created_at: Math.floor(Date.now() / 1000),
-      notes: notes || {}
-    };
+      const fallbackOrder = {
+        id: `order_fallback_${Date.now()}`,
+        amount: Math.round(amount * 100),
+        currency: currency,
+        receipt: receipt || `fallback_receipt_${Date.now()}`,
+        status: 'created',
+        created_at: Math.floor(Date.now() / 1000),
+        notes: notes || {}
+      };
 
-    console.log('✅ Fallback payment order created:', fallbackOrder);
+      console.log('✅ Fallback payment order created:', fallbackOrder);
 
-    return NextResponse.json({
-      success: true,
-      order: fallbackOrder,
-      fallback: true,
-      message: 'Payment order created using fallback system due to API issues'
-    });
+      return NextResponse.json({
+        success: true,
+        order: fallbackOrder,
+        fallback: true,
+        message: 'Payment order created using fallback system due to API issues'
+      });
+    } catch (fallbackError) {
+      console.error('❌ Fallback system also failed:', fallbackError);
+
+      return NextResponse.json(
+        {
+          error: 'Payment system temporarily unavailable',
+          details: 'Both primary and fallback systems failed',
+          code: 'SYSTEM_UNAVAILABLE'
+        },
+        { status: 503 }
+      );
+    }
   }
 }
