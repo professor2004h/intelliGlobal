@@ -3,29 +3,34 @@ FROM node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Copy package files
 COPY nextjs-frontend/package.json nextjs-frontend/package-lock.json* ./
-RUN npm ci
+
+# Install all dependencies (including devDependencies for build)
+RUN npm ci --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
+
+# Copy source code
 COPY nextjs-frontend/ ./
 
-# Environment variables for build time
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# Set build environment variables
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
 # Build the application
 RUN npm run build
 
-# Debug: List the build output
-RUN ls -la .next/
+# Verify standalone build was created
+RUN ls -la .next/ && ls -la .next/standalone/
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -34,39 +39,40 @@ WORKDIR /app
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Set production environment
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
+# Create user and group
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the built application
+# Copy public assets
 COPY --from=builder /app/public ./public
 
-# Set the correct permission for prerender cache
+# Create .next directory with proper permissions
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Copy startup script
-COPY --chown=nextjs:nodejs start.sh ./
-RUN chmod +x start.sh
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Copy the standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy and setup startup script
+COPY --chown=nextjs:nodejs start.sh ./
+RUN chmod +x start.sh
+
+# Switch to non-root user
 USER nextjs
 
+# Expose port
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
 # Add health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:3000/api/health || exit 1
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+# Start the application
 CMD ["./start.sh"]
