@@ -154,6 +154,20 @@ export async function POST(request: NextRequest) {
 
       } catch (razorpayError) {
         console.error('❌ Real Razorpay failed, using fallback:', razorpayError);
+
+        // Log detailed error for debugging
+        if (razorpayError && typeof razorpayError === 'object') {
+          const error = razorpayError as any;
+          console.error('Razorpay Error Details:', {
+            message: error.message,
+            code: error.code,
+            description: error.description,
+            source: error.source,
+            step: error.step,
+            reason: error.reason
+          });
+        }
+
         // Continue to fallback system below
       }
     }

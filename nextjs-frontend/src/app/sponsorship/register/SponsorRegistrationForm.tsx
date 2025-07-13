@@ -532,6 +532,32 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           }
         },
 
+        // Additional UPI optimization settings
+        display: {
+          language: 'en'
+        },
+
+        // Enhanced payment method preferences
+        config: {
+          display: {
+            blocks: {
+              utib: {
+                name: 'Pay using UPI',
+                instruments: [
+                  { method: 'upi' },
+                  { method: 'card' },
+                  { method: 'netbanking' },
+                  { method: 'wallet' }
+                ]
+              }
+            },
+            sequence: ['block.utib'],
+            preferences: {
+              show_default_blocks: true
+            }
+          }
+        },
+
         // Notes for payment tracking and UPI configuration
         notes: {
           sponsorship_tier: selectedTier.name,
