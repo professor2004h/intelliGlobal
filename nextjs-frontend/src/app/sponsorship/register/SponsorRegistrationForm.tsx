@@ -494,6 +494,26 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           color: '#3399cc'
         },
 
+        // Additional UPI and payment optimization
+        readonly: {
+          email: true,
+          name: true,
+          contact: true
+        },
+
+        // Enhanced modal settings for better UPI experience
+        modal: {
+          backdropclose: false,
+          escape: true,
+          handleback: true,
+          confirm_close: false,
+          animation: true,
+          ondismiss: function() {
+            console.log('💔 Payment modal dismissed by user');
+            setPaymentLoading(false);
+          }
+        },
+
         // Notes for payment tracking and UPI configuration
         notes: {
           sponsorship_tier: selectedTier.name,
@@ -507,17 +527,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           payment_methods_enabled: 'upi,card,netbanking,wallet'
         },
 
-        // Modal configuration
-        modal: {
-          backdropclose: false,
-          escape: true,
-          handleback: true,
-          confirm_close: false,
-          ondismiss: function() {
-            console.log('💔 Payment modal dismissed by user');
-            setPaymentLoading(false);
-          }
-        },
+
 
         handler: async function (response: any) {
           try {

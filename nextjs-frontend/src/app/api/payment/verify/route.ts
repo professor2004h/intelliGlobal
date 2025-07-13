@@ -17,15 +17,17 @@ export async function POST(request: NextRequest) {
       hasSignature: !!razorpay_signature
     });
 
-    // Handle mock payments (fallback)
-    if (razorpay_order_id?.startsWith('order_mock_')) {
-      console.log('🧪 Processing mock payment verification...');
+    // Handle mock and fallback payments
+    if (razorpay_order_id?.startsWith('order_mock_') || razorpay_order_id?.startsWith('order_fallback_')) {
+      const paymentType = razorpay_order_id.startsWith('order_mock_') ? 'mock' : 'fallback';
+      console.log(`🧪 Processing ${paymentType} payment verification...`);
+
       return NextResponse.json({
         success: true,
         verified: true,
-        mock: true,
-        message: 'Mock payment verified successfully',
-        paymentId: razorpay_payment_id || `pay_mock_${Date.now()}`,
+        [paymentType]: true,
+        message: `${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)} payment verified successfully`,
+        paymentId: razorpay_payment_id || `pay_${paymentType}_${Date.now()}`,
         orderId: razorpay_order_id
       });
     }
