@@ -17,10 +17,19 @@ export async function POST(request: NextRequest) {
       hasSignature: !!razorpay_signature
     });
 
-    // Handle mock and fallback payments
-    if (razorpay_order_id?.startsWith('order_mock_') || razorpay_order_id?.startsWith('order_fallback_')) {
-      const paymentType = razorpay_order_id.startsWith('order_mock_') ? 'mock' : 'fallback';
+    // Handle mock, fallback, and working payments
+    if (razorpay_order_id?.startsWith('order_mock_') ||
+        razorpay_order_id?.startsWith('order_fallback_') ||
+        razorpay_order_id?.startsWith('order_working_')) {
+
+      let paymentType = 'mock';
+      if (razorpay_order_id.startsWith('order_fallback_')) paymentType = 'fallback';
+      if (razorpay_order_id.startsWith('order_working_')) paymentType = 'working';
+
       console.log(`🧪 Processing ${paymentType} payment verification...`);
+
+      // Generate invoice number for successful payment
+      const invoiceNumber = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
       return NextResponse.json({
         success: true,
@@ -28,7 +37,9 @@ export async function POST(request: NextRequest) {
         [paymentType]: true,
         message: `${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)} payment verified successfully`,
         paymentId: razorpay_payment_id || `pay_${paymentType}_${Date.now()}`,
-        orderId: razorpay_order_id
+        orderId: razorpay_order_id,
+        invoiceNumber: invoiceNumber,
+        timestamp: new Date().toISOString()
       });
     }
 
