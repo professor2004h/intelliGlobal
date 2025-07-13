@@ -455,6 +455,33 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           paylater: false      // Disable pay later options
         },
 
+        // Enhanced UPI configuration for better visibility
+        config: {
+          display: {
+            blocks: {
+              banks: {
+                name: 'All Payment Methods',
+                instruments: [
+                  { method: 'upi' },
+                  { method: 'card' },
+                  { method: 'netbanking' },
+                  { method: 'wallet' }
+                ]
+              }
+            },
+            sequence: ['block.banks'],
+            preferences: {
+              show_default_blocks: true
+            }
+          }
+        },
+
+        // UPI specific settings
+        upi: {
+          flow: ['collect', 'intent', 'qr'],
+          apps: ['gpay', 'phonepe', 'paytm', 'bhim', 'mobikwik', 'freecharge']
+        },
+
         // Prefill customer information for better conversion rates
         prefill: {
           name: formData.name || '',
@@ -467,13 +494,17 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           color: '#3399cc'
         },
 
-        // Notes for payment tracking
+        // Notes for payment tracking and UPI configuration
         notes: {
           sponsorship_tier: selectedTier.name,
           conference: selectedConference.title,
           test_mode: 'true',
           upi_test_enabled: 'true',
-          test_upi_id: 'success@razorpay'
+          test_upi_id: 'success@razorpay',
+          // Enhanced UPI settings
+          upi_flows_enabled: 'collect,intent,qr',
+          upi_apps_supported: 'gpay,phonepe,paytm,bhim',
+          payment_methods_enabled: 'upi,card,netbanking,wallet'
         },
 
         // Modal configuration
@@ -574,12 +605,15 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         order_id: options.order_id
       });
 
-      // Additional UPI debugging
-      console.log('💳 UPI Configuration Debug:', {
+      // Enhanced UPI and payment method debugging
+      console.log('💳 Payment Methods Configuration:', {
         upiEnabled: options.method?.upi,
+        cardEnabled: options.method?.card,
+        netbankingEnabled: options.method?.netbanking,
+        walletEnabled: options.method?.wallet,
         currency: options.currency,
-        testMode: process.env.NEXT_PUBLIC_UPI_TEST_MODE,
-        testUpiId: process.env.NEXT_PUBLIC_UPI_TEST_ID,
+        upiConfig: options.upi,
+        displayConfig: options.config?.display,
         razorpayKey: options.key?.substring(0, 10) + '...'
       });
 

@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       hasSignature: !!razorpay_signature
     });
 
-    // Handle mock payments
+    // Handle mock payments (fallback)
     if (razorpay_order_id?.startsWith('order_mock_')) {
       console.log('🧪 Processing mock payment verification...');
       return NextResponse.json({

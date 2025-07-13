@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import Razorpay from 'razorpay'; // Temporarily disabled
+import Razorpay from 'razorpay';
 
-// Razorpay initialization temporarily disabled
-// let razorpay: Razorpay | null = null;
-// if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) {
-//   razorpay = new Razorpay({
-//     key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-//     key_secret: process.env.RAZORPAY_SECRET_KEY,
-//   });
-// }
+// Initialize Razorpay with proper configuration
+let razorpay: Razorpay | null = null;
+
+if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) {
+  razorpay = new Razorpay({
+    key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_SECRET_KEY,
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,26 +29,64 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TEMPORARY: Always use mock payment for now to fix the issue
-    console.log('🧪 Creating mock payment order...');
+    // Check if Razorpay is properly configured
+    if (!razorpay) {
+      console.error('❌ Razorpay not initialized - missing credentials');
+      return NextResponse.json(
+        {
+          error: 'Payment service is not configured. Please contact support.',
+          details: 'Razorpay credentials not found in environment variables'
+        },
+        { status: 503 }
+      );
+    }
 
-    const mockOrder = {
-      id: `order_mock_${Date.now()}`,
-      amount: Math.round(amount * 100), // Convert to smallest unit
+    // Convert amount to smallest currency unit (paise for INR)
+    const amountInSmallestUnit = Math.round(amount * 100);
+
+    console.log('💳 Creating Razorpay order with enhanced UPI support...');
+
+    // Create Razorpay order with comprehensive payment method support
+    const order = await razorpay.orders.create({
+      amount: amountInSmallestUnit,
       currency: currency,
-      receipt: receipt || `mock_receipt_${Date.now()}`,
-      status: 'created',
-      created_at: Math.floor(Date.now() / 1000),
-      notes: notes || {}
-    };
+      receipt: receipt || `receipt_${Date.now()}`,
+      notes: {
+        ...notes,
+        // Enhanced UPI configuration
+        upi_enabled: 'true',
+        upi_test_mode: 'true',
+        test_upi_id: 'success@razorpay',
+        // Payment methods configuration
+        payment_methods: 'upi,card,netbanking,wallet,emi',
+        // UPI specific settings
+        upi_flows: 'collect,intent,qr',
+        upi_apps: 'gpay,phonepe,paytm,bhim',
+        // Card configuration
+        card_types: 'credit,debit',
+        international_cards: 'enabled',
+        // Environment settings
+        environment: process.env.NODE_ENV || 'development',
+        currency_used: currency
+      }
+    });
 
-    console.log('✅ Mock payment order created:', mockOrder);
+    console.log('✅ Razorpay order created successfully:', {
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      status: order.status
+    });
 
     return NextResponse.json({
       success: true,
-      order: mockOrder,
-      mock: true,
-      message: 'Mock payment order created - payment will be processed as test transaction'
+      order: {
+        id: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        receipt: order.receipt,
+        status: order.status
+      }
     });
 
     // Original Razorpay code (commented out temporarily)
