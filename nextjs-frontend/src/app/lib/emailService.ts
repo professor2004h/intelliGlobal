@@ -67,14 +67,16 @@ export interface SponsorshipNotificationData {
 const SMTP_CONFIG = {
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+  secure: false, // true for 465, false for other ports like 587
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    pass: process.env.SMTP_PASS?.replace(/\s/g, ''), // Remove any spaces from password
   },
   tls: {
-    rejectUnauthorized: false // Allow self-signed certificates for development
-  }
+    rejectUnauthorized: false // Allow self-signed certificates
+  },
+  debug: true, // Enable debug logs
+  logger: true // Enable logger
 };
 
 // Create reusable transporter object using SMTP transport
@@ -97,12 +99,26 @@ function createTransporter(): nodemailer.Transporter {
 // Verify SMTP connection
 export async function verifyEmailConnection(): Promise<boolean> {
   try {
+    console.log('🔧 Testing SMTP connection...');
+    console.log('SMTP Config:', {
+      host: SMTP_CONFIG.host,
+      port: SMTP_CONFIG.port,
+      secure: SMTP_CONFIG.secure,
+      user: SMTP_CONFIG.auth.user,
+      passLength: SMTP_CONFIG.auth.pass?.length || 0
+    });
+
     const emailTransporter = createTransporter();
     await emailTransporter.verify();
     console.log('✅ SMTP connection verified successfully');
     return true;
   } catch (error) {
     console.error('❌ SMTP connection failed:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      command: (error as any)?.command
+    });
     return false;
   }
 }
@@ -118,6 +134,8 @@ export async function sendEmail(emailData: EmailData): Promise<boolean> {
     // Validate required environment variables
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
       console.error('❌ SMTP credentials not configured');
+      console.error('SMTP_USER:', process.env.SMTP_USER ? 'SET' : 'NOT SET');
+      console.error('SMTP_PASS:', process.env.SMTP_PASS ? `SET (length: ${process.env.SMTP_PASS.length})` : 'NOT SET');
       return false;
     }
 
@@ -143,6 +161,12 @@ export async function sendEmail(emailData: EmailData): Promise<boolean> {
 
   } catch (error) {
     console.error('❌ Error sending email:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      command: (error as any)?.command,
+      response: (error as any)?.response
+    });
     return false;
   }
 }

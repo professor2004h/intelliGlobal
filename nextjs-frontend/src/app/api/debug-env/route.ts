@@ -15,6 +15,9 @@ export async function GET(_request: NextRequest) {
       razorpaySecret: process.env.RAZORPAY_SECRET_KEY ? 'set' : 'not set',
       sanityToken: process.env.SANITY_API_TOKEN ? 'set' : 'not set',
       smtpHost: process.env.SMTP_HOST || 'not set',
+      smtpPort: process.env.SMTP_PORT || 'not set',
+      smtpUser: process.env.SMTP_USER || 'not set',
+      smtpPass: process.env.SMTP_PASS ? 'set (length: ' + process.env.SMTP_PASS.length + ')' : 'not set',
       fromEmail: process.env.FROM_EMAIL || 'not set',
       buildInfo: 'Docker rebuild v2 - timestamp added',
       containerInfo: {
