@@ -53,8 +53,60 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Validate required fields for real payments
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    // Handle real Razorpay payments
+    if (razorpay_order_id && !isTestOrder && razorpay_payment_id && razorpay_signature) {
+      console.log('🔍 Processing real Razorpay payment verification...');
+
+      try {
+        // Verify Razorpay signature
+        const secret = process.env.RAZORPAY_SECRET_KEY;
+        if (!secret) {
+          throw new Error('Razorpay secret key not found');
+        }
+
+        const body = razorpay_order_id + '|' + razorpay_payment_id;
+        const expectedSignature = crypto
+          .createHmac('sha256', secret)
+          .update(body.toString())
+          .digest('hex');
+
+        const isSignatureValid = expectedSignature === razorpay_signature;
+
+        if (isSignatureValid) {
+          console.log('✅ Real Razorpay payment verified successfully');
+
+          // Generate invoice number for successful payment
+          const invoiceNumber = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+          return NextResponse.json({
+            success: true,
+            verified: true,
+            razorpay: true,
+            message: 'Real Razorpay payment verified successfully',
+            paymentId: razorpay_payment_id,
+            orderId: razorpay_order_id,
+            invoiceNumber: invoiceNumber,
+            timestamp: new Date().toISOString(),
+            sponsorshipData: sponsorshipData
+          });
+        } else {
+          console.error('❌ Invalid Razorpay signature');
+          return NextResponse.json(
+            { error: 'Invalid payment signature' },
+            { status: 400 }
+          );
+        }
+      } catch (verificationError) {
+        console.error('❌ Razorpay verification error:', verificationError);
+        return NextResponse.json(
+          { error: 'Payment verification failed' },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Validate required fields for other payments
+    if (!razorpay_order_id || !razorpay_payment_id) {
       return NextResponse.json(
         { error: 'Missing required payment verification data' },
         { status: 400 }
