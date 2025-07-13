@@ -1,19 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
-// Initialize Razorpay with working credentials
+// Initialize Razorpay with robust error handling
 let razorpay: Razorpay | null = null;
 
-if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) {
-  razorpay = new Razorpay({
-    key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_SECRET_KEY,
+function initializeRazorpay() {
+  const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_SECRET_KEY;
+
+  console.log('🔧 Initializing Razorpay with credentials check:', {
+    keyIdExists: !!keyId,
+    keyIdValue: keyId ? keyId.substring(0, 8) + '...' : 'NOT SET',
+    keySecretExists: !!keySecret,
+    keySecretLength: keySecret ? keySecret.length : 0
   });
-  console.log('✅ Razorpay initialized with credentials:', {
-    keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.substring(0, 8) + '...',
-    keySecretLength: process.env.RAZORPAY_SECRET_KEY?.length
-  });
+
+  if (!keyId || !keySecret) {
+    console.error('❌ Razorpay credentials missing:', {
+      NEXT_PUBLIC_RAZORPAY_KEY_ID: keyId ? 'SET' : 'MISSING',
+      RAZORPAY_SECRET_KEY: keySecret ? 'SET' : 'MISSING'
+    });
+    return null;
+  }
+
+  if (keyId.length < 10 || keySecret.length < 10) {
+    console.error('❌ Razorpay credentials appear invalid:', {
+      keyIdLength: keyId.length,
+      keySecretLength: keySecret.length
+    });
+    return null;
+  }
+
+  try {
+    const instance = new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret,
+    });
+
+    console.log('✅ Razorpay initialized successfully:', {
+      keyId: keyId.substring(0, 8) + '...',
+      keySecretLength: keySecret.length
+    });
+
+    return instance;
+  } catch (error) {
+    console.error('❌ Razorpay initialization failed:', error);
+    return null;
+  }
 }
+
+// Initialize Razorpay
+razorpay = initializeRazorpay();
 
 export async function POST(request: NextRequest) {
   console.log('💳 Payment order creation request received');
@@ -57,14 +94,20 @@ export async function POST(request: NextRequest) {
       validAmount = amount;
     }
 
-    // Try real Razorpay first if available
-    if (razorpay) {
+    // Try real Razorpay first - reinitialize if needed to ensure fresh credentials
+    let currentRazorpay = razorpay;
+    if (!currentRazorpay) {
+      console.log('🔄 Razorpay not initialized, attempting fresh initialization...');
+      currentRazorpay = initializeRazorpay();
+    }
+
+    if (currentRazorpay) {
       try {
         console.log('💳 Creating real Razorpay order...');
 
         const amountInPaise = Math.round(validAmount * 100);
 
-        const razorpayOrder = await razorpay.orders.create({
+        const razorpayOrder = await currentRazorpay.orders.create({
           amount: amountInPaise,
           currency: currency,
           receipt: receipt || `rzp_receipt_${Date.now()}`,
