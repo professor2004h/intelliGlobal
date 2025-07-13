@@ -13,10 +13,21 @@ if (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET_KEY) 
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('💳 Payment order creation request received');
+    console.log('Environment check:', {
+      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ? 'SET' : 'NOT SET',
+      secretKey: process.env.RAZORPAY_SECRET_KEY ? 'SET' : 'NOT SET',
+      nodeEnv: process.env.NODE_ENV
+    });
+
     // Check if Razorpay is properly configured
     if (!razorpay) {
+      console.error('❌ Razorpay not initialized - missing credentials');
       return NextResponse.json(
-        { error: 'Payment service is not configured. Please contact support.' },
+        {
+          error: 'Payment service is not configured. Please contact support.',
+          details: 'Razorpay credentials not found in environment variables'
+        },
         { status: 503 }
       );
     }
@@ -75,11 +86,20 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('❌ Error creating payment order:', error);
-    
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code,
+      description: (error as any)?.description,
+      source: (error as any)?.source,
+      step: (error as any)?.step,
+      reason: (error as any)?.reason
+    });
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to create payment order',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
+        code: (error as any)?.code || 'UNKNOWN_ERROR'
       },
       { status: 500 }
     );
