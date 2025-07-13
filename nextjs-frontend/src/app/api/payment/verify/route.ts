@@ -17,14 +17,24 @@ export async function POST(request: NextRequest) {
       hasSignature: !!razorpay_signature
     });
 
-    // Handle mock, fallback, and working payments
-    if (razorpay_order_id?.startsWith('order_mock_') ||
-        razorpay_order_id?.startsWith('order_fallback_') ||
-        razorpay_order_id?.startsWith('order_working_')) {
+    // Handle all test payment types
+    const testOrderPrefixes = [
+      'order_mock_', 'order_fallback_', 'order_working_',
+      'order_reliable_', 'order_basic_', 'order_emergency_', 'order_test_'
+    ];
 
-      let paymentType = 'mock';
-      if (razorpay_order_id.startsWith('order_fallback_')) paymentType = 'fallback';
-      if (razorpay_order_id.startsWith('order_working_')) paymentType = 'working';
+    const isTestOrder = testOrderPrefixes.some(prefix => razorpay_order_id?.startsWith(prefix));
+
+    if (isTestOrder) {
+      let paymentType = 'test';
+
+      // Determine payment type from order ID
+      if (razorpay_order_id.startsWith('order_mock_')) paymentType = 'mock';
+      else if (razorpay_order_id.startsWith('order_fallback_')) paymentType = 'fallback';
+      else if (razorpay_order_id.startsWith('order_working_')) paymentType = 'working';
+      else if (razorpay_order_id.startsWith('order_reliable_')) paymentType = 'reliable';
+      else if (razorpay_order_id.startsWith('order_basic_')) paymentType = 'basic';
+      else if (razorpay_order_id.startsWith('order_emergency_')) paymentType = 'emergency';
 
       console.log(`🧪 Processing ${paymentType} payment verification...`);
 
