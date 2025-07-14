@@ -25,6 +25,7 @@ interface LocationsResponse {
   dataSource: string;
   timestamp: string;
   note?: string;
+  message?: string; // For error responses
 }
 
 // Loading component

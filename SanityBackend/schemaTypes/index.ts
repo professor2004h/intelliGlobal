@@ -11,7 +11,7 @@ import paymentTransaction from './paymentTransaction';
 import pastConferencesSection from './pastConferencesSection';
 import journalSection from './journalSection';
 import customContentSection from './customContentSection';
-import conferenceLocation from './conferenceLocation';
+import googleMapsLocation from './googleMapsLocation';
 
 
 
@@ -30,5 +30,5 @@ export const schemaTypes = [
   pastConferencesSection,
   journalSection,
   customContentSection,
-  conferenceLocation
+  googleMapsLocation
 ]
