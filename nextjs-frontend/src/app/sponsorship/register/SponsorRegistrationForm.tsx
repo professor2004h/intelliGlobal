@@ -473,27 +473,6 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           paylater: false      // Disable pay later options
         },
 
-        // Enhanced UPI configuration for better visibility
-        config: {
-          display: {
-            blocks: {
-              banks: {
-                name: 'All Payment Methods',
-                instruments: [
-                  { method: 'upi' },
-                  { method: 'card' },
-                  { method: 'netbanking' },
-                  { method: 'wallet' }
-                ]
-              }
-            },
-            sequence: ['block.banks'],
-            preferences: {
-              show_default_blocks: true
-            }
-          }
-        },
-
         // UPI specific settings
         upi: {
           flow: ['collect', 'intent', 'qr'],
@@ -532,14 +511,10 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
           }
         },
 
-        // Additional UPI optimization settings
-        display: {
-          language: 'en'
-        },
-
-        // Enhanced payment method preferences
+        // Enhanced payment method preferences and display settings
         config: {
           display: {
+            language: 'en',
             blocks: {
               utib: {
                 name: 'Pay using UPI',
