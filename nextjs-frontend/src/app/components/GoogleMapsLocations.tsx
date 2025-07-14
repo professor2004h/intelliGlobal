@@ -7,13 +7,14 @@ import { Loader } from '@googlemaps/js-api-loader';
 interface GoogleMapsLocation {
   _id: string;
   title: string;
+  category?: string;
   address: string;
   placeId?: string;
   latitude?: number;
   longitude?: number;
   description?: string;
   isActive: boolean;
-  order?: number;
+  priority?: number;
   markerColor?: string;
 }
 
@@ -104,15 +105,28 @@ const GoogleMapsLocations: React.FC = () => {
     }
   };
 
+  // Helper function to get marker color
+  const getMarkerColor = (color?: string): string => {
+    const colorMap: { [key: string]: string } = {
+      red: '#ef4444',
+      blue: '#3b82f6',
+      green: '#10b981',
+      yellow: '#f59e0b',
+      purple: '#8b5cf6',
+      orange: '#f97316',
+    };
+    return colorMap[color || 'red'] || '#ef4444';
+  };
+
   const initializeMap = async () => {
     if (!mapRef.current || locations.length === 0) return;
 
     try {
-      // Initialize Google Maps
+      // Initialize Google Maps with proper API key
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
         version: 'weekly',
-        libraries: ['places'],
+        libraries: ['places', 'geometry'],
       });
 
       const google = await loader.load();
@@ -135,13 +149,25 @@ const GoogleMapsLocations: React.FC = () => {
         centerLng /= validCoordinates;
       }
 
-      // Create map
+      // Create map with mobile-optimized settings
       const map = new google.maps.Map(mapRef.current, {
         center: { lat: centerLat, lng: centerLng },
-        zoom: validCoordinates === 1 ? 10 : 2,
+        zoom: validCoordinates === 1 ? 12 : 2,
+        gestureHandling: 'cooperative', // Better mobile experience
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: true,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
         styles: [
           {
             featureType: 'poi',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }],
+          },
+          {
+            featureType: 'transit',
             elementType: 'labels',
             stylers: [{ visibility: 'off' }],
           },
@@ -173,38 +199,56 @@ const GoogleMapsLocations: React.FC = () => {
         }
 
         if (position) {
-          // Create custom marker
+          // Create custom marker with improved styling
           const marker = new google.maps.Marker({
             position: position,
             map: map,
             title: location.title,
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
-              scale: 12,
-              fillColor: location.markerColor || '#f97316',
-              fillOpacity: 1,
+              scale: 14,
+              fillColor: getMarkerColor(location.markerColor),
+              fillOpacity: 0.9,
               strokeColor: '#ffffff',
               strokeWeight: 3,
+              strokeOpacity: 1,
             },
+            animation: google.maps.Animation.DROP,
           });
 
-          // Create info window
+          // Create mobile-optimized info window
+          const categoryIcon = location.category === 'office' ? '🏢' :
+                              location.category === 'conference' ? '🏛️' :
+                              location.category === 'venue' ? '🎪' :
+                              location.category === 'partner' ? '🤝' : '📍';
+
           const infoWindow = new google.maps.InfoWindow({
             content: `
-              <div style="max-width: 300px; padding: 8px;">
-                <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1f2937;">
-                  ${location.title}
-                </h3>
-                <p style="margin: 0 0 8px 0; font-size: 14px; color: #6b7280;">
+              <div style="max-width: 280px; padding: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 20px; margin-right: 8px;">${categoryIcon}</span>
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937; line-height: 1.3;">
+                    ${location.title}
+                  </h3>
+                </div>
+                ${location.category ? `
+                  <div style="margin-bottom: 8px;">
+                    <span style="display: inline-block; background: ${getMarkerColor(location.markerColor)}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; text-transform: capitalize;">
+                      ${location.category}
+                    </span>
+                  </div>
+                ` : ''}
+                <p style="margin: 0 0 8px 0; font-size: 14px; color: #6b7280; line-height: 1.4;">
                   📍 ${location.address}
                 </p>
                 ${location.description ? `
-                  <p style="margin: 0; font-size: 14px; color: #4b5563;">
+                  <p style="margin: 0; font-size: 14px; color: #4b5563; line-height: 1.4;">
                     ${location.description}
                   </p>
                 ` : ''}
               </div>
             `,
+            maxWidth: 300,
           });
 
           // Add click listener
@@ -248,51 +292,91 @@ const GoogleMapsLocations: React.FC = () => {
   }
 
   return (
-    <section className="py-16 md:py-20 bg-gray-50">
+    <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Our Global Presence
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Our Global Locations
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover our conference locations around the world. We bring together experts, 
-            researchers, and professionals from diverse fields across multiple continents.
+          <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Explore our worldwide network of offices, conference centers, and partner locations.
+            We connect professionals and innovators across the globe.
           </p>
           {!loading && !error && (
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-500 mt-3">
               {locations.length} active location{locations.length !== 1 ? 's' : ''} worldwide
             </p>
           )}
         </div>
 
         {/* Map Container */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
           {loading && <MapSkeleton />}
           {error && <MapError error={error} onRetry={handleRetry} />}
           {!loading && !error && locations.length > 0 && (
             <div
               ref={mapRef}
-              className="w-full h-[400px] md:h-[500px]"
+              className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px]"
               style={{ minHeight: '400px' }}
             />
           )}
         </div>
 
-        {/* Locations List (Mobile-friendly) */}
+        {/* Enhanced Mobile Locations List */}
         {!loading && !error && locations.length > 0 && (
-          <div className="mt-8 md:hidden">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Conference Locations</h3>
-            <div className="grid gap-4">
-              {locations.map((location) => (
-                <div key={location._id} className="bg-white p-4 rounded-lg shadow border">
-                  <h4 className="font-semibold text-gray-900">{location.title}</h4>
-                  <p className="text-sm text-gray-600 mt-1">📍 {location.address}</p>
-                  {location.description && (
-                    <p className="text-sm text-gray-500 mt-2">{location.description}</p>
-                  )}
-                </div>
-              ))}
+          <div className="mt-8 lg:hidden">
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                <h3 className="text-xl font-semibold text-white">All Locations</h3>
+                <p className="text-blue-100 text-sm mt-1">Tap any location to view details</p>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {locations
+                  .sort((a, b) => (b.priority || 50) - (a.priority || 50))
+                  .map((location) => {
+                    const categoryIcon = location.category === 'office' ? '🏢' :
+                                        location.category === 'conference' ? '🏛️' :
+                                        location.category === 'venue' ? '🎪' :
+                                        location.category === 'partner' ? '🤝' : '📍';
+
+                    return (
+                      <div key={location._id} className="p-6 hover:bg-gray-50 transition-colors">
+                        <div className="flex items-start space-x-4">
+                          <div className="flex-shrink-0">
+                            <div
+                              className="w-4 h-4 rounded-full border-2 border-white shadow-md"
+                              style={{ backgroundColor: getMarkerColor(location.markerColor) }}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-lg">{categoryIcon}</span>
+                              <h4 className="font-semibold text-gray-900 text-lg">{location.title}</h4>
+                            </div>
+                            {location.category && (
+                              <div className="mb-3">
+                                <span
+                                  className="inline-block px-3 py-1 rounded-full text-xs font-medium text-white capitalize"
+                                  style={{ backgroundColor: getMarkerColor(location.markerColor) }}
+                                >
+                                  {location.category}
+                                </span>
+                              </div>
+                            )}
+                            <p className="text-sm text-gray-600 mb-2 flex items-start">
+                              <span className="mr-2 mt-0.5">📍</span>
+                              <span className="leading-relaxed">{location.address}</span>
+                            </p>
+                            {location.description && (
+                              <p className="text-sm text-gray-500 leading-relaxed">{location.description}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         )}

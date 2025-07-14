@@ -5,28 +5,30 @@ import { client } from '@/app/sanity/client';
 export interface GoogleMapsLocation {
   _id: string;
   title: string;
+  category?: string;
   address: string;
   placeId?: string;
   latitude?: number;
   longitude?: number;
   description?: string;
   isActive: boolean;
-  order?: number;
+  priority?: number;
   markerColor?: string;
 }
 
 // GROQ query to fetch active Google Maps locations
 const GOOGLE_MAPS_LOCATIONS_QUERY = `
-  *[_type == "googleMapsLocation" && isActive == true] | order(order asc, title asc) {
+  *[_type == "mapLocation" && isActive == true] | order(priority desc, title asc) {
     _id,
     title,
+    category,
     address,
     placeId,
     latitude,
     longitude,
     description,
     isActive,
-    order,
+    priority,
     markerColor
   }
 `;
@@ -35,58 +37,63 @@ const GOOGLE_MAPS_LOCATIONS_QUERY = `
 const testLocations: GoogleMapsLocation[] = [
   {
     _id: 'test-london',
-    title: 'London, United Kingdom',
+    title: 'London Office',
+    category: 'office',
     address: 'ExCeL London, Royal Victoria Dock, London E16 1XL, UK',
     latitude: 51.5074,
     longitude: -0.1278,
     description: 'Major European hub for international conferences and academic events.',
     isActive: true,
-    order: 1,
-    markerColor: '#f97316',
+    priority: 90,
+    markerColor: 'blue',
   },
   {
     _id: 'test-newyork',
-    title: 'New York, USA',
+    title: 'New York Conference Center',
+    category: 'conference',
     address: 'Jacob K. Javits Convention Center, 429 11th Ave, New York, NY 10001, USA',
     latitude: 40.7128,
     longitude: -74.0060,
     description: 'Premier destination for technology and business conferences in North America.',
     isActive: true,
-    order: 2,
-    markerColor: '#f97316',
+    priority: 85,
+    markerColor: 'red',
   },
   {
     _id: 'test-singapore',
-    title: 'Singapore',
+    title: 'Singapore Event Venue',
+    category: 'venue',
     address: 'Marina Bay Sands Expo and Convention Centre, 10 Bayfront Ave, Singapore 018956',
     latitude: 1.3521,
     longitude: 103.8198,
     description: 'Gateway to Asia-Pacific conferences and international symposiums.',
     isActive: true,
-    order: 3,
-    markerColor: '#f97316',
+    priority: 80,
+    markerColor: 'green',
   },
   {
     _id: 'test-dubai',
-    title: 'Dubai, UAE',
+    title: 'Dubai Regional Office',
+    category: 'office',
     address: 'Dubai World Trade Centre, Sheikh Zayed Rd, Dubai, UAE',
     latitude: 25.2048,
     longitude: 55.2708,
     description: 'Middle East hub for global conferences and business events.',
     isActive: true,
-    order: 4,
-    markerColor: '#f97316',
+    priority: 75,
+    markerColor: 'orange',
   },
   {
     _id: 'test-tokyo',
-    title: 'Tokyo, Japan',
+    title: 'Tokyo Innovation Hub',
+    category: 'partner',
     address: 'Tokyo International Forum, 3-5-1 Marunouchi, Chiyoda City, Tokyo 100-0005, Japan',
     latitude: 35.6762,
     longitude: 139.6503,
     description: 'Leading venue for technology and innovation conferences in Asia.',
     isActive: true,
-    order: 5,
-    markerColor: '#f97316',
+    priority: 70,
+    markerColor: 'purple',
   },
 ];
 

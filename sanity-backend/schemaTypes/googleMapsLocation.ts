@@ -2,17 +2,34 @@ import { defineField, defineType } from 'sanity'
 import { MapPinIcon } from '@sanity/icons'
 
 export default defineType({
-  name: 'googleMapsLocation',
-  title: 'Conference Location (Google Maps)',
+  name: 'mapLocation',
+  title: 'Map Location',
   type: 'document',
   icon: MapPinIcon,
+  description: 'Standalone map locations - independent from conference events',
   fields: [
     defineField({
       name: 'title',
       title: 'Location Name',
       type: 'string',
-      description: 'Name of the city or location (e.g., "London, UK" or "New York, USA")',
-      validation: (Rule) => Rule.required().min(2).max(100),
+      description: 'Name of the location (e.g., "London Office", "New York Headquarters", "Conference Center")',
+      validation: (Rule: any) => Rule.required().min(2).max(100),
+    }),
+    defineField({
+      name: 'category',
+      title: 'Location Category',
+      type: 'string',
+      description: 'Type of location for better organization',
+      options: {
+        list: [
+          { title: 'Office', value: 'office' },
+          { title: 'Conference Center', value: 'conference' },
+          { title: 'Event Venue', value: 'venue' },
+          { title: 'Partner Location', value: 'partner' },
+          { title: 'Other', value: 'other' },
+        ],
+      },
+      initialValue: 'office',
     }),
     defineField({
       name: 'address',
@@ -20,7 +37,7 @@ export default defineType({
       type: 'text',
       description: 'Complete address for Google Maps geocoding and display',
       rows: 3,
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: 'placeId',
@@ -33,7 +50,7 @@ export default defineType({
       title: 'Latitude (Optional)',
       type: 'number',
       description: 'Latitude coordinate - will be auto-generated from address if not provided',
-      validation: (Rule) => 
+      validation: (Rule: any) =>
         Rule.min(-90)
           .max(90)
           .precision(6)
@@ -44,7 +61,7 @@ export default defineType({
       title: 'Longitude (Optional)',
       type: 'number',
       description: 'Longitude coordinate - will be auto-generated from address if not provided',
-      validation: (Rule) => 
+      validation: (Rule: any) =>
         Rule.min(-180)
           .max(180)
           .precision(6)
@@ -65,29 +82,32 @@ export default defineType({
       initialValue: true,
     }),
     defineField({
-      name: 'order',
-      title: 'Display Order',
-      type: 'number',
-      description: 'Order in which locations appear (lower numbers first)',
-      initialValue: 0,
-    }),
-    defineField({
       name: 'markerColor',
       title: 'Marker Color',
       type: 'string',
-      description: 'Custom marker color (hex code)',
+      description: 'Custom color for the map marker',
       options: {
         list: [
-          { title: 'Orange (Default)', value: '#f97316' },
-          { title: 'Red', value: '#ef4444' },
-          { title: 'Blue', value: '#3b82f6' },
-          { title: 'Green', value: '#10b981' },
-          { title: 'Purple', value: '#8b5cf6' },
-          { title: 'Custom', value: '' },
+          { title: 'Red (Default)', value: 'red' },
+          { title: 'Blue', value: 'blue' },
+          { title: 'Green', value: 'green' },
+          { title: 'Yellow', value: 'yellow' },
+          { title: 'Purple', value: 'purple' },
+          { title: 'Orange', value: 'orange' },
         ],
       },
-      initialValue: '#f97316',
+      initialValue: 'red',
     }),
+    defineField({
+      name: 'priority',
+      title: 'Display Priority',
+      type: 'number',
+      description: 'Higher numbers appear first in lists (1-100)',
+      validation: (Rule: any) => Rule.min(1).max(100),
+      initialValue: 50,
+    }),
+
+
   ],
   preview: {
     select: {
@@ -95,7 +115,7 @@ export default defineType({
       subtitle: 'address',
       isActive: 'isActive',
     },
-    prepare(selection) {
+    prepare(selection: any) {
       const { title, subtitle, isActive } = selection
       return {
         title: title,
@@ -106,14 +126,19 @@ export default defineType({
   },
   orderings: [
     {
-      title: 'Display Order',
-      name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }],
+      title: 'Priority (High to Low)',
+      name: 'priorityDesc',
+      by: [{ field: 'priority', direction: 'desc' }],
     },
     {
       title: 'Location Name',
       name: 'titleAsc',
       by: [{ field: 'title', direction: 'asc' }],
+    },
+    {
+      title: 'Category',
+      name: 'categoryAsc',
+      by: [{ field: 'category', direction: 'asc' }],
     },
   ],
 })
