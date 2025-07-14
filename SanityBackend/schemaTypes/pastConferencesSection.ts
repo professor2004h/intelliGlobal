@@ -59,13 +59,13 @@ export const pastConferencesSection = defineType({
       description: 'Control the opacity of the color overlay (0-100%). Higher values make the overlay more opaque, lower values make it more transparent.',
       validation: (Rule) => Rule.required().min(0).max(100),
       initialValue: 80,
-      options: {
-        range: {
-          min: 0,
-          max: 100,
-          step: 5
-        }
-      }
+      // options: {
+      //   range: {
+      //     min: 0,
+      //     max: 100,
+      //     step: 5
+      //   }
+      // }
     }),
 
     // Enable/Disable Toggle
@@ -100,7 +100,7 @@ export const pastConferencesSection = defineType({
   },
   
   // Singleton - only one document of this type should exist
-  __experimental_singleton: true,
+  // __experimental_singleton: true,
 });
 
 export default pastConferencesSection;

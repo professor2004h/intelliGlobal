@@ -1,12 +1,12 @@
 // schemaTypes/mapLocation.ts
 import {defineField, defineType} from 'sanity'
-import {MapPinIcon} from '@sanity/icons'
+import {PinIcon} from '@sanity/icons'
 
 export default defineType({
   name: 'mapLocation',
   title: 'Map Locations',
   type: 'document',
-  icon: MapPinIcon,
+  icon: PinIcon,
   description: 'Manage locations that will appear on the Google Maps on your homepage',
   fields: [
     defineField({

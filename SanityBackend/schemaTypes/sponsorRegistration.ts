@@ -282,7 +282,7 @@ const sponsorRegistration = defineType({
         confirmed: '✅',
         cancelled: '❌',
         refunded: '💰',
-      }[status] || '❓';
+      }[status as string] || '❓';
       
       return {
         title: `${statusEmoji} ${companyName || 'Unknown Company'}`,

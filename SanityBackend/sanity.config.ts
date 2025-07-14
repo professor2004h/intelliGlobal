@@ -54,8 +54,8 @@ export default defineConfig({
   },
 
   // Add document actions for better editing experience
-  document: {
-    // Enable real-time collaboration
-    unstable_liveEdit: true,
-  },
+  // document: {
+  //   // Enable real-time collaboration
+  //   unstable_liveEdit: true,
+  // },
 })

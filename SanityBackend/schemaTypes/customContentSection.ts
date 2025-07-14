@@ -68,7 +68,7 @@ export const customContentSection = defineType({
   },
   
   // Singleton - only one document of this type should exist
-  __experimental_singleton: true,
+  // __experimental_singleton: true,
 });
 
 export default customContentSection;

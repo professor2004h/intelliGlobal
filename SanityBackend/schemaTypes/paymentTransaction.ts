@@ -229,7 +229,7 @@ const paymentTransaction = defineType({
         cancelled: '🚫',
         refunded: '💰',
         partially_refunded: '💸',
-      }[status] || '❓';
+      }[status as string] || '❓';
       
       return {
         title: `${statusEmoji} ${transactionId}`,
