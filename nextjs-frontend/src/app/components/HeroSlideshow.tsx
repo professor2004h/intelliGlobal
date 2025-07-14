@@ -94,10 +94,7 @@ export default function HeroSlideshow({ hero }: HeroSlideshowProps) {
 
           {/* Dynamic Call to Action Buttons from Sanity */}
           <div className="hero-buttons-container">
-            {/* Primary Button - Use Link for internal URLs, a tag for external URLs */}
-            {(hero?.primaryButton?.url || '/conferences').startsWith('http://') ||
-            (hero?.primaryButton?.url || '/conferences').startsWith('https://') ? (
-
+            {/* Primary Button - Always use Link for internal navigation */}
             <Link
               href={hero?.primaryButton?.url || '/conferences'}
               className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 focus:from-orange-600 focus:to-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300"
@@ -105,12 +102,8 @@ export default function HeroSlideshow({ hero }: HeroSlideshowProps) {
             >
               {hero?.primaryButton?.text || 'VIEW ALL CONFERENCES'}
             </Link>
-          )}
 
-            {/* Secondary Button - Use Link for internal URLs, a tag for external URLs */}
-            {(hero?.secondaryButton?.url || '/contact').startsWith('http://') ||
-            (hero?.secondaryButton?.url || '/contact').startsWith('https://') ? (
-
+            {/* Secondary Button - Always use Link for internal navigation */}
             <Link
               href={hero?.secondaryButton?.url || '/contact'}
               className="border-2 border-white text-white hover:bg-white hover:text-gray-900 focus:bg-white focus:text-gray-900 focus:outline-none focus:ring-4 focus:ring-white"
@@ -118,7 +111,6 @@ export default function HeroSlideshow({ hero }: HeroSlideshowProps) {
             >
               {hero?.secondaryButton?.text || 'CONTACT US'}
             </Link>
-          )}
           </div>
         </div>
       </div>
