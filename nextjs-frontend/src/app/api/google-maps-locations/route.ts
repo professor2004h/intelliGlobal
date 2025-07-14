@@ -7,7 +7,6 @@ export interface GoogleMapsLocation {
   title: string;
   category?: string;
   address: string;
-  placeId?: string;
   latitude?: number;
   longitude?: number;
   description?: string;
@@ -23,7 +22,6 @@ const GOOGLE_MAPS_LOCATIONS_QUERY = `
     title,
     category,
     address,
-    placeId,
     latitude,
     longitude,
     description,
@@ -45,7 +43,7 @@ const testLocations: GoogleMapsLocation[] = [
     description: 'Major European hub for international conferences and academic events.',
     isActive: true,
     priority: 90,
-    markerColor: 'blue',
+    markerColor: 'orange',
   },
   {
     _id: 'test-newyork',
@@ -57,7 +55,7 @@ const testLocations: GoogleMapsLocation[] = [
     description: 'Premier destination for technology and business conferences in North America.',
     isActive: true,
     priority: 85,
-    markerColor: 'red',
+    markerColor: 'orange',
   },
   {
     _id: 'test-singapore',

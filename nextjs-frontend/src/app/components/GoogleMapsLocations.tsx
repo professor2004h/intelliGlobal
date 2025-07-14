@@ -115,7 +115,7 @@ const GoogleMapsLocations: React.FC = () => {
       purple: '#8b5cf6',
       orange: '#f97316',
     };
-    return colorMap[color || 'red'] || '#ef4444';
+    return colorMap[color || 'orange'] || '#f97316';
   };
 
   const initializeMap = async () => {

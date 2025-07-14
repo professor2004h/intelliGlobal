@@ -1,52 +1,156 @@
 // schemaTypes/mapLocation.ts
 import {defineField, defineType} from 'sanity'
+import {MapPinIcon} from '@sanity/icons'
 
 export default defineType({
   name: 'mapLocation',
-  title: 'Map Location',
+  title: 'Map Locations',
   type: 'document',
+  icon: MapPinIcon,
+  description: 'Manage locations that will appear on the Google Maps on your homepage',
   fields: [
     defineField({
-      name: 'name',
+      name: 'title',
       title: 'Location Name',
       type: 'string',
+      description: 'Name of the location (e.g., "London Office", "New York Conference Center")',
+      validation: Rule => Rule.required().min(2).max(100),
+    }),
+    defineField({
+      name: 'category',
+      title: 'Location Category',
+      type: 'string',
+      description: 'Type of location for better organization and display',
+      options: {
+        list: [
+          {title: 'Office', value: 'office'},
+          {title: 'Conference Center', value: 'conference'},
+          {title: 'Event Venue', value: 'venue'},
+          {title: 'Partner Location', value: 'partner'},
+          {title: 'Hotel', value: 'hotel'},
+          {title: 'Restaurant', value: 'restaurant'},
+          {title: 'Other', value: 'other'}
+        ]
+      },
+      initialValue: 'office',
       validation: Rule => Rule.required()
     }),
     defineField({
       name: 'address',
-      title: 'Address',
-      type: 'string',
-      validation: Rule => Rule.required()
+      title: 'Full Address',
+      type: 'text',
+      description: 'Complete address for Google Maps geocoding and display (e.g., "123 Main St, New York, NY 10001, USA")',
+      rows: 3,
+      validation: Rule => Rule.required(),
     }),
     defineField({
-      name: 'coordinates',
-      title: 'Coordinates',
-      type: 'geopoint',
-      validation: Rule => Rule.required()
+      name: 'latitude',
+      title: 'Latitude (Optional)',
+      type: 'number',
+      description: 'Latitude coordinate - will be auto-generated from address if not provided (e.g., 40.7128)',
+      validation: Rule =>
+        Rule.min(-90)
+          .max(90)
+          .precision(6)
+          .error('Latitude must be between -90 and 90 degrees'),
+    }),
+    defineField({
+      name: 'longitude',
+      title: 'Longitude (Optional)',
+      type: 'number',
+      description: 'Longitude coordinate - will be auto-generated from address if not provided (e.g., -74.0060)',
+      validation: Rule =>
+        Rule.min(-180)
+          .max(180)
+          .precision(6)
+          .error('Longitude must be between -180 and 180 degrees'),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
+      description: 'Additional details about this location (optional)',
+      rows: 4,
     }),
     defineField({
-      name: 'category',
-      title: 'Category',
+      name: 'isActive',
+      title: 'Show on Map',
+      type: 'boolean',
+      description: 'Toggle to show/hide this location on the homepage map',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'priority',
+      title: 'Display Priority',
+      type: 'number',
+      description: 'Higher numbers appear first (0-100, default: 50)',
+      initialValue: 50,
+      validation: Rule => Rule.min(0).max(100),
+    }),
+    defineField({
+      name: 'markerColor',
+      title: 'Marker Color',
       type: 'string',
+      description: 'Color of the marker on the map',
       options: {
         list: [
-          {title: 'Conference Venue', value: 'venue'},
-          {title: 'Hotel', value: 'hotel'},
-          {title: 'Restaurant', value: 'restaurant'},
-          {title: 'Other', value: 'other'}
+          {title: 'Orange (Default)', value: 'orange'},
+          {title: 'Blue', value: 'blue'},
+          {title: 'Red', value: 'red'},
+          {title: 'Green', value: 'green'},
+          {title: 'Purple', value: 'purple'},
+          {title: 'Yellow', value: 'yellow'},
         ]
-      }
-    }),
-    defineField({
-      name: 'enabled',
-      title: 'Enabled',
-      type: 'boolean',
-      initialValue: true
+      },
+      initialValue: 'orange',
     })
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      category: 'category',
+      address: 'address',
+      isActive: 'isActive',
+      priority: 'priority'
+    },
+    prepare({title, category, address, isActive, priority}) {
+      const status = isActive ? '🟢' : '🔴';
+      const categoryIcon = category === 'office' ? '🏢' :
+                          category === 'conference' ? '🏛️' :
+                          category === 'venue' ? '🎪' :
+                          category === 'partner' ? '🤝' :
+                          category === 'hotel' ? '🏨' :
+                          category === 'restaurant' ? '🍽️' : '📍';
+
+      return {
+        title: `${status} ${categoryIcon} ${title}`,
+        subtitle: `${address?.substring(0, 50)}${address?.length > 50 ? '...' : ''} | Priority: ${priority || 50}`,
+      };
+    },
+  },
+  orderings: [
+    {
+      title: 'Priority (High to Low)',
+      name: 'priorityDesc',
+      by: [
+        {field: 'priority', direction: 'desc'},
+        {field: 'title', direction: 'asc'}
+      ]
+    },
+    {
+      title: 'Name A-Z',
+      name: 'nameAsc',
+      by: [
+        {field: 'title', direction: 'asc'}
+      ]
+    },
+    {
+      title: 'Category',
+      name: 'category',
+      by: [
+        {field: 'category', direction: 'asc'},
+        {field: 'title', direction: 'asc'}
+      ]
+    }
   ]
 })
