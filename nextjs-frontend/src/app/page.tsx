@@ -32,6 +32,7 @@ import {
 import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
+import ConferenceLocationsMap from "./components/ConferenceLocationsMap";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -773,6 +774,9 @@ function HomePageContent({
           </div>
         </section>
       )}
+
+      {/* Conference Locations Map Section */}
+      <ConferenceLocationsMap />
 
     </div>
   );

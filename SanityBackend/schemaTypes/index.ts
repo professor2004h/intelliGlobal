@@ -11,6 +11,7 @@ import paymentTransaction from './paymentTransaction';
 import pastConferencesSection from './pastConferencesSection';
 import journalSection from './journalSection';
 import customContentSection from './customContentSection';
+import conferenceLocation from './conferenceLocation';
 
 
 
@@ -28,5 +29,6 @@ export const schemaTypes = [
   paymentTransaction,
   pastConferencesSection,
   journalSection,
-  customContentSection
+  customContentSection,
+  conferenceLocation
 ]

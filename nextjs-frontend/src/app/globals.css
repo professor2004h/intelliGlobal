@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet CSS for interactive maps */
+@import 'leaflet/dist/leaflet.css';
+
 /* Enhanced loading states for dynamic CMS content */
 .loading-skeleton {
   @apply animate-pulse bg-gray-200 rounded;
