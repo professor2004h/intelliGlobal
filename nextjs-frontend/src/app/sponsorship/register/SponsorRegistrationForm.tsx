@@ -436,20 +436,59 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
       console.log('🔧 Order created:', order);
       console.log('🔑 Razorpay Key:', process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
 
-      // Validate Razorpay key before initialization
+      // Validate Razorpay key before initialization with detailed debugging
       const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-      if (!razorpayKey) {
-        console.error('❌ Razorpay key not found in environment variables');
-        alert('Payment configuration error. Please contact support.');
-        setPaymentLoading(false);
-        return;
-      }
 
-      if (!razorpayKey.startsWith('rzp_')) {
+      console.log('🔍 Frontend Environment Check:', {
+        razorpayKeyExists: !!razorpayKey,
+        razorpayKeyValue: razorpayKey || 'NOT_SET',
+        allEnvKeys: Object.keys(process.env).filter(key => key.includes('RAZORPAY')),
+        nodeEnv: process.env.NODE_ENV
+      });
+
+      if (!razorpayKey) {
+        console.error('❌ Razorpay key not found in frontend environment variables');
+        console.error('Available environment variables:', Object.keys(process.env));
+
+        // Try to get the key from a backend endpoint as fallback
+        try {
+          console.log('🔄 Attempting to fetch Razorpay key from backend...');
+          const keyResponse = await fetch('/api/get-razorpay-key');
+          if (keyResponse.ok) {
+            const keyData = await keyResponse.json();
+            if (keyData.keyId) {
+              console.log('✅ Retrieved Razorpay key from backend');
+              // Continue with the retrieved key
+              const retrievedKey = keyData.keyId;
+              if (retrievedKey.startsWith('rzp_')) {
+                console.log('✅ Backend-provided key is valid');
+                // Update the options with the retrieved key
+                options.key = retrievedKey;
+              } else {
+                console.error('❌ Backend-provided key is invalid');
+                alert('Payment configuration error. Please contact support.');
+                setPaymentLoading(false);
+                return;
+              }
+            } else {
+              throw new Error('No key provided by backend');
+            }
+          } else {
+            throw new Error('Backend key endpoint failed');
+          }
+        } catch (backendError) {
+          console.error('❌ Failed to get key from backend:', backendError);
+          alert('Payment configuration error. Please refresh the page and try again.');
+          setPaymentLoading(false);
+          return;
+        }
+      } else if (!razorpayKey.startsWith('rzp_')) {
         console.error('❌ Invalid Razorpay key format:', razorpayKey);
         alert('Invalid payment configuration. Please contact support.');
         setPaymentLoading(false);
         return;
+      } else {
+        console.log('✅ Frontend Razorpay key validated:', razorpayKey.substring(0, 8) + '...');
       }
 
       console.log('✅ Razorpay key validated:', razorpayKey.substring(0, 8) + '...');
