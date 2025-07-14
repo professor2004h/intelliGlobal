@@ -3,6 +3,9 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 
+// Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
+
 // Define the conference location interface
 interface ConferenceLocation {
   _id: string;

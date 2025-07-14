@@ -27,6 +27,40 @@ const CONFERENCE_LOCATIONS_QUERY = `
   }
 `;
 
+// Test data fallback
+const testLocations: ConferenceLocation[] = [
+  {
+    _id: 'test-london',
+    title: 'London, United Kingdom',
+    address: 'ExCeL London, Royal Victoria Dock, London E16 1XL, UK',
+    latitude: 51.5074,
+    longitude: -0.1278,
+    description: 'Major European hub for international conferences and academic events.',
+    isActive: true,
+    order: 1,
+  },
+  {
+    _id: 'test-newyork',
+    title: 'New York, USA',
+    address: 'Jacob K. Javits Convention Center, 429 11th Ave, New York, NY 10001, USA',
+    latitude: 40.7128,
+    longitude: -74.0060,
+    description: 'Premier destination for technology and business conferences in North America.',
+    isActive: true,
+    order: 2,
+  },
+  {
+    _id: 'test-singapore',
+    title: 'Singapore',
+    address: 'Marina Bay Sands Expo and Convention Centre, 10 Bayfront Ave, Singapore 018956',
+    latitude: 1.3521,
+    longitude: 103.8198,
+    description: 'Gateway to Asia-Pacific conferences and international symposiums.',
+    isActive: true,
+    order: 3,
+  },
+];
+
 export async function GET(request: NextRequest) {
   try {
     console.log('🗺️ Fetching conference locations from Sanity...');
@@ -36,17 +70,33 @@ export async function GET(request: NextRequest) {
       apiVersion: client.config().apiVersion,
     });
 
-    // Fetch conference locations from Sanity
-    const locations: ConferenceLocation[] = await client.fetch(
-      CONFERENCE_LOCATIONS_QUERY,
-      {},
-      {
-        cache: 'no-store', // Always fetch fresh data for real-time updates
-        next: { revalidate: 60 }, // Revalidate every 60 seconds
-      }
-    );
+    let locations: ConferenceLocation[] = [];
+    let dataSource = 'sanity';
 
-    console.log(`✅ Successfully fetched ${locations.length} conference locations`);
+    try {
+      // Fetch conference locations from Sanity
+      locations = await client.fetch(
+        CONFERENCE_LOCATIONS_QUERY,
+        {},
+        {
+          cache: 'no-store', // Always fetch fresh data for real-time updates
+          next: { revalidate: 60 }, // Revalidate every 60 seconds
+        }
+      );
+
+      console.log(`✅ Successfully fetched ${locations.length} conference locations from Sanity`);
+    } catch (sanityError) {
+      console.warn('⚠️ Sanity fetch failed, using test data:', sanityError);
+      locations = testLocations;
+      dataSource = 'test';
+    }
+
+    // If no Sanity data, use test data
+    if (locations.length === 0) {
+      console.log('📍 No Sanity data found, using test locations');
+      locations = testLocations;
+      dataSource = 'test';
+    }
 
     // Validate location data
     const validLocations = locations.filter(location => {
@@ -74,7 +124,11 @@ export async function GET(request: NextRequest) {
         success: true,
         data: validLocations,
         count: validLocations.length,
+        dataSource: dataSource,
         timestamp: new Date().toISOString(),
+        ...(dataSource === 'test' && {
+          note: 'Using test data. Configure Sanity CMS for dynamic locations.'
+        }),
       },
       {
         status: 200,
