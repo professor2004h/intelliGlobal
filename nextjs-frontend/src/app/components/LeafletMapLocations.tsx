@@ -140,7 +140,7 @@ const LeafletMapLocations: React.FC = () => {
         </div>
 
         {/* Map Container */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 relative" style={{ isolation: 'isolate', zIndex: 1 }}>
           {loading && <MapSkeleton />}
           {error && <MapError error={error} onRetry={handleRetry} />}
           {!loading && !error && locations.length > 0 && (

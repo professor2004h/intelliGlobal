@@ -49,10 +49,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
 
     mapInstanceRef.current = map;
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // Add CartoDB Positron tiles (English-only labels, clean design)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '', // Hide attribution as requested
       maxZoom: 19,
+      subdomains: 'abcd',
     }).addTo(map);
 
     // Calculate bounds and center
@@ -202,8 +203,13 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
     <>
       <div
         ref={mapRef}
-        className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px]"
-        style={{ minHeight: '400px' }}
+        className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] relative overflow-hidden"
+        style={{
+          minHeight: '400px',
+          position: 'relative',
+          zIndex: 1,
+          isolation: 'isolate'
+        }}
       />
       <style jsx global>{`
         .custom-popup .leaflet-popup-content-wrapper {
@@ -230,6 +236,27 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
         
         .leaflet-container {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          position: relative !important;
+          z-index: 1 !important;
+          overflow: hidden !important;
+        }
+
+        /* Fix for mobile scrolling issues */
+        .leaflet-container .leaflet-control-container {
+          position: relative !important;
+        }
+
+        /* Prevent map from overlaying other elements */
+        .leaflet-pane {
+          z-index: 1 !important;
+        }
+
+        /* Fix touch issues on mobile */
+        .leaflet-container .leaflet-control-zoom {
+          position: absolute !important;
+          top: 10px !important;
+          left: 10px !important;
+          z-index: 1000 !important;
         }
         
         .leaflet-control-zoom {
@@ -249,8 +276,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
         }
         
         .leaflet-control-attribution {
-          background: rgba(255,255,255,0.9) !important;
-          font-size: 11px !important;
+          display: none !important;
         }
       `}</style>
     </>
