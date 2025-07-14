@@ -6,7 +6,7 @@ const client = createClient({
   dataset: 'production',
   useCdn: false,
   apiVersion: '2023-05-03',
-  token: process.env.SANITY_API_TOKEN || 'skQOQOvNiMJjmLnOGACNNfHhbXXvQOQOvNiMJjmLnOGACNNfHhbXXvQOQOvNiMJjmLnOGACNNfHhbXXv'
+  token: process.env.SANITY_API_TOKEN || 'skYegVIAaFOFaI7V7mOXSkrnV0L1P1TNbcYNIlfZ0seOUeFLSM1ygvFaAchfi6IfYwtqslz0WrVjBQ7pjcOOB2Spjp2E0ujG16mN5VGppLRnvsFL29nFZHU2ceAy6bBBP8TBJ5TcsrT180LR6HTjC0gzjnmfXl9srhe8kJkx312tqhAekrDp'
 });
 
 // Sample map locations data

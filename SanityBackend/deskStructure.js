@@ -1,7 +1,6 @@
 // Custom Sanity Studio structure to include Map Location in the sidebar
-import S from '@sanity/desk-tool/structure-builder'
 
-export default () =>
+export default (S) =>
   S.list()
     .title('Content')
     .items([
@@ -18,6 +17,9 @@ export default () =>
       S.listItem().title('Past Conferences Section Styling').schemaType('pastConferencesSection').child(S.documentTypeList('pastConferencesSection')),
       S.listItem().title('Journal Section Styling').schemaType('journalSection').child(S.documentTypeList('journalSection')),
       S.listItem().title('Custom Content Section').schemaType('customContentSection').child(S.documentTypeList('customContentSection')),
-      // Add Map Location
-      S.listItem().title('Map Locations').schemaType('mapLocation').child(S.documentTypeList('mapLocation'))
+      // Add Map Location with icon
+      S.listItem()
+        .title('🗺️ Map Locations')
+        .schemaType('mapLocation')
+        .child(S.documentTypeList('mapLocation').title('Map Locations'))
     ])
