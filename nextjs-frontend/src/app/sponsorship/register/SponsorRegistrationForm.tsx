@@ -688,38 +688,38 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
   const selectedDetailedConference = detailedConferences.find(conf => conf._id === formData.conferenceId);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-4 md:py-12">
+      <div className="max-w-4xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="sponsorship-form-header text-center mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4">
             Sponsor Registration
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-base md:text-lg text-gray-600">
             Join us as a sponsor and showcase your brand to industry leaders
           </p>
         </div>
 
         {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-6">
+        <div className="progress-steps-container mb-6 md:mb-8">
+          <div className="progress-steps flex items-center justify-center space-x-3 md:space-x-6">
             {[1, 2, 3, 4].map((step) => (
-              <div key={step} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
+              <div key={step} className="progress-step flex items-center">
+                <div className={`progress-step-circle w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs md:text-sm font-medium ${
                   step <= currentStep
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-300 text-gray-600'
                 }`}>
                   {step}
                 </div>
-                <div className="ml-2 text-sm font-medium text-gray-600">
+                <div className="progress-step-label ml-1 md:ml-2 text-xs md:text-sm font-medium text-gray-600 hidden sm:block">
                   {step === 1 && 'Selection'}
                   {step === 2 && 'Information'}
                   {step === 3 && 'Review'}
                   {step === 4 && 'Payment'}
                 </div>
                 {step < 4 && (
-                  <div className={`ml-6 w-12 h-1 ${
+                  <div className={`progress-step-connector ml-2 md:ml-6 w-6 md:w-12 h-1 ${
                     step < currentStep ? 'bg-blue-600' : 'bg-gray-300'
                   }`} />
                 )}
@@ -729,18 +729,18 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="sponsorship-form-container bg-white rounded-lg shadow-lg p-4 md:p-8">
           <form onSubmit={handleSubmit}>
             {/* Step 1: Conference & Tier Selection */}
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
                   Select Conference & Sponsorship Tier
                 </h2>
-                
+
                 {/* Conference Selection */}
-                <div>
-                  <label htmlFor="conferenceId" className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mobile-form-field">
+                  <label htmlFor="conferenceId" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
                     Select Conference *
                   </label>
                   <select
@@ -748,8 +748,8 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                     value={formData.conferenceId}
                     onChange={handleInputChange}
                     disabled={loading}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.conferenceId ? 'border-red-500' : 'border-gray-300'
+                    className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.conferenceId ? 'border-red-500 error' : 'border-gray-300'
                     }`}
                   >
                     <option value="">Choose a conference...</option>
@@ -766,13 +766,13 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                     )}
                   </select>
                   {errors.conferenceId && (
-                    <p className="mt-1 text-sm text-red-600">{errors.conferenceId}</p>
+                    <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.conferenceId}</p>
                   )}
                 </div>
 
                 {/* Sponsorship Tier Selection */}
-                <div>
-                  <label htmlFor="tierId" className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mobile-form-field">
+                  <label htmlFor="tierId" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
                     Select Sponsorship Tier *
                   </label>
                   <select
@@ -780,8 +780,8 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                     value={formData.tierId}
                     onChange={handleInputChange}
                     disabled={loading}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.tierId ? 'border-red-500' : 'border-gray-300'
+                    className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.tierId ? 'border-red-500 error' : 'border-gray-300'
                     }`}
                   >
                     <option value="">Choose a sponsorship tier...</option>
@@ -792,21 +792,21 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                     ))}
                   </select>
                   {errors.tierId && (
-                    <p className="mt-1 text-sm text-red-600">{errors.tierId}</p>
+                    <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.tierId}</p>
                   )}
                 </div>
 
                 {/* Dynamic Pricing Display */}
                 {selectedTier && (
-                  <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold text-blue-900 mb-2">{selectedTier.name}</h3>
-                        <p className="text-blue-800 mb-2">{selectedTier.description || 'No description available'}</p>
+                  <div className="mobile-summary-card bg-blue-50 p-4 md:p-6 rounded-lg border border-blue-200">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 space-y-3 md:space-y-0">
+                      <div className="flex-1">
+                        <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">{selectedTier.name}</h3>
+                        <p className="text-sm md:text-base text-blue-800 mb-2">{selectedTier.description || 'No description available'}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-3xl font-bold text-blue-900">{formatCurrency(selectedTier.price)}</p>
-                        <p className="text-sm text-blue-700">Total Amount</p>
+                      <div className="text-center md:text-right">
+                        <p className="mobile-summary-price text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(selectedTier.price)}</p>
+                        <p className="text-xs md:text-sm text-blue-700">Total Amount</p>
                       </div>
                     </div>
                     {selectedTier.benefits && selectedTier.benefits.length > 0 && (
@@ -962,14 +962,14 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
             {/* Step 2: Company Information */}
             {currentStep === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+              <div className="space-y-4 md:space-y-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
                   Company Information
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mobile-form-grid tablet-form-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="mobile-form-field">
+                    <label htmlFor="companyName" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
                       Company Name *
                     </label>
                     <input
@@ -977,18 +977,18 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       name="companyName"
                       value={formData.companyName}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.companyName ? 'border-red-500' : 'border-gray-300'
+                      className={`mobile-form-input tablet-form-input w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.companyName ? 'border-red-500 error' : 'border-gray-300'
                       }`}
                       placeholder="Enter your company name"
                     />
                     {errors.companyName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.companyName}</p>
+                      <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.companyName}</p>
                     )}
                   </div>
 
-                  <div>
-                    <label htmlFor="contactPerson" className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="mobile-form-field">
+                    <label htmlFor="contactPerson" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
                       Contact Person *
                     </label>
                     <input
@@ -996,18 +996,18 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       name="contactPerson"
                       value={formData.contactPerson}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.contactPerson ? 'border-red-500' : 'border-gray-300'
+                      className={`mobile-form-input tablet-form-input w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.contactPerson ? 'border-red-500 error' : 'border-gray-300'
                       }`}
                       placeholder="Enter contact person name"
                     />
                     {errors.contactPerson && (
-                      <p className="mt-1 text-sm text-red-600">{errors.contactPerson}</p>
+                      <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.contactPerson}</p>
                     )}
                   </div>
 
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="mobile-form-field">
+                    <label htmlFor="email" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -1015,13 +1015,13 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.email ? 'border-red-500' : 'border-gray-300'
+                      className={`mobile-form-input tablet-form-input w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.email ? 'border-red-500 error' : 'border-gray-300'
                       }`}
                       placeholder="Enter email address"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.email}</p>
                     )}
                   </div>
 
@@ -1225,26 +1225,28 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                 </div>
 
                 {/* Payment Options */}
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <div className="bg-white p-4 md:p-6 rounded-lg border border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Payment Method</h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="mobile-payment-methods tablet-payment-methods grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <button
                       type="button"
                       onClick={() => handlePayment('Stripe')}
                       disabled={paymentLoading || !razorpayLoaded}
-                      className="w-full px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
+                      className="mobile-payment-method w-full px-6 md:px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
                     >
                       {paymentLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span>Processing Payment...</span>
+                          <div className="mobile-loading-spinner animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <span className="mobile-payment-text">Processing Payment...</span>
                         </>
                       ) : (
                         <>
-                          <span className="text-xl">💳</span>
-                          <span>Pay with Stripe</span>
-                          <span className="text-sm opacity-80">• Secure Payment</span>
+                          <span className="mobile-payment-icon text-xl">💳</span>
+                          <div className="flex flex-col items-center">
+                            <span className="mobile-payment-text">Pay with Stripe</span>
+                            <span className="mobile-payment-subtext text-xs opacity-80">• Secure Payment</span>
+                          </div>
                         </>
                       )}
                     </button>
@@ -1253,18 +1255,20 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       type="button"
                       onClick={() => handlePayment('PayPal')}
                       disabled={paymentLoading || !razorpayLoaded}
-                      className="w-full px-8 py-4 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
+                      className="mobile-payment-method w-full px-6 md:px-8 py-4 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
                     >
                       {paymentLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span>Processing Payment...</span>
+                          <div className="mobile-loading-spinner animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <span className="mobile-payment-text">Processing Payment...</span>
                         </>
                       ) : (
                         <>
-                          <span className="text-xl">🅿️</span>
-                          <span>Pay with PayPal</span>
-                          <span className="text-sm opacity-80">• Secure Payment</span>
+                          <span className="mobile-payment-icon text-xl">🅿️</span>
+                          <div className="flex flex-col items-center">
+                            <span className="mobile-payment-text">Pay with PayPal</span>
+                            <span className="mobile-payment-subtext text-xs opacity-80">• Secure Payment</span>
+                          </div>
                         </>
                       )}
                     </button>
@@ -1272,20 +1276,20 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                 </div>
 
                 {/* Security Information */}
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <span className="text-green-600">🔒</span>
-                    <span className="text-sm font-medium text-green-900">Secure Payment Processing</span>
+                <div className="mobile-info-card bg-green-50 p-3 md:p-4 rounded-lg border border-green-200">
+                  <div className="mobile-info-card-header flex items-center space-x-2 mb-2">
+                    <span className="mobile-info-card-icon text-green-600">🔒</span>
+                    <span className="mobile-info-card-title text-sm font-medium text-green-900">Secure Payment Processing</span>
                   </div>
-                  <p className="text-sm text-green-800">
+                  <p className="mobile-info-card-content text-sm text-green-800">
                     Your payment is processed securely through Razorpay with 256-bit SSL encryption.
                     Both payment options support UPI, cards, net banking, and digital wallets.
                   </p>
-                  <div className="mt-2 text-xs text-green-700">
-                    <p>• PCI DSS Level 1 compliant</p>
-                    <p>• Your card details are never stored on our servers</p>
-                    <p>• Invoice will be automatically generated and emailed after successful payment</p>
-                  </div>
+                  <ul className="mobile-info-card-list mt-2 text-xs text-green-700">
+                    <li>PCI DSS Level 1 compliant</li>
+                    <li>Your card details are never stored on our servers</li>
+                    <li>Invoice will be automatically generated and emailed after successful payment</li>
+                  </ul>
                 </div>
 
                 {/* UPI Payment Information - Prominently Displayed */}
@@ -1345,12 +1349,12 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
+            <div className="mobile-form-navigation flex flex-col md:flex-row justify-between mt-6 md:mt-8 gap-3 md:gap-0">
               <button
                 type="button"
                 onClick={handlePrevious}
                 disabled={currentStep === 1 || paymentLoading}
-                className={`px-6 py-3 rounded-lg font-medium ${
+                className={`mobile-form-button mobile-form-button-secondary tablet-form-button px-4 md:px-6 py-3 rounded-lg font-medium ${
                   currentStep === 1 || paymentLoading
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-gray-600 text-white hover:bg-gray-700'
@@ -1364,12 +1368,12 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                   type="button"
                   onClick={handleNext}
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
+                  className="mobile-form-button mobile-form-button-primary tablet-form-button px-4 md:px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
                 >
                   {currentStep === 3 ? 'Proceed to Payment' : 'Next'}
                 </button>
               ) : (
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 text-center md:text-left">
                   Select a payment method above to complete your registration
                 </div>
               )}
