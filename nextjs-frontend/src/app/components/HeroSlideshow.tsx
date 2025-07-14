@@ -97,46 +97,28 @@ export default function HeroSlideshow({ hero }: HeroSlideshowProps) {
             {/* Primary Button - Use Link for internal URLs, a tag for external URLs */}
             {(hero?.primaryButton?.url || '/conferences').startsWith('http://') ||
             (hero?.primaryButton?.url || '/conferences').startsWith('https://') ? (
-              <a
-                href={hero?.primaryButton?.url || '/conferences'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 focus:from-orange-600 focus:to-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300"
-                aria-label={hero?.primaryButton?.text || 'View all conferences'}
-              >
-                {hero?.primaryButton?.text || 'VIEW ALL CONFERENCES'}
-              </a>
-            ) : (
-              <Link
-                href={hero?.primaryButton?.url || '/conferences'}
-                className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 focus:from-orange-600 focus:to-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300"
-                aria-label={hero?.primaryButton?.text || 'View all conferences'}
-              >
-                {hero?.primaryButton?.text || 'VIEW ALL CONFERENCES'}
-              </Link>
-            )}
+
+            <Link
+              href={hero?.primaryButton?.url || '/conferences'}
+              className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 focus:from-orange-600 focus:to-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300"
+              aria-label={hero?.primaryButton?.text || 'View all conferences'}
+            >
+              {hero?.primaryButton?.text || 'VIEW ALL CONFERENCES'}
+            </Link>
+          )}
 
             {/* Secondary Button - Use Link for internal URLs, a tag for external URLs */}
             {(hero?.secondaryButton?.url || '/contact').startsWith('http://') ||
             (hero?.secondaryButton?.url || '/contact').startsWith('https://') ? (
-              <a
-                href={hero?.secondaryButton?.url || '/contact'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border-2 border-white text-white hover:bg-white hover:text-gray-900 focus:bg-white focus:text-gray-900 focus:outline-none focus:ring-4 focus:ring-white"
-                aria-label={hero?.secondaryButton?.text || 'Contact us'}
-              >
-                {hero?.secondaryButton?.text || 'CONTACT US'}
-              </a>
-            ) : (
-              <Link
-                href={hero?.secondaryButton?.url || '/contact'}
-                className="border-2 border-white text-white hover:bg-white hover:text-gray-900 focus:bg-white focus:text-gray-900 focus:outline-none focus:ring-4 focus:ring-white"
-                aria-label={hero?.secondaryButton?.text || 'Contact us'}
-              >
-                {hero?.secondaryButton?.text || 'CONTACT US'}
-              </Link>
-            )}
+
+            <Link
+              href={hero?.secondaryButton?.url || '/contact'}
+              className="border-2 border-white text-white hover:bg-white hover:text-gray-900 focus:bg-white focus:text-gray-900 focus:outline-none focus:ring-4 focus:ring-white"
+              aria-label={hero?.secondaryButton?.text || 'Contact us'}
+            >
+              {hero?.secondaryButton?.text || 'CONTACT US'}
+            </Link>
+          )}
           </div>
         </div>
       </div>
