@@ -32,7 +32,7 @@ import {
 import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
-import GoogleMapsLocations from "./components/GoogleMapsLocations";
+import LeafletMapLocations from "./components/LeafletMapLocations";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -775,8 +775,8 @@ function HomePageContent({
         </section>
       )}
 
-      {/* Conference Locations Map Section - Google Maps */}
-      <GoogleMapsLocations />
+      {/* Conference Locations Map Section - OpenStreetMap with Leaflet */}
+      <LeafletMapLocations />
 
     </div>
   );

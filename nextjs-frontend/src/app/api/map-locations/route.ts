@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/app/sanity/client';
 
-// Define the map location type (now generic for any map provider)
+// Define the map location type (generic for any map provider)
 export interface MapLocation {
   _id: string;
   title: string;
@@ -67,7 +67,7 @@ const testLocations: MapLocation[] = [
     description: 'Gateway to Asia-Pacific conferences and international symposiums.',
     isActive: true,
     priority: 80,
-    markerColor: 'green',
+    markerColor: 'orange',
   },
   {
     _id: 'test-dubai',
@@ -91,7 +91,7 @@ const testLocations: MapLocation[] = [
     description: 'Leading venue for technology and innovation conferences in Asia.',
     isActive: true,
     priority: 70,
-    markerColor: 'purple',
+    markerColor: 'orange',
   },
 ];
 
