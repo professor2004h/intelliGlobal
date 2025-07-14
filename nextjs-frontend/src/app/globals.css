@@ -829,6 +829,42 @@ a:hover {
     font-size: 0.875rem;
   }
 
+  /* Enhanced Mobile Conference Grid Button Styling */
+  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 button {
+    /* Ensure minimum touch target size */
+    min-height: 44px !important;
+    /* Enhanced text centering */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    /* Bold text for better readability */
+    font-weight: 700 !important;
+    /* Better line height for text centering */
+    line-height: 1.2 !important;
+    /* Ensure text doesn't wrap awkwardly */
+    white-space: nowrap !important;
+    /* Better padding for mobile */
+    padding: 12px 8px !important;
+    /* Improved font size for mobile readability */
+    font-size: 0.8rem !important;
+  }
+
+  /* Specific styling for Register Now buttons (orange gradient) */
+  .grid.grid-cols-2 a[class*="from-orange-500"],
+  .grid.grid-cols-2 button[class*="from-orange-500"] {
+    font-weight: 700 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Specific styling for Submit Abstract buttons (border style) */
+  .grid.grid-cols-2 a[class*="border-slate-300"],
+  .grid.grid-cols-2 button[class*="border-slate-300"] {
+    font-weight: 700 !important;
+    border-width: 2px !important;
+  }
+
   /* Contact Form Mobile Optimizations */
   .contact-form-container {
     padding: 1rem;
@@ -2395,6 +2431,21 @@ select:focus {
   .conference-description {
     font-size: 0.9rem;
   }
+
+  /* Extra small mobile conference grid buttons */
+  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 button {
+    min-height: 44px !important;
+    padding: 10px 6px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    /* Ensure perfect centering on very small screens */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 }
 
 /* Medium mobile devices (375px - 414px) - Balanced spacing */
@@ -2406,6 +2457,20 @@ select:focus {
   .conference-card {
     min-height: 290px;
   }
+
+  /* Medium mobile conference grid buttons */
+  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 button {
+    min-height: 46px !important;
+    padding: 12px 8px !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 }
 
 /* Large mobile devices (414px - 640px) - More comfortable spacing */
@@ -2416,6 +2481,47 @@ select:focus {
 
   .conference-card {
     min-height: 300px;
+  }
+
+  /* Large mobile conference grid buttons */
+  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 button {
+    min-height: 48px !important;
+    padding: 14px 10px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* Tablet and Desktop Conference Grid Button Enhancements */
+@media (min-width: 640px) {
+  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 button,
+  .grid.grid-cols-3 a,
+  .grid.grid-cols-3 button {
+    min-height: 48px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* Large Desktop Conference Grid Button Enhancements */
+@media (min-width: 1024px) {
+  .grid.grid-cols-3 a,
+  .grid.grid-cols-3 button {
+    min-height: 52px !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    padding: 16px 12px !important;
   }
 }
 
