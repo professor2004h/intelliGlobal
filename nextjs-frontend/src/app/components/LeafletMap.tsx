@@ -35,7 +35,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
   const mapInstanceRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
-    if (!mapRef.current || locations.length === 0) return;
+    // Only run on client side
+    if (typeof window === 'undefined' || !mapRef.current || locations.length === 0) return;
 
     // Initialize map
     const map = L.map(mapRef.current, {

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 
 // Define the map location type (same as before)
 export interface MapLocation {
@@ -55,11 +54,8 @@ const MapError: React.FC<{ error: string; onRetry: () => void }> = ({ error, onR
   </div>
 );
 
-// Dynamically import the map component to avoid SSR issues
-const DynamicLeafletMap = dynamic(() => import('./LeafletMap'), {
-  ssr: false,
-  loading: () => <MapSkeleton />
-});
+// Import the map component directly
+import LeafletMap from './LeafletMap';
 
 const LeafletMapLocations: React.FC = () => {
   const [locations, setLocations] = useState<MapLocation[]>([]);
@@ -148,8 +144,8 @@ const LeafletMapLocations: React.FC = () => {
           {loading && <MapSkeleton />}
           {error && <MapError error={error} onRetry={handleRetry} />}
           {!loading && !error && locations.length > 0 && (
-            <DynamicLeafletMap 
-              locations={locations} 
+            <LeafletMap
+              locations={locations}
               getMarkerColor={getMarkerColor}
             />
           )}
