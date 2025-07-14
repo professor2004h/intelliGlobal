@@ -33,6 +33,7 @@ import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
 import ConferenceLocationsMap from "./components/ConferenceLocationsMap";
+import SimpleMapTest from "./components/SimpleMapTest";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -775,8 +776,8 @@ function HomePageContent({
         </section>
       )}
 
-      {/* Conference Locations Map Section */}
-      <ConferenceLocationsMap />
+      {/* Conference Locations Map Section - Test Mode */}
+      <SimpleMapTest />
 
     </div>
   );
