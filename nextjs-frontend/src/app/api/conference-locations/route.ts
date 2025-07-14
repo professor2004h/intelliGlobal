@@ -30,6 +30,11 @@ const CONFERENCE_LOCATIONS_QUERY = `
 export async function GET(request: NextRequest) {
   try {
     console.log('🗺️ Fetching conference locations from Sanity...');
+    console.log('📊 Sanity client config:', {
+      projectId: client.config().projectId,
+      dataset: client.config().dataset,
+      apiVersion: client.config().apiVersion,
+    });
 
     // Fetch conference locations from Sanity
     const locations: ConferenceLocation[] = await client.fetch(
