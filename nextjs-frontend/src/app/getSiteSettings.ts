@@ -68,6 +68,18 @@ export interface SiteSettings {
       alt?: string;
     };
   };
+  footerLogo?: {
+    asset: {
+      _id: string;
+      url: string;
+    };
+    alt?: string;
+  };
+  registerButton?: {
+    text: string;
+    url: string;
+    openInNewTab: boolean;
+  };
 }
 
 // Cache for site settings with timestamp and version
@@ -132,6 +144,18 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
           },
           alt
         }
+      },
+      footerLogo{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      registerButton{
+        text,
+        url,
+        openInNewTab
       }
     }`;
 
@@ -216,6 +240,18 @@ export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
           },
           alt
         }
+      },
+      footerLogo{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      registerButton{
+        text,
+        url,
+        openInNewTab
       }
     }`;
 
@@ -284,6 +320,18 @@ export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
           },
           alt
         }
+      },
+      footerLogo{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      registerButton{
+        text,
+        url,
+        openInNewTab
       },
       _updatedAt
     }`;
@@ -357,6 +405,18 @@ export async function getSiteSettingsSSR(): Promise<SiteSettings | null> {
           },
           alt
         }
+      },
+      footerLogo{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      registerButton{
+        text,
+        url,
+        openInNewTab
       }
     }`;
 

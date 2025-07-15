@@ -438,6 +438,59 @@ const siteSettings = defineType({
             }
           ],
         }),
+        defineField({
+          name: 'footerLogo',
+          title: 'Footer Logo',
+          type: 'image',
+          description: 'Specific logo for the footer section (can be different from main site logo)',
+          options: {
+            hotspot: true,
+            accept: '.png,.jpg,.jpeg,.webp,.svg',
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Footer Logo Alt Text',
+              description: 'Describe the footer logo for accessibility',
+              placeholder: 'Footer logo',
+              validation: (Rule) => Rule.max(100).error('Alt text should be under 100 characters'),
+            }
+          ],
+        }),
+        defineField({
+          name: 'registerButton',
+          title: 'Register Now Button',
+          type: 'object',
+          description: 'Configuration for the Register Now button in the footer',
+          fields: [
+            {
+              name: 'text',
+              title: 'Button Text',
+              type: 'string',
+              description: 'Text displayed on the register button',
+              placeholder: 'Register Now',
+              validation: (Rule) => Rule.max(50).error('Button text should be under 50 characters'),
+            },
+            {
+              name: 'url',
+              title: 'Registration URL',
+              type: 'url',
+              description: 'URL where the register button should navigate',
+              placeholder: 'https://example.com/register',
+              validation: (Rule) => Rule.uri({
+                scheme: ['http', 'https']
+              }),
+            },
+            {
+              name: 'openInNewTab',
+              title: 'Open in New Tab',
+              type: 'boolean',
+              description: 'Should the registration link open in a new tab?',
+              initialValue: true,
+            }
+          ],
+        }),
       ],
     }),
   ],
