@@ -60,6 +60,13 @@ export interface SiteSettings {
       linkedin?: string;
       facebook?: string;
     };
+    footerBackgroundImage?: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
+    };
   };
 }
 
@@ -117,6 +124,13 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
           instagram,
           linkedin,
           facebook
+        },
+        footerBackgroundImage{
+          asset->{
+            _id,
+            url
+          },
+          alt
         }
       }
     }`;
@@ -194,6 +208,13 @@ export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
           instagram,
           linkedin,
           facebook
+        },
+        footerBackgroundImage{
+          asset->{
+            _id,
+            url
+          },
+          alt
         }
       }
     }`;
@@ -255,6 +276,13 @@ export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
           instagram,
           linkedin,
           facebook
+        },
+        footerBackgroundImage{
+          asset->{
+            _id,
+            url
+          },
+          alt
         }
       },
       _updatedAt
@@ -321,6 +349,13 @@ export async function getSiteSettingsSSR(): Promise<SiteSettings | null> {
           instagram,
           linkedin,
           facebook
+        },
+        footerBackgroundImage{
+          asset->{
+            _id,
+            url
+          },
+          alt
         }
       }
     }`;

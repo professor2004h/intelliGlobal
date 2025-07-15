@@ -418,6 +418,26 @@ const siteSettings = defineType({
             },
           ],
         }),
+        defineField({
+          name: 'footerBackgroundImage',
+          title: 'Footer Background Image',
+          type: 'image',
+          description: 'Optional background image for the footer section. If not provided, a default gradient will be used.',
+          options: {
+            hotspot: true,
+            accept: '.png,.jpg,.jpeg,.webp',
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Background Image Alt Text',
+              description: 'Describe the background image for accessibility',
+              placeholder: 'Footer background image',
+              validation: (Rule) => Rule.max(100).error('Alt text should be under 100 characters'),
+            }
+          ],
+        }),
       ],
     }),
   ],
