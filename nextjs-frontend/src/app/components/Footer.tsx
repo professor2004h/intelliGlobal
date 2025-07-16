@@ -19,16 +19,18 @@ export default async function Footer() {
   const footerLogo = siteSettings?.footerContent?.footerLogo;
   const footerLogoUrl = footerLogo ? getImageUrl(footerLogo) : null;
 
-  // Debug footer logo
-  console.log('Footer Logo Debug:', {
+  // Get register button config
+  const registerButton = siteSettings?.registerButton;
+
+  // Debug footer logo and register button
+  console.log('Footer Debug:', {
     footerLogo,
     footerLogoUrl,
+    registerButton,
+    registerButtonUrl: registerButton?.url,
     footerContent: siteSettings?.footerContent,
     mainLogo: siteSettings?.logo
   });
-
-  // Get register button config
-  const registerButton = siteSettings?.registerButton;
 
   return (
     <footer
@@ -110,24 +112,22 @@ export default async function Footer() {
                     )}
                   </div>
 
-                  {/* Register Now Button */}
-                  {registerButton?.url && (
-                    <div className="flex-shrink-0">
-                      <a
-                        href={registerButton.url}
-                        target={registerButton.openInNewTab ? '_blank' : '_self'}
-                        rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
-                        className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                      >
-                        {registerButton.text || 'Register Now'}
-                        {registerButton.openInNewTab && (
-                          <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        )}
-                      </a>
-                    </div>
-                  )}
+                  {/* Register Now Button - Always visible for testing */}
+                  <div className="flex-shrink-0">
+                    <a
+                      href={registerButton?.url || '#'}
+                      target={registerButton?.openInNewTab ? '_blank' : '_self'}
+                      rel={registerButton?.openInNewTab ? 'noopener noreferrer' : undefined}
+                      className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                    >
+                      {registerButton?.text || 'Register Now'}
+                      {registerButton?.openInNewTab && (
+                        <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      )}
+                    </a>
+                  </div>
                 </div>
               </div>
               <p className="text-gray-300 mb-6 max-w-md">
