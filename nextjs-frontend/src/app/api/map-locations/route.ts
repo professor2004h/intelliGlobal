@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/app/sanity/client';
+import { processLocationCoordinates } from '@/app/utils/coordinateUtils';
 
 // Define the map location type (generic for any map provider)
 export interface MapLocation {
@@ -7,8 +8,11 @@ export interface MapLocation {
   title: string;
   category?: string;
   address: string;
+  coordinateFormat?: 'decimal' | 'dms';
   latitude?: number;
   longitude?: number;
+  latitudeDMS?: string;
+  longitudeDMS?: string;
   description?: string;
   isActive: boolean;
   priority?: number;
@@ -22,8 +26,11 @@ const MAP_LOCATIONS_QUERY = `
     title,
     category,
     address,
+    coordinateFormat,
     latitude,
     longitude,
+    latitudeDMS,
+    longitudeDMS,
     description,
     isActive,
     priority,
@@ -114,6 +121,19 @@ export async function GET(request: NextRequest) {
       );
 
       console.log(`✅ Successfully fetched ${locations.length} map locations from Sanity`);
+
+      // Debug: Log raw location data from Sanity
+      locations.forEach((location, index) => {
+        console.log(`📍 API Route: Location ${index + 1} raw data:`, {
+          title: location.title,
+          coordinateFormat: location.coordinateFormat,
+          latitudeDMS: location.latitudeDMS,
+          longitudeDMS: location.longitudeDMS,
+          latitude: location.latitude,
+          longitude: location.longitude
+        });
+      });
+
     } catch (sanityError) {
       console.warn('⚠️ Sanity fetch failed, using test data:', sanityError);
       locations = testLocations;
@@ -127,19 +147,22 @@ export async function GET(request: NextRequest) {
       dataSource = 'test';
     }
 
-    // Validate location data
+    // Validate location data and process coordinates
     const validLocations = locations.filter(location => {
-      const isValid = 
-        location.title &&
-        location.address &&
-        (location.latitude === undefined || (typeof location.latitude === 'number' && location.latitude >= -90 && location.latitude <= 90)) &&
-        (location.longitude === undefined || (typeof location.longitude === 'number' && location.longitude >= -180 && location.longitude <= 180));
-
-      if (!isValid) {
-        console.warn(`⚠️ Invalid location data for: ${location.title || 'Unknown'}`);
+      // Basic validation
+      if (!location.title || !location.address) {
+        console.warn(`⚠️ Missing required fields for: ${location.title || 'Unknown'}`);
+        return false;
       }
 
-      return isValid;
+      // Try to process coordinates (handles both decimal and DMS formats)
+      const coordinates = processLocationCoordinates(location);
+      if (!coordinates) {
+        console.warn(`⚠️ Invalid coordinates for: ${location.title}`);
+        return false;
+      }
+
+      return true;
     });
 
     console.log(`✅ ${validLocations.length} valid locations after validation`);

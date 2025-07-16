@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { processLocationCoordinates } from '@/app/utils/coordinateUtils';
 
 // Fix for default markers in Leaflet with Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -17,8 +18,11 @@ interface MapLocation {
   title: string;
   category?: string;
   address: string;
+  coordinateFormat?: 'decimal' | 'dms';
   latitude?: number;
   longitude?: number;
+  latitudeDMS?: string;
+  longitudeDMS?: string;
   description?: string;
   isActive: boolean;
   priority?: number;
@@ -56,9 +60,38 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
       subdomains: 'abcd',
     }).addTo(map);
 
-    // Calculate bounds and center
-    const validLocations = locations.filter(loc => loc.latitude && loc.longitude);
-    
+    // Process locations and get exact coordinates
+    console.log('🗺️ LeafletMap: Processing', locations.length, 'locations');
+
+    const validLocations = locations
+      .map((location, index) => {
+        console.log(`🗺️ LeafletMap: Processing location ${index + 1}:`, location.title);
+        console.log(`🗺️ LeafletMap: Raw location data:`, {
+          coordinateFormat: location.coordinateFormat,
+          latitudeDMS: location.latitudeDMS,
+          longitudeDMS: location.longitudeDMS,
+          latitude: location.latitude,
+          longitude: location.longitude
+        });
+
+        const coordinates = processLocationCoordinates(location);
+        if (!coordinates) {
+          console.log(`❌ LeafletMap: Failed to process coordinates for:`, location.title);
+          return null;
+        }
+
+        console.log(`✅ LeafletMap: Processed coordinates for ${location.title}:`, coordinates);
+
+        return {
+          ...location,
+          exactLatitude: coordinates.latitude,
+          exactLongitude: coordinates.longitude
+        };
+      })
+      .filter(Boolean) as (MapLocation & { exactLatitude: number; exactLongitude: number })[];
+
+    console.log('🗺️ LeafletMap: Valid locations count:', validLocations.length);
+
     if (validLocations.length === 0) {
       // Default to world view if no coordinates
       map.setView([20, 0], 2);
@@ -66,12 +99,15 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
     }
 
     const bounds = L.latLngBounds([]);
-    
-    // Add markers
-    validLocations.forEach((location) => {
-      if (!location.latitude || !location.longitude) return;
 
-      const latLng = L.latLng(location.latitude, location.longitude);
+    // Add markers with exact coordinates
+    validLocations.forEach((location) => {
+      console.log(`📍 LeafletMap: Creating marker for ${location.title} at:`, {
+        latitude: location.exactLatitude,
+        longitude: location.exactLongitude
+      });
+
+      const latLng = L.latLng(location.exactLatitude, location.exactLongitude);
       bounds.extend(latLng);
 
       // Create custom marker icon
@@ -160,6 +196,16 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
             color: #6b7280;
             line-height: 1.4;
           ">📍 ${location.address}</p>
+          <p style="
+            margin: 8px 0;
+            font-size: 12px;
+            color: #6b7280;
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            line-height: 1.3;
+          ">🌍 ${location.exactLatitude.toFixed(6)}, ${location.exactLongitude.toFixed(6)}</p>
           ${location.description ? `
             <p style="
               margin: 0;
@@ -177,16 +223,16 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
       });
     });
 
-    // Fit map to bounds
+    // Fit map to bounds with exact coordinates
     if (validLocations.length === 1) {
-      // Single location - center and zoom
+      // Single location - center and zoom to exact coordinates
       const location = validLocations[0];
-      map.setView([location.latitude!, location.longitude!], 12);
+      map.setView([location.exactLatitude, location.exactLongitude], 15);
     } else if (validLocations.length > 1) {
       // Multiple locations - fit bounds with padding
-      map.fitBounds(bounds, { 
+      map.fitBounds(bounds, {
         padding: [20, 20],
-        maxZoom: 15 
+        maxZoom: 15
       });
     }
 
