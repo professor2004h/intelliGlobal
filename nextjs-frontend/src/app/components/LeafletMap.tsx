@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { processLocationCoordinates } from '@/app/utils/coordinateUtils';
+// Removed DMS coordinate processing - using decimal only
 
 // Fix for default markers in Leaflet with Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -18,11 +18,8 @@ interface MapLocation {
   title: string;
   category?: string;
   address: string;
-  coordinateFormat?: 'decimal' | 'dms';
-  latitude?: number;
-  longitude?: number;
-  latitudeDMS?: string;
-  longitudeDMS?: string;
+  latitude: number;
+  longitude: number;
   description?: string;
   isActive: boolean;
   priority?: number;
@@ -60,35 +57,31 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
       subdomains: 'abcd',
     }).addTo(map);
 
-    // Process locations and get exact coordinates
+    // Process locations (decimal coordinates only)
     console.log('🗺️ LeafletMap: Processing', locations.length, 'locations');
 
     const validLocations = locations
-      .map((location, index) => {
-        console.log(`🗺️ LeafletMap: Processing location ${index + 1}:`, location.title);
-        console.log(`🗺️ LeafletMap: Raw location data:`, {
-          coordinateFormat: location.coordinateFormat,
-          latitudeDMS: location.latitudeDMS,
-          longitudeDMS: location.longitudeDMS,
+      .filter((location) => {
+        // Validate decimal coordinates
+        if (typeof location.latitude !== 'number' || typeof location.longitude !== 'number') {
+          console.log(`❌ LeafletMap: Invalid coordinates for:`, location.title);
+          return false;
+        }
+
+        // Validate coordinate ranges
+        if (location.latitude < -90 || location.latitude > 90 ||
+            location.longitude < -180 || location.longitude > 180) {
+          console.log(`❌ LeafletMap: Coordinates out of range for:`, location.title);
+          return false;
+        }
+
+        console.log(`✅ LeafletMap: Valid coordinates for ${location.title}:`, {
           latitude: location.latitude,
           longitude: location.longitude
         });
 
-        const coordinates = processLocationCoordinates(location);
-        if (!coordinates) {
-          console.log(`❌ LeafletMap: Failed to process coordinates for:`, location.title);
-          return null;
-        }
-
-        console.log(`✅ LeafletMap: Processed coordinates for ${location.title}:`, coordinates);
-
-        return {
-          ...location,
-          exactLatitude: coordinates.latitude,
-          exactLongitude: coordinates.longitude
-        };
-      })
-      .filter(Boolean) as (MapLocation & { exactLatitude: number; exactLongitude: number })[];
+        return true;
+      });
 
     console.log('🗺️ LeafletMap: Valid locations count:', validLocations.length);
 
@@ -100,14 +93,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
 
     const bounds = L.latLngBounds([]);
 
-    // Add markers with exact coordinates
+    // Add markers with decimal coordinates
     validLocations.forEach((location) => {
       console.log(`📍 LeafletMap: Creating marker for ${location.title} at:`, {
-        latitude: location.exactLatitude,
-        longitude: location.exactLongitude
+        latitude: location.latitude,
+        longitude: location.longitude
       });
 
-      const latLng = L.latLng(location.exactLatitude, location.exactLongitude);
+      const latLng = L.latLng(location.latitude, location.longitude);
       bounds.extend(latLng);
 
       // Create custom marker icon
@@ -205,7 +198,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
             padding: 4px 8px;
             border-radius: 4px;
             line-height: 1.3;
-          ">🌍 ${location.exactLatitude.toFixed(6)}, ${location.exactLongitude.toFixed(6)}</p>
+          ">🌍 ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}</p>
           ${location.description ? `
             <p style="
               margin: 0;
@@ -227,7 +220,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
     if (validLocations.length === 1) {
       // Single location - center and zoom to exact coordinates
       const location = validLocations[0];
-      map.setView([location.exactLatitude, location.exactLongitude], 15);
+      map.setView([location.latitude, location.longitude], 15);
     } else if (validLocations.length > 1) {
       // Multiple locations - fit bounds with padding
       map.fitBounds(bounds, {

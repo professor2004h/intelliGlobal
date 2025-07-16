@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 
-// Define the map location type (same as before)
+// Define the map location type (decimal coordinates only)
 export interface MapLocation {
   _id: string;
   title: string;
   category?: string;
   address: string;
-  latitude?: number;
-  longitude?: number;
+  latitude: number;
+  longitude: number;
   description?: string;
   isActive: boolean;
   priority?: number;

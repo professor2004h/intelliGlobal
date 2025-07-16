@@ -44,101 +44,30 @@ export default defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
-      name: 'coordinateFormat',
-      title: 'Coordinate Input Format',
-      type: 'string',
-      description: 'Choose how you want to input coordinates',
-      options: {
-        list: [
-          {title: 'Decimal Degrees (e.g., 18.967664, 72.805832)', value: 'decimal'},
-          {title: 'Degrees Minutes Seconds (e.g., 18° 58\' 3.59" N)', value: 'dms'}
-        ]
-      },
-      initialValue: 'dms',
-    }),
-    defineField({
-      name: 'latitudeDMS',
-      title: 'Latitude (DMS Format)',
-      type: 'string',
-      description: 'Enter latitude in Degrees Minutes Seconds format (e.g., 18° 58\' 3.59" N)',
-      placeholder: '18° 58\' 3.59" N',
-      hidden: ({document}) => document?.coordinateFormat !== 'dms',
-      validation: Rule => Rule.custom((value, context) => {
-        if (context.document?.coordinateFormat === 'dms' && value) {
-          // Validate DMS format: DD° MM' SS.SS" [N|S]
-          const dmsPattern = /^(\d{1,3})°\s*(\d{1,2})'\s*(\d{1,2}(?:\.\d+)?)"?\s*([NS])$/i;
-          if (!dmsPattern.test(value)) {
-            return 'Please use format: 18° 58\' 3.59" N (degrees° minutes\' seconds" N/S)';
-          }
-
-          const match = value.match(dmsPattern);
-          if (match) {
-            const degrees = parseInt(match[1]);
-            const minutes = parseInt(match[2]);
-            const seconds = parseFloat(match[3]);
-
-            if (degrees > 90) return 'Degrees cannot exceed 90';
-            if (minutes >= 60) return 'Minutes must be less than 60';
-            if (seconds >= 60) return 'Seconds must be less than 60';
-          }
-        }
-        return true;
-      }),
-    }),
-    defineField({
-      name: 'longitudeDMS',
-      title: 'Longitude (DMS Format)',
-      type: 'string',
-      description: 'Enter longitude in Degrees Minutes Seconds format (e.g., 72° 48\' 20.99" E)',
-      placeholder: '72° 48\' 20.99" E',
-      hidden: ({document}) => document?.coordinateFormat !== 'dms',
-      validation: Rule => Rule.custom((value, context) => {
-        if (context.document?.coordinateFormat === 'dms' && value) {
-          // Validate DMS format: DDD° MM' SS.SS" [E|W]
-          const dmsPattern = /^(\d{1,3})°\s*(\d{1,2})'\s*(\d{1,2}(?:\.\d+)?)"?\s*([EW])$/i;
-          if (!dmsPattern.test(value)) {
-            return 'Please use format: 72° 48\' 20.99" E (degrees° minutes\' seconds" E/W)';
-          }
-
-          const match = value.match(dmsPattern);
-          if (match) {
-            const degrees = parseInt(match[1]);
-            const minutes = parseInt(match[2]);
-            const seconds = parseFloat(match[3]);
-
-            if (degrees > 180) return 'Degrees cannot exceed 180';
-            if (minutes >= 60) return 'Minutes must be less than 60';
-            if (seconds >= 60) return 'Seconds must be less than 60';
-          }
-        }
-        return true;
-      }),
-    }),
-    defineField({
       name: 'latitude',
-      title: 'Latitude (Decimal Degrees)',
+      title: 'Latitude',
       type: 'number',
-      description: 'Latitude coordinate in decimal format (e.g., 18.967664)',
+      description: 'Latitude coordinate in decimal degrees (e.g., 18.967664)',
       placeholder: '18.967664',
-      hidden: ({document}) => document?.coordinateFormat !== 'decimal',
       validation: Rule =>
-        Rule.min(-90)
+        Rule.required()
+          .min(-90)
           .max(90)
           .precision(6)
-          .error('Latitude must be between -90 and 90 degrees'),
+          .error('Latitude is required and must be between -90 and 90 degrees'),
     }),
     defineField({
       name: 'longitude',
-      title: 'Longitude (Decimal Degrees)',
+      title: 'Longitude',
       type: 'number',
-      description: 'Longitude coordinate in decimal format (e.g., 72.805832)',
+      description: 'Longitude coordinate in decimal degrees (e.g., 72.805832)',
       placeholder: '72.805832',
-      hidden: ({document}) => document?.coordinateFormat !== 'decimal',
       validation: Rule =>
-        Rule.min(-180)
+        Rule.required()
+          .min(-180)
           .max(180)
           .precision(6)
-          .error('Longitude must be between -180 and 180 degrees'),
+          .error('Longitude is required and must be between -180 and 180 degrees'),
     }),
     defineField({
       name: 'description',

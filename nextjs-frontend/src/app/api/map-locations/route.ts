@@ -1,36 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/app/sanity/client';
-import { processLocationCoordinates } from '@/app/utils/coordinateUtils';
 
-// Define the map location type (generic for any map provider)
+// Define the map location type (simplified for decimal coordinates only)
 export interface MapLocation {
   _id: string;
   title: string;
   category?: string;
   address: string;
-  coordinateFormat?: 'decimal' | 'dms';
-  latitude?: number;
-  longitude?: number;
-  latitudeDMS?: string;
-  longitudeDMS?: string;
+  latitude: number;
+  longitude: number;
   description?: string;
   isActive: boolean;
   priority?: number;
   markerColor?: string;
 }
 
-// GROQ query to fetch active map locations
+// GROQ query to fetch active map locations (decimal coordinates only)
 const MAP_LOCATIONS_QUERY = `
   *[_type == "mapLocation" && isActive == true] | order(priority desc, title asc) {
     _id,
     title,
     category,
     address,
-    coordinateFormat,
     latitude,
     longitude,
-    latitudeDMS,
-    longitudeDMS,
     description,
     isActive,
     priority,
@@ -38,69 +31,7 @@ const MAP_LOCATIONS_QUERY = `
   }
 `;
 
-// Test data fallback
-const testLocations: MapLocation[] = [
-  {
-    _id: 'test-london',
-    title: 'London Office',
-    category: 'office',
-    address: 'ExCeL London, Royal Victoria Dock, London E16 1XL, UK',
-    latitude: 51.5074,
-    longitude: -0.1278,
-    description: 'Major European hub for international conferences and academic events.',
-    isActive: true,
-    priority: 90,
-    markerColor: 'orange',
-  },
-  {
-    _id: 'test-newyork',
-    title: 'New York Conference Center',
-    category: 'conference',
-    address: 'Jacob K. Javits Convention Center, 429 11th Ave, New York, NY 10001, USA',
-    latitude: 40.7128,
-    longitude: -74.0060,
-    description: 'Premier destination for technology and business conferences in North America.',
-    isActive: true,
-    priority: 85,
-    markerColor: 'orange',
-  },
-  {
-    _id: 'test-singapore',
-    title: 'Singapore Event Venue',
-    category: 'venue',
-    address: 'Marina Bay Sands Expo and Convention Centre, 10 Bayfront Ave, Singapore 018956',
-    latitude: 1.3521,
-    longitude: 103.8198,
-    description: 'Gateway to Asia-Pacific conferences and international symposiums.',
-    isActive: true,
-    priority: 80,
-    markerColor: 'orange',
-  },
-  {
-    _id: 'test-dubai',
-    title: 'Dubai Regional Office',
-    category: 'office',
-    address: 'Dubai World Trade Centre, Sheikh Zayed Rd, Dubai, UAE',
-    latitude: 25.2048,
-    longitude: 55.2708,
-    description: 'Middle East hub for global conferences and business events.',
-    isActive: true,
-    priority: 75,
-    markerColor: 'orange',
-  },
-  {
-    _id: 'test-tokyo',
-    title: 'Tokyo Innovation Hub',
-    category: 'partner',
-    address: 'Tokyo International Forum, 3-5-1 Marunouchi, Chiyoda City, Tokyo 100-0005, Japan',
-    latitude: 35.6762,
-    longitude: 139.6503,
-    description: 'Leading venue for technology and innovation conferences in Asia.',
-    isActive: true,
-    priority: 70,
-    markerColor: 'orange',
-  },
-];
+// No test data - only use Sanity CMS data
 
 export async function GET(request: NextRequest) {
   try {
@@ -109,45 +40,19 @@ export async function GET(request: NextRequest) {
     let locations: MapLocation[] = [];
     let dataSource = 'sanity';
 
-    try {
-      // Try to fetch map locations from Sanity
-      locations = await client.fetch(
-        MAP_LOCATIONS_QUERY,
-        {},
-        {
-          cache: 'no-store', // Always fetch fresh data for real-time updates
-          next: { revalidate: 60 }, // Revalidate every 60 seconds
-        }
-      );
+    // Fetch map locations from Sanity CMS only
+    locations = await client.fetch(
+      MAP_LOCATIONS_QUERY,
+      {},
+      {
+        cache: 'no-store', // Always fetch fresh data for real-time updates
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      }
+    );
 
-      console.log(`✅ Successfully fetched ${locations.length} map locations from Sanity`);
+    console.log(`✅ Successfully fetched ${locations.length} active map locations from Sanity`);
 
-      // Debug: Log raw location data from Sanity
-      locations.forEach((location, index) => {
-        console.log(`📍 API Route: Location ${index + 1} raw data:`, {
-          title: location.title,
-          coordinateFormat: location.coordinateFormat,
-          latitudeDMS: location.latitudeDMS,
-          longitudeDMS: location.longitudeDMS,
-          latitude: location.latitude,
-          longitude: location.longitude
-        });
-      });
-
-    } catch (sanityError) {
-      console.warn('⚠️ Sanity fetch failed, using test data:', sanityError);
-      locations = testLocations;
-      dataSource = 'test';
-    }
-
-    // If no Sanity data, use test data
-    if (locations.length === 0) {
-      console.log('📍 No Sanity data found, using test locations');
-      locations = testLocations;
-      dataSource = 'test';
-    }
-
-    // Validate location data and process coordinates
+    // Validate location data (only decimal coordinates)
     const validLocations = locations.filter(location => {
       // Basic validation
       if (!location.title || !location.address) {
@@ -155,10 +60,20 @@ export async function GET(request: NextRequest) {
         return false;
       }
 
-      // Try to process coordinates (handles both decimal and DMS formats)
-      const coordinates = processLocationCoordinates(location);
-      if (!coordinates) {
-        console.warn(`⚠️ Invalid coordinates for: ${location.title}`);
+      // Validate decimal coordinates
+      if (typeof location.latitude !== 'number' || typeof location.longitude !== 'number') {
+        console.warn(`⚠️ Missing or invalid coordinates for: ${location.title}`);
+        return false;
+      }
+
+      // Validate coordinate ranges
+      if (location.latitude < -90 || location.latitude > 90) {
+        console.warn(`⚠️ Invalid latitude for: ${location.title}`);
+        return false;
+      }
+
+      if (location.longitude < -180 || location.longitude > 180) {
+        console.warn(`⚠️ Invalid longitude for: ${location.title}`);
         return false;
       }
 
