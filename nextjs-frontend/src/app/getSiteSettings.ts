@@ -67,13 +67,13 @@ export interface SiteSettings {
       };
       alt?: string;
     };
-  };
-  footerLogo?: {
-    asset: {
-      _id: string;
-      url: string;
+    footerLogo?: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
     };
-    alt?: string;
   };
   registerButton?: {
     text: string;
@@ -143,14 +143,14 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
             url
           },
           alt
-        }
-      },
-      footerLogo{
-        asset->{
-          _id,
-          url
         },
-        alt
+        footerLogo{
+          asset->{
+            _id,
+            url
+          },
+          alt
+        }
       },
       registerButton{
         text,
@@ -319,6 +319,13 @@ export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
             url
           },
           alt
+        },
+        footerLogo{
+          asset->{
+            _id,
+            url
+          },
+          alt
         }
       },
       footerLogo{
@@ -404,14 +411,14 @@ export async function getSiteSettingsSSR(): Promise<SiteSettings | null> {
             url
           },
           alt
-        }
-      },
-      footerLogo{
-        asset->{
-          _id,
-          url
         },
-        alt
+        footerLogo{
+          asset->{
+            _id,
+            url
+          },
+          alt
+        }
       },
       registerButton{
         text,

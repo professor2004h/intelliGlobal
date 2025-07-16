@@ -16,7 +16,7 @@ export default async function Footer() {
   const backgroundImageUrl = footerBgImage ? getImageUrl(footerBgImage) : null;
 
   // Get footer logo
-  const footerLogo = siteSettings?.footerLogo;
+  const footerLogo = siteSettings?.footerContent?.footerLogo;
   const footerLogoUrl = footerLogo ? getImageUrl(footerLogo) : null;
 
   // Get register button config
@@ -41,7 +41,7 @@ export default async function Footer() {
       <div className="relative z-10">
 
         {/* Header Section with Logo and Register Button */}
-        <div className="py-6">
+        <div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
 
