@@ -43,7 +43,7 @@ export default async function Footer() {
       }}
     >
       {/* Background overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
       {/* Content wrapper */}
       <div className="relative z-10">
