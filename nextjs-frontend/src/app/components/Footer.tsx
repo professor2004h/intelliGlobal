@@ -77,34 +77,58 @@ export default async function Footer() {
           {/* Company Info with Logo */}
           <div className="lg:col-span-2">
             <div className="mb-6">
-              {/* Footer Logo */}
+              {/* Footer Logo and Register Button */}
               <div className="mb-6">
-                {footerLogoUrl ? (
-                  <Image
-                    src={footerLogoUrl}
-                    alt={footerLogo?.alt || 'Footer Logo'}
-                    width={200}
-                    height={60}
-                    className="h-12 sm:h-16 w-auto object-contain"
-                    priority
-                  />
-                ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
-                  <Image
-                    src={getImageUrl(siteSettings.logo) || ''}
-                    alt={siteSettings.logo.alt || 'Logo'}
-                    width={200}
-                    height={60}
-                    className="h-12 sm:h-16 w-auto object-contain"
-                    priority
-                  />
-                ) : (
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                      <span className="text-white font-bold text-lg sm:text-xl">IGC</span>
-                    </div>
-                    <h2 className="text-xl sm:text-2xl font-bold">Intelli Global Conferences</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  {/* Logo */}
+                  <div className="flex-shrink-0">
+                    {footerLogoUrl ? (
+                      <Image
+                        src={footerLogoUrl}
+                        alt={footerLogo?.alt || 'Footer Logo'}
+                        width={200}
+                        height={60}
+                        className="h-12 sm:h-16 w-auto object-contain"
+                        priority
+                      />
+                    ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
+                      <Image
+                        src={getImageUrl(siteSettings.logo) || ''}
+                        alt={siteSettings.logo.alt || 'Logo'}
+                        width={200}
+                        height={60}
+                        className="h-12 sm:h-16 w-auto object-contain"
+                        priority
+                      />
+                    ) : (
+                      <div className="flex items-center">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                          <span className="text-white font-bold text-lg sm:text-xl">IGC</span>
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-bold">Intelli Global Conferences</h2>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  {/* Register Now Button */}
+                  {registerButton?.url && (
+                    <div className="flex-shrink-0">
+                      <a
+                        href={registerButton.url}
+                        target={registerButton.openInNewTab ? '_blank' : '_self'}
+                        rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
+                        className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                      >
+                        {registerButton.text || 'Register Now'}
+                        {registerButton.openInNewTab && (
+                          <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        )}
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
               <p className="text-gray-300 mb-6 max-w-md">
                 We at Intelli Global Conferences built an ecosystem that brings the Scholars, people in the Scientific Study & Research,
@@ -176,24 +200,6 @@ export default async function Footer() {
               )}
             </div>
 
-            {/* Register Now Button */}
-            {registerButton?.url && (
-              <div className="mt-6">
-                <a
-                  href={registerButton.url}
-                  target={registerButton.openInNewTab ? '_blank' : '_self'}
-                  rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-                >
-                  {registerButton.text || 'Register Now'}
-                  {registerButton.openInNewTab && (
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  )}
-                </a>
-              </div>
-            )}
           </div>
 
           {/* Quick Links */}
@@ -223,7 +229,7 @@ export default async function Footer() {
                 <div className="flex-1 min-w-0">
                   <a
                     href={`mailto:${siteSettings?.contactInfo?.email || "intelliglobalconferences@gmail.com"}`}
-                    className="text-white font-medium hover:text-orange-400 transition-colors text-sm break-all"
+                    className="text-white font-medium hover:text-orange-400 transition-colors text-sm break-words"
                   >
                     {siteSettings?.contactInfo?.email || "intelliglobalconferences@gmail.com"}
                   </a>
