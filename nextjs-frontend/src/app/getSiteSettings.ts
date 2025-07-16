@@ -161,7 +161,7 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
 
     const siteSettings = await client.fetch(query, {}, {
       next: {
-        revalidate: process.env.NODE_ENV === 'development' ? 5 : 30, // 5 seconds in dev, 30 seconds in production
+        revalidate: process.env.NODE_ENV === 'development' ? 1 : 30, // 1 second in dev for faster testing, 30 seconds in production
         tags: ['site-settings'] // Cache tag for targeted revalidation
       },
     });

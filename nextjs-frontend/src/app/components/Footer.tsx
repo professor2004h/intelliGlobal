@@ -19,6 +19,14 @@ export default async function Footer() {
   const footerLogo = siteSettings?.footerContent?.footerLogo;
   const footerLogoUrl = footerLogo ? getImageUrl(footerLogo) : null;
 
+  // Debug footer logo
+  console.log('Footer Logo Debug:', {
+    footerLogo,
+    footerLogoUrl,
+    footerContent: siteSettings?.footerContent,
+    mainLogo: siteSettings?.logo
+  });
+
   // Get register button config
   const registerButton = siteSettings?.registerButton;
 
@@ -40,62 +48,7 @@ export default async function Footer() {
       {/* Content wrapper */}
       <div className="relative z-10">
 
-        {/* Header Section with Logo and Register Button */}
-        <div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
 
-              {/* Footer Logo */}
-              <div className="flex-shrink-0">
-                {footerLogoUrl ? (
-                  <Image
-                    src={footerLogoUrl}
-                    alt={footerLogo?.alt || 'Footer Logo'}
-                    width={200}
-                    height={60}
-                    className="h-12 sm:h-16 w-auto object-contain"
-                    priority
-                  />
-                ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
-                  <Image
-                    src={getImageUrl(siteSettings.logo) || ''}
-                    alt={siteSettings.logo.alt || 'Logo'}
-                    width={200}
-                    height={60}
-                    className="h-12 sm:h-16 w-auto object-contain"
-                    priority
-                  />
-                ) : (
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                      <span className="text-white font-bold text-lg sm:text-xl">IGC</span>
-                    </div>
-                    <h2 className="text-xl sm:text-2xl font-bold">Intelli Global Conferences</h2>
-                  </div>
-                )}
-              </div>
-
-              {/* Register Now Button */}
-              {registerButton?.url && (
-                <div className="flex-shrink-0">
-                  <a
-                    href={registerButton.url}
-                    target={registerButton.openInNewTab ? '_blank' : '_self'}
-                    rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
-                    className="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    {registerButton.text || 'Register Now'}
-                    {registerButton.openInNewTab && (
-                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    )}
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       {/* Newsletter Section */}
       <div className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,12 +77,21 @@ export default async function Footer() {
           {/* Company Info with Logo */}
           <div className="lg:col-span-2">
             <div className="mb-6">
-              {/* Logo */}
+              {/* Footer Logo */}
               <div className="mb-6">
-                {siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
+                {footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={footerLogo?.alt || 'Footer Logo'}
+                    width={200}
+                    height={60}
+                    className="h-12 sm:h-16 w-auto object-contain"
+                    priority
+                  />
+                ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
                   <Image
                     src={getImageUrl(siteSettings.logo) || ''}
-                    alt={siteSettings.logo.alt || 'Intelli Global Conferences Logo'}
+                    alt={siteSettings.logo.alt || 'Logo'}
                     width={200}
                     height={60}
                     className="h-12 sm:h-16 w-auto object-contain"
@@ -213,6 +175,25 @@ export default async function Footer() {
                 </a>
               )}
             </div>
+
+            {/* Register Now Button */}
+            {registerButton?.url && (
+              <div className="mt-6">
+                <a
+                  href={registerButton.url}
+                  target={registerButton.openInNewTab ? '_blank' : '_self'}
+                  rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
+                  className="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                >
+                  {registerButton.text || 'Register Now'}
+                  {registerButton.openInNewTab && (
+                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  )}
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
