@@ -1785,17 +1785,21 @@ a, button, input, textarea, select {
   }
 
   .mobile-summary-card {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
-    border-color: #3b82f6 !important;
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%) !important;
+    border-color: #4b5563 !important;
   }
 
   .mobile-summary-card h3 {
-    color: #dbeafe !important;
+    color: #f9fafb !important;
   }
 
   .mobile-summary-label,
   .mobile-summary-value {
-    color: #bfdbfe !important;
+    color: #e5e7eb !important;
+  }
+
+  .mobile-summary-price {
+    color: #f9fafb !important;
   }
 
   .mobile-payment-method {

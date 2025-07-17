@@ -1035,7 +1035,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
                 {/* Dynamic Pricing Display */}
                 {displayTier && (
-                  <div className="mobile-summary-card bg-blue-50 p-4 md:p-6 rounded-lg border border-blue-200">
+                  <div className="mobile-summary-card">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 space-y-3 md:space-y-0">
                       <div className="flex-1">
                         <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">
