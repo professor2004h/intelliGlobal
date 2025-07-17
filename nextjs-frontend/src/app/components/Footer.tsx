@@ -79,56 +79,51 @@ export default async function Footer() {
           {/* Company Info with Logo */}
           <div className="lg:col-span-2">
             <div className="mb-6">
-              {/* Footer Logo and Register Button */}
+              {/* Footer Logo */}
               <div className="mb-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  {/* Logo */}
-                  <div className="flex-shrink-0">
-                    {footerLogoUrl ? (
-                      <Image
-                        src={footerLogoUrl}
-                        alt={footerLogo?.alt || 'Footer Logo'}
-                        width={200}
-                        height={60}
-                        className="h-12 sm:h-16 w-auto object-contain"
-                        priority
-                      />
-                    ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
-                      <Image
-                        src={getImageUrl(siteSettings.logo) || ''}
-                        alt={siteSettings.logo.alt || 'Logo'}
-                        width={200}
-                        height={60}
-                        className="h-12 sm:h-16 w-auto object-contain"
-                        priority
-                      />
-                    ) : (
-                      <div className="flex items-center">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                          <span className="text-white font-bold text-lg sm:text-xl">IGC</span>
-                        </div>
-                        <h2 className="text-xl sm:text-2xl font-bold">Intelli Global Conferences</h2>
-                      </div>
-                    )}
+                {footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={footerLogo?.alt || 'Footer Logo'}
+                    width={200}
+                    height={60}
+                    className="h-12 sm:h-16 w-auto object-contain"
+                    priority
+                  />
+                ) : siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
+                  <Image
+                    src={getImageUrl(siteSettings.logo) || ''}
+                    alt={siteSettings.logo.alt || 'Logo'}
+                    width={200}
+                    height={60}
+                    className="h-12 sm:h-16 w-auto object-contain"
+                    priority
+                  />
+                ) : (
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                      <span className="text-white font-bold text-lg sm:text-xl">IGC</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-bold">Intelli Global Conferences</h2>
                   </div>
+                )}
+              </div>
 
-                  {/* Register Now Button - Always visible for testing */}
-                  <div className="flex-shrink-0">
-                    <a
-                      href={registerButton?.url || '#'}
-                      target={registerButton?.openInNewTab ? '_blank' : '_self'}
-                      rel={registerButton?.openInNewTab ? 'noopener noreferrer' : undefined}
-                      className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                    >
-                      {registerButton?.text || 'Register Now'}
-                      {registerButton?.openInNewTab && (
-                        <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      )}
-                    </a>
-                  </div>
-                </div>
+              {/* Register Now Button - Below logo on all devices */}
+              <div className="mb-6">
+                <a
+                  href={registerButton?.url || '#'}
+                  target={registerButton?.openInNewTab ? '_blank' : '_self'}
+                  rel={registerButton?.openInNewTab ? 'noopener noreferrer' : undefined}
+                  className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                >
+                  {registerButton?.text || 'Register Now'}
+                  {registerButton?.openInNewTab && (
+                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  )}
+                </a>
               </div>
               <p className="text-gray-300 mb-6 max-w-md">
                 We at Intelli Global Conferences built an ecosystem that brings the Scholars, people in the Scientific Study & Research,
@@ -218,18 +213,18 @@ export default async function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4 text-white">Contact Info</h3>
             <div className="space-y-4">
-              {/* Email - Mobile Aligned */}
-              <div className="flex items-center space-x-4">
+              {/* Email - Fixed line break issue */}
+              <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 overflow-hidden">
                   <a
                     href={`mailto:${siteSettings?.contactInfo?.email || "intelliglobalconferences@gmail.com"}`}
-                    className="text-white font-medium hover:text-orange-400 transition-colors text-sm break-words"
+                    className="text-white font-medium hover:text-orange-400 transition-colors text-sm whitespace-nowrap block overflow-hidden text-ellipsis"
                   >
                     {siteSettings?.contactInfo?.email || "intelliglobalconferences@gmail.com"}
                   </a>
