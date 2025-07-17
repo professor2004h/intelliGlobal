@@ -23,13 +23,13 @@ export default async function Footer() {
   const registerButton = siteSettings?.registerButton;
 
   // Debug footer logo and register button
-  console.log('Footer Debug:', {
-    footerLogo,
-    footerLogoUrl,
+  console.log('🔍 Footer Debug - Register Button:', {
     registerButton,
     registerButtonUrl: registerButton?.url,
-    footerContent: siteSettings?.footerContent,
-    mainLogo: siteSettings?.logo
+    registerButtonText: registerButton?.text,
+    registerButtonOpenInNewTab: registerButton?.openInNewTab,
+    fullSiteSettings: siteSettings,
+    footerContent: siteSettings?.footerContent
   });
 
   return (
@@ -110,21 +110,23 @@ export default async function Footer() {
               </div>
 
               {/* Register Now Button - Below logo on all devices */}
-              <div className="mb-6">
-                <a
-                  href={registerButton?.url || '#'}
-                  target={registerButton?.openInNewTab ? '_blank' : '_self'}
-                  rel={registerButton?.openInNewTab ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                >
-                  {registerButton?.text || 'Register Now'}
-                  {registerButton?.openInNewTab && (
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  )}
-                </a>
-              </div>
+              {registerButton?.url && (
+                <div className="mb-6">
+                  <a
+                    href={registerButton.url}
+                    target={registerButton.openInNewTab ? '_blank' : '_self'}
+                    rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
+                    className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  >
+                    {registerButton.text || 'Register Now'}
+                    {registerButton.openInNewTab && (
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    )}
+                  </a>
+                </div>
+              )}
               <p className="text-gray-300 mb-6 max-w-md">
                 We at Intelli Global Conferences built an ecosystem that brings the Scholars, people in the Scientific Study & Research,
                 knowledge group of the society, the students, learners and more on a common ground – to share their knowledge,
