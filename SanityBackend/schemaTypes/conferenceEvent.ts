@@ -69,3 +69,5 @@ export const conferenceEvent = defineType({
     }),
   ],
 })
+
+export default conferenceEvent;

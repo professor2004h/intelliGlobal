@@ -1,5 +1,5 @@
-import { conferenceEvent } from "./conferenceEvent"
-import { pastConference } from "./pastConference"
+import conferenceEvent from "./conferenceEvent";
+import pastConference from "./pastConference";
 import about from './about';
 import heroSection from './heroSection';
 import conferences from "./conferences";
