@@ -210,19 +210,19 @@ export default async function HeaderServer() {
           <div className="flex items-center h-full py-2">
             <Link href="/" className="flex items-center h-full">
               {siteSettings?.logo && getLogoImageUrl(siteSettings.logo) ? (
-                <div className="relative h-full max-h-16 sm:max-h-20 md:max-h-24 flex items-center">
+                <div className="relative h-full max-h-16 sm:max-h-20 md:max-h-20 flex items-center">
                   <Image
                     src={getLogoImageUrl(siteSettings.logo) || ''}
                     alt={siteSettings.logo.alt || 'Cognition Conferences Logo'}
-                    width={400}
-                    height={120}
+                    width={320}
+                    height={100}
                     className="h-auto w-auto max-h-full max-w-full object-contain"
                     priority
                     quality={100}
-                    sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
+                    sizes="(max-width: 640px) 200px, (max-width: 768px) 280px, 320px"
                     style={{
                       maxHeight: '100%',
-                      maxWidth: '350px',
+                      maxWidth: '280px',
                       height: 'auto',
                       width: 'auto',
                     }}
@@ -232,8 +232,8 @@ export default async function HeaderServer() {
               ) : (
                 <div className="flex items-center h-full">
                   {/* Enhanced fallback logo */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 max-h-full bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">CC</span>
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 max-h-full bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-xl sm:text-2xl md:text-2xl">CC</span>
                   </div>
                 </div>
               )}
