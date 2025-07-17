@@ -44,13 +44,6 @@ const sponsorRegistration = defineType({
       hidden: ({ document }) => !document?.isCustomAmount,
     }),
     defineField({
-      name: 'customAmount',
-      title: 'Custom Amount (USD)',
-      type: 'number',
-      description: 'Custom sponsorship amount if different from tier price',
-      validation: (Rule) => Rule.min(0),
-    }),
-    defineField({
       name: 'companyDetails',
       title: 'Company Details',
       type: 'object',
