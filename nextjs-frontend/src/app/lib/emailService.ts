@@ -54,6 +54,8 @@ export interface SponsorshipNotificationData {
   conferenceName: string;
   tierName: string;
   amount: number;
+  isCustomAmount?: boolean;
+  customAmount?: number;
   paymentId?: string;
   paymentStatus: 'pending' | 'completed' | 'failed';
   specialRequests?: string;
@@ -424,8 +426,11 @@ export async function sendSponsorshipNotification(
                 <span class="value" style="font-weight: bold;">${sponsorData.conferenceName}</span>
               </div>
               <div class="field">
-                <span class="label">Sponsorship Tier:</span>
-                <span class="value" style="font-weight: bold; color: #ea580c;">${sponsorData.tierName}</span>
+                <span class="label">Sponsorship Option:</span>
+                <span class="value" style="font-weight: bold; color: #ea580c;">
+                  ${sponsorData.tierName}
+                  ${sponsorData.isCustomAmount ? '<span style="background-color: #fed7aa; color: #ea580c; padding: 2px 6px; border-radius: 12px; font-size: 10px; margin-left: 8px;">CUSTOM</span>' : ''}
+                </span>
               </div>
               <div class="field">
                 <span class="label">Amount:</span>
@@ -453,6 +458,15 @@ export async function sendSponsorshipNotification(
                   ${(!sponsorData.marketingMaterials && !sponsorData.logoPlacement && !sponsorData.speakingOpportunity) ? 'None selected' : ''}
                 </div>
               </div>
+            </div>
+            ` : ''}
+
+            ${sponsorData.isCustomAmount ? `
+            <div style="background-color: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <h4 style="color: #92400e; margin: 0 0 10px 0; font-size: 14px;">📞 Custom Sponsorship Package</h4>
+              <p style="color: #92400e; margin: 0; font-size: 13px;">
+                Our admin team will contact you within 24 hours to discuss and customize your sponsorship package benefits based on your investment level of <strong>$${sponsorData.amount.toLocaleString()}</strong>.
+              </p>
             </div>
             ` : ''}
 

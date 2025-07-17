@@ -86,6 +86,9 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
   console.log('🎯 CLIENT: Form received conferences:', conferences);
   console.log('🎯 CLIENT: Form received tiers:', sponsorshipTiers);
 
+  // State for site settings (admin contact info)
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
   // Initialize form state with localStorage persistence
   const initializeFormState = () => {
     if (typeof window !== 'undefined') {
@@ -102,6 +105,8 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
       // Step 1: Conference & Tier Selection
       conferenceId: '',
       tierId: '',
+      customAmount: '',
+      isCustomAmount: false,
 
       // Step 2: Company Information
       companyName: '',
@@ -224,6 +229,23 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
     }
   }, []);
 
+  // Fetch site settings for admin contact info
+  useEffect(() => {
+    const fetchSiteSettings = async () => {
+      try {
+        const response = await fetch('/api/site-settings');
+        if (response.ok) {
+          const settings = await response.json();
+          setSiteSettings(settings);
+        }
+      } catch (error) {
+        console.error('Error fetching site settings:', error);
+      }
+    };
+
+    fetchSiteSettings();
+  }, []);
+
   // Save form data to localStorage whenever it changes
   const saveFormData = (newFormData: typeof formData) => {
     if (typeof window !== 'undefined') {
@@ -250,10 +272,33 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
-    const newFormData = {
+    let newFormData = {
       ...formData,
       [name]: type === 'checkbox' ? checked : value
     };
+
+    // Handle tier selection changes
+    if (name === 'tierId') {
+      if (value === 'custom') {
+        newFormData.isCustomAmount = true;
+        newFormData.tierId = '';
+      } else {
+        newFormData.isCustomAmount = false;
+        newFormData.customAmount = '';
+      }
+    }
+
+    // Handle custom amount input
+    if (name === 'customAmount') {
+      // Only allow numbers and decimal point
+      const numericValue = value.replace(/[^0-9.]/g, '');
+      // Ensure only one decimal point
+      const parts = numericValue.split('.');
+      if (parts.length > 2) {
+        return; // Don't update if more than one decimal point
+      }
+      newFormData.customAmount = numericValue;
+    }
 
     setFormData(newFormData);
     saveFormData(newFormData); // Persist form data
@@ -269,11 +314,27 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
-    
+
     switch (step) {
       case 1:
         if (!formData.conferenceId) newErrors.conferenceId = 'Please select a conference';
-        if (!formData.tierId) newErrors.tierId = 'Please select a sponsorship tier';
+
+        if (formData.isCustomAmount) {
+          if (!formData.customAmount.trim()) {
+            newErrors.customAmount = 'Please enter a custom amount';
+          } else {
+            const amount = parseFloat(formData.customAmount);
+            if (isNaN(amount) || amount <= 0) {
+              newErrors.customAmount = 'Please enter a valid amount greater than 0';
+            } else if (amount < 100) {
+              newErrors.customAmount = 'Minimum custom amount is $100';
+            } else if (amount > 100000) {
+              newErrors.customAmount = 'Maximum custom amount is $100,000';
+            }
+          }
+        } else {
+          if (!formData.tierId) newErrors.tierId = 'Please select a sponsorship tier';
+        }
         break;
       case 2:
         if (!formData.companyName.trim()) newErrors.companyName = 'Company name is required';
@@ -286,7 +347,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         // No required fields in step 3
         break;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -406,25 +467,45 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
     try {
       const selectedConference = conferences.find(c => c._id === formData.conferenceId);
-      const selectedTier = sponsorshipTiers.find(t => t._id === formData.tierId);
 
-      if (!selectedTier || !selectedConference) {
-        throw new Error('Please select both conference and sponsorship tier');
+      // Handle custom amount or regular tier
+      let selectedTier = null;
+      let usdAmount = 0;
+      let tierName = '';
+
+      if (formData.isCustomAmount) {
+        usdAmount = parseFloat(formData.customAmount);
+        tierName = 'Custom Sponsorship';
+        if (isNaN(usdAmount) || usdAmount <= 0) {
+          throw new Error('Please enter a valid custom amount');
+        }
+      } else {
+        selectedTier = sponsorshipTiers.find(t => t._id === formData.tierId);
+        if (!selectedTier) {
+          throw new Error('Please select a sponsorship tier');
+        }
+        usdAmount = selectedTier.price;
+        tierName = selectedTier.name;
+      }
+
+      if (!selectedConference) {
+        throw new Error('Please select a conference');
       }
 
       const registrationId = generateRegistrationId();
 
       // Convert USD to INR for UPI support (approximate conversion for testing)
-      const usdAmount = selectedTier.price;
       const inrAmount = Math.round(usdAmount * 83); // Approximate USD to INR conversion
 
       const sponsorshipData = {
         registrationId,
         ...formData,
         conferenceName: selectedConference.title,
-        tierName: selectedTier.name,
-        amount: selectedTier.price, // Keep original USD amount for records
+        tierName: tierName,
+        amount: usdAmount, // USD amount (custom or tier price)
         amountINR: inrAmount, // INR amount for payment processing
+        isCustomAmount: formData.isCustomAmount,
+        customAmount: formData.isCustomAmount ? usdAmount : undefined,
         submittedAt: new Date().toISOString(),
       };
 
@@ -468,7 +549,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         amount: order.amount,
         currency: order.currency, // INR for UPI compatibility
         name: 'Intelli Global Conferences',
-        description: `${selectedTier.name} Sponsorship - ${selectedConference.title}`,
+        description: `${tierName} Sponsorship - ${selectedConference.title}`,
         order_id: order.id,
 
         // Enable UPI and other payment methods - CRITICAL FOR UPI SUPPORT
@@ -543,8 +624,10 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
         // Notes for payment tracking and UPI configuration
         notes: {
-          sponsorship_tier: selectedTier.name,
+          sponsorship_tier: tierName,
           conference: selectedConference.title,
+          is_custom_amount: formData.isCustomAmount ? 'true' : 'false',
+          custom_amount_usd: formData.isCustomAmount ? usdAmount.toString() : '',
           test_mode: 'true',
           upi_test_enabled: 'true',
           test_upi_id: 'success@razorpay',
@@ -683,9 +766,17 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
     }
   };
 
-  const selectedTier = sponsorshipTiers.find(tier => tier._id === formData.tierId);
+  // Handle both regular tiers and custom amounts
+  const selectedTier = formData.isCustomAmount ? null : sponsorshipTiers.find(tier => tier._id === formData.tierId);
   const selectedConference = conferences.find(conf => conf._id === formData.conferenceId);
   const selectedDetailedConference = detailedConferences.find(conf => conf._id === formData.conferenceId);
+
+  // Create a display object for custom amounts
+  const displayTier = formData.isCustomAmount ? {
+    name: 'Custom Sponsorship',
+    price: parseFloat(formData.customAmount) || 0,
+    description: 'Custom sponsorship package - details to be discussed with admin team'
+  } : selectedTier;
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 md:py-12">
@@ -772,54 +863,194 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
                 {/* Sponsorship Tier Selection */}
                 <div className="mobile-form-field">
-                  <label htmlFor="tierId" className="mobile-form-label block text-sm font-medium text-gray-700 mb-2">
-                    Select Sponsorship Tier *
+                  <label className="mobile-form-label block text-sm font-medium text-gray-700 mb-4">
+                    Select Sponsorship Option *
                   </label>
-                  <select
-                    name="tierId"
-                    value={formData.tierId}
-                    onChange={handleInputChange}
-                    disabled={loading}
-                    className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.tierId ? 'border-red-500 error' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Choose a sponsorship tier...</option>
-                    {sponsorshipTiers.map((tier) => (
-                      <option key={tier._id} value={tier._id}>
-                        {tier.name} - {formatCurrency(tier.price)}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.tierId && (
-                    <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.tierId}</p>
-                  )}
+
+                  {/* Regular Tier Selection */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">
+                        Choose from Available Packages:
+                      </label>
+                      <select
+                        name="tierId"
+                        value={formData.isCustomAmount ? '' : formData.tierId}
+                        onChange={handleInputChange}
+                        disabled={loading || formData.isCustomAmount}
+                        className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          errors.tierId ? 'border-red-500 error' : 'border-gray-300'
+                        } ${formData.isCustomAmount ? 'bg-gray-100 text-gray-500' : ''}`}
+                      >
+                        <option value="">Choose a sponsorship tier...</option>
+                        {sponsorshipTiers.map((tier) => (
+                          <option key={tier._id} value={tier._id}>
+                            {tier.name} - {formatCurrency(tier.price)}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.tierId && !formData.isCustomAmount && (
+                        <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.tierId}</p>
+                      )}
+                    </div>
+
+                    {/* OR Divider */}
+                    <div className="flex items-center my-4">
+                      <div className="flex-1 border-t border-gray-300"></div>
+                      <span className="px-4 text-sm text-gray-500 bg-white">OR</span>
+                      <div className="flex-1 border-t border-gray-300"></div>
+                    </div>
+
+                    {/* Custom Amount Option */}
+                    <div>
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="sponsorshipOption"
+                          checked={formData.isCustomAmount}
+                          onChange={(e) => {
+                            const newFormData = {
+                              ...formData,
+                              isCustomAmount: e.target.checked,
+                              tierId: e.target.checked ? '' : formData.tierId,
+                              customAmount: e.target.checked ? formData.customAmount : ''
+                            };
+                            setFormData(newFormData);
+                            saveFormData(newFormData);
+                          }}
+                          className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
+                        />
+                        <span className="text-sm font-medium text-gray-700">
+                          Custom Sponsorship Amount
+                        </span>
+                      </label>
+
+                      {formData.isCustomAmount && (
+                        <div className="mt-3 ml-7">
+                          <div className="relative">
+                            <span className="absolute left-3 top-3 text-gray-500">$</span>
+                            <input
+                              type="text"
+                              name="customAmount"
+                              value={formData.customAmount}
+                              onChange={handleInputChange}
+                              placeholder="Enter amount (minimum $100)"
+                              disabled={loading}
+                              className={`mobile-form-input w-full pl-8 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                                errors.customAmount ? 'border-red-500 error' : 'border-gray-300'
+                              }`}
+                            />
+                          </div>
+                          {errors.customAmount && (
+                            <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.customAmount}</p>
+                          )}
+
+                          {/* Admin Contact Information for Custom Amounts */}
+                          <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                            <div className="flex items-start space-x-3">
+                              <div className="flex-shrink-0">
+                                <svg className="w-5 h-5 text-orange-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-orange-800 mb-2">
+                                  Custom Sponsorship Package Details
+                                </h4>
+                                <p className="text-sm text-orange-700 mb-3">
+                                  For custom sponsorship amounts, please contact our admin team to discuss package details and benefits tailored to your investment.
+                                </p>
+
+                                {siteSettings?.contactInfo && (
+                                  <div className="space-y-2">
+                                    <div className="flex items-center space-x-2 text-sm">
+                                      <svg className="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                      </svg>
+                                      <span className="text-orange-800">
+                                        <strong>Email:</strong> {siteSettings.contactInfo.email}
+                                      </span>
+                                    </div>
+
+                                    {siteSettings.contactInfo.phone && (
+                                      <div className="flex items-center space-x-2 text-sm">
+                                        <svg className="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                          <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                        </svg>
+                                        <span className="text-orange-800">
+                                          <strong>Phone:</strong> {siteSettings.contactInfo.phone}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                    {siteSettings.contactInfo.whatsapp && (
+                                      <div className="flex items-center space-x-2 text-sm">
+                                        <svg className="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
+                                        </svg>
+                                        <span className="text-orange-800">
+                                          <strong>WhatsApp:</strong> {siteSettings.contactInfo.whatsapp}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+
+                                <p className="text-xs text-orange-600 mt-3">
+                                  💡 You can still proceed with payment for your custom amount. Our team will contact you within 24 hours to finalize the sponsorship package details.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Dynamic Pricing Display */}
-                {selectedTier && (
+                {displayTier && (
                   <div className="mobile-summary-card bg-blue-50 p-4 md:p-6 rounded-lg border border-blue-200">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 space-y-3 md:space-y-0">
                       <div className="flex-1">
-                        <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">{selectedTier.name}</h3>
-                        <p className="text-sm md:text-base text-blue-800 mb-2">{selectedTier.description || 'No description available'}</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">
+                          {displayTier.name}
+                          {formData.isCustomAmount && (
+                            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
+                              Custom Amount
+                            </span>
+                          )}
+                        </h3>
+                        <p className="text-sm md:text-base text-blue-800 mb-2">{displayTier.description || 'No description available'}</p>
                       </div>
                       <div className="text-center md:text-right">
-                        <p className="mobile-summary-price text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(selectedTier.price)}</p>
+                        <p className="mobile-summary-price text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(displayTier.price)}</p>
                         <p className="text-xs md:text-sm text-blue-700">Total Amount</p>
                       </div>
                     </div>
-                    {selectedTier.benefits && selectedTier.benefits.length > 0 && (
+                    {formData.isCustomAmount ? (
                       <div>
-                        <p className="font-medium text-blue-900 mb-2">Benefits Included:</p>
-                        <ul className="list-disc list-inside text-blue-800 text-sm space-y-1">
-                          {selectedTier.benefits.map((benefitObj, index) => (
-                            <li key={index}>
-                              {typeof benefitObj === 'string' ? benefitObj : benefitObj.benefit}
-                            </li>
-                          ))}
-                        </ul>
+                        <p className="font-medium text-blue-900 mb-2">Custom Package Benefits:</p>
+                        <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                          <p className="text-sm text-orange-800">
+                            📞 Our admin team will contact you within 24 hours to discuss and customize your sponsorship package benefits based on your investment level.
+                          </p>
+                        </div>
                       </div>
+                    ) : (
+                      selectedTier?.benefits && selectedTier.benefits.length > 0 && (
+                        <div>
+                          <p className="font-medium text-blue-900 mb-2">Benefits Included:</p>
+                          <ul className="list-disc list-inside text-blue-800 text-sm space-y-1">
+                            {selectedTier.benefits.map((benefitObj, index) => (
+                              <li key={index}>
+                                {typeof benefitObj === 'string' ? benefitObj : benefitObj.benefit}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
                     )}
                   </div>
                 )}
@@ -1100,10 +1331,17 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                       )}
                     </div>
                     <div>
-                      <span className="font-medium text-gray-700">Sponsorship Tier:</span>
-                      <p className="text-gray-900">{selectedTier?.name || 'Not selected'}</p>
-                      {selectedTier && (
-                        <p className="text-2xl font-bold text-blue-600">{formatCurrency(selectedTier.price)}</p>
+                      <span className="font-medium text-gray-700">Sponsorship Option:</span>
+                      <p className="text-gray-900">
+                        {formData.isCustomAmount ? 'Custom Sponsorship' : (selectedTier?.name || 'Not selected')}
+                        {formData.isCustomAmount && (
+                          <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
+                            Custom
+                          </span>
+                        )}
+                      </p>
+                      {displayTier && (
+                        <p className="text-2xl font-bold text-blue-600">{formatCurrency(displayTier.price)}</p>
                       )}
                     </div>
                     <div>
@@ -1206,16 +1444,28 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
                     <div className="space-y-3">
                       <div>
-                        <span className="font-medium text-blue-800">Sponsorship Tier:</span>
-                        <p className="text-blue-900 font-semibold">{selectedTier?.name || 'Not selected'}</p>
-                        <p className="text-blue-700 text-sm">{selectedTier?.description || 'No description available'}</p>
+                        <span className="font-medium text-blue-800">Sponsorship Option:</span>
+                        <p className="text-blue-900 font-semibold">
+                          {formData.isCustomAmount ? 'Custom Sponsorship' : (selectedTier?.name || 'Not selected')}
+                          {formData.isCustomAmount && (
+                            <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
+                              Custom
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-blue-700 text-sm">
+                          {formData.isCustomAmount
+                            ? 'Custom sponsorship package - details to be discussed with admin team'
+                            : (selectedTier?.description || 'No description available')
+                          }
+                        </p>
                       </div>
 
                       <div className="bg-white p-4 rounded-lg border border-blue-300">
                         <div className="flex justify-between items-center">
                           <span className="font-semibold text-blue-900">Total Amount:</span>
                           <span className="text-3xl font-bold text-blue-600">
-                            {selectedTier ? formatCurrency(selectedTier.price) : '$0.00'}
+                            {displayTier ? formatCurrency(displayTier.price) : '$0.00'}
                           </span>
                         </div>
                         <p className="text-sm text-blue-700 mt-1">One-time sponsorship fee</p>

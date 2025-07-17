@@ -48,11 +48,12 @@ export async function POST(request: NextRequest) {
         _type: 'reference',
         _ref: body.conferenceId,
       },
-      sponsorshipTier: {
+      sponsorshipTier: body.isCustomAmount ? undefined : {
         _type: 'reference',
         _ref: body.sponsorshipTierId,
       },
-      customAmount: body.customAmount || undefined,
+      isCustomAmount: body.isCustomAmount || false,
+      customAmount: body.isCustomAmount ? body.customAmount : undefined,
       companyDetails: {
         companyName: body.companyDetails.companyName,
         industry: body.companyDetails.industry || undefined,
