@@ -326,8 +326,6 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
             const amount = parseFloat(formData.customAmount);
             if (isNaN(amount) || amount <= 0) {
               newErrors.customAmount = 'Please enter a valid amount greater than 0';
-            } else if (amount < 100) {
-              newErrors.customAmount = 'Minimum custom amount is $100';
             } else if (amount > 100000) {
               newErrors.customAmount = 'Maximum custom amount is $100,000';
             }
@@ -867,30 +865,55 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                     Select Sponsorship Option *
                   </label>
 
-                  {/* Regular Tier Selection */}
+                  {/* Sponsorship Option Selection */}
                   <div className="space-y-4">
+                    {/* Predefined Tiers Option */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-600 mb-2">
-                        Choose from Available Packages:
+                      <label className="flex items-center space-x-3 cursor-pointer mb-3">
+                        <input
+                          type="radio"
+                          name="sponsorshipOption"
+                          checked={!formData.isCustomAmount}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              const newFormData = {
+                                ...formData,
+                                isCustomAmount: false,
+                                customAmount: ''
+                              };
+                              setFormData(newFormData);
+                              saveFormData(newFormData);
+                            }
+                          }}
+                          className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                        />
+                        <span className="text-sm font-medium text-gray-700">
+                          Choose from Available Packages
+                        </span>
                       </label>
-                      <select
-                        name="tierId"
-                        value={formData.isCustomAmount ? '' : formData.tierId}
-                        onChange={handleInputChange}
-                        disabled={loading || formData.isCustomAmount}
-                        className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          errors.tierId ? 'border-red-500 error' : 'border-gray-300'
-                        } ${formData.isCustomAmount ? 'bg-gray-100 text-gray-500' : ''}`}
-                      >
-                        <option value="">Choose a sponsorship tier...</option>
-                        {sponsorshipTiers.map((tier) => (
-                          <option key={tier._id} value={tier._id}>
-                            {tier.name} - {formatCurrency(tier.price)}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.tierId && !formData.isCustomAmount && (
-                        <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.tierId}</p>
+
+                      {!formData.isCustomAmount && (
+                        <div className="ml-7">
+                          <select
+                            name="tierId"
+                            value={formData.tierId}
+                            onChange={handleInputChange}
+                            disabled={loading}
+                            className={`mobile-form-select w-full px-3 md:px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                              errors.tierId ? 'border-red-500 error' : 'border-gray-300'
+                            }`}
+                          >
+                            <option value="">Choose a sponsorship tier...</option>
+                            {sponsorshipTiers.map((tier) => (
+                              <option key={tier._id} value={tier._id}>
+                                {tier.name} - {formatCurrency(tier.price)}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.tierId && (
+                            <p className="mobile-form-error mt-1 text-sm text-red-600">{errors.tierId}</p>
+                          )}
+                        </div>
                       )}
                     </div>
 
@@ -903,20 +926,21 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
                     {/* Custom Amount Option */}
                     <div>
-                      <label className="flex items-center space-x-3 cursor-pointer">
+                      <label className="flex items-center space-x-3 cursor-pointer mb-3">
                         <input
                           type="radio"
                           name="sponsorshipOption"
                           checked={formData.isCustomAmount}
                           onChange={(e) => {
-                            const newFormData = {
-                              ...formData,
-                              isCustomAmount: e.target.checked,
-                              tierId: e.target.checked ? '' : formData.tierId,
-                              customAmount: e.target.checked ? formData.customAmount : ''
-                            };
-                            setFormData(newFormData);
-                            saveFormData(newFormData);
+                            if (e.target.checked) {
+                              const newFormData = {
+                                ...formData,
+                                isCustomAmount: true,
+                                tierId: ''
+                              };
+                              setFormData(newFormData);
+                              saveFormData(newFormData);
+                            }
                           }}
                           className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                         />
@@ -934,7 +958,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                               name="customAmount"
                               value={formData.customAmount}
                               onChange={handleInputChange}
-                              placeholder="Enter amount (minimum $100)"
+                              placeholder="Enter amount (any positive value)"
                               disabled={loading}
                               className={`mobile-form-input w-full pl-8 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
                                 errors.customAmount ? 'border-red-500 error' : 'border-gray-300'
