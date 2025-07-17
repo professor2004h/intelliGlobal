@@ -74,6 +74,11 @@ export interface SiteSettings {
       };
       alt?: string;
     };
+    registerButton?: {
+      text: string;
+      url: string;
+      openInNewTab: boolean;
+    };
   };
   registerButton?: {
     text: string;
@@ -150,12 +155,12 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
             url
           },
           alt
+        },
+        registerButton{
+          text,
+          url,
+          openInNewTab
         }
-      },
-      registerButton{
-        text,
-        url,
-        openInNewTab
       }
     }`;
 
@@ -239,19 +244,19 @@ export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
             url
           },
           alt
-        }
-      },
-      footerLogo{
-        asset->{
-          _id,
-          url
         },
-        alt
-      },
-      registerButton{
-        text,
-        url,
-        openInNewTab
+        footerLogo{
+          asset->{
+            _id,
+            url
+          },
+          alt
+        },
+        registerButton{
+          text,
+          url,
+          openInNewTab
+        }
       }
     }`;
 
@@ -326,19 +331,12 @@ export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
             url
           },
           alt
-        }
-      },
-      footerLogo{
-        asset->{
-          _id,
-          url
         },
-        alt
-      },
-      registerButton{
-        text,
-        url,
-        openInNewTab
+        registerButton{
+          text,
+          url,
+          openInNewTab
+        }
       },
       _updatedAt
     }`;
@@ -418,12 +416,12 @@ export async function getSiteSettingsSSR(): Promise<SiteSettings | null> {
             url
           },
           alt
+        },
+        registerButton{
+          text,
+          url,
+          openInNewTab
         }
-      },
-      registerButton{
-        text,
-        url,
-        openInNewTab
       }
     }`;
 

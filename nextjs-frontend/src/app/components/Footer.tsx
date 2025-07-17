@@ -19,28 +19,16 @@ export default async function Footer() {
   const footerLogo = siteSettings?.footerContent?.footerLogo;
   const footerLogoUrl = footerLogo ? getImageUrl(footerLogo) : null;
 
-  // Get register button config
-  const registerButton = siteSettings?.registerButton;
+  // Get register button config from footerContent
+  const registerButton = siteSettings?.footerContent?.registerButton;
 
-  // Enhanced Debug logging for Register Button
-  console.log('🔍 FOOTER DEBUG - REGISTER BUTTON TROUBLESHOOTING:');
-  console.log('1. Full siteSettings object:', siteSettings);
-  console.log('2. registerButton data:', registerButton);
-  console.log('3. registerButton URL:', registerButton?.url);
-  console.log('4. registerButton text:', registerButton?.text);
-  console.log('5. registerButton openInNewTab:', registerButton?.openInNewTab);
-  console.log('6. Is registerButton truthy?', !!registerButton);
-  console.log('7. Is registerButton.url truthy?', !!registerButton?.url);
-  console.log('8. Expected URL from Sanity:', 'http://icoc04wo0c000ws4kkokgwgk.31.97.203.190.sslip.io/sponsorship');
-  console.log('9. Footer content:', siteSettings?.footerContent);
-  console.log('10. Button should render:', 'ALWAYS (no conditional rendering)');
-
-  // Force button to always show for debugging
-  const debugRegisterButton = registerButton || {
-    text: 'Register Now (Debug)',
-    url: 'https://example.com/debug',
-    openInNewTab: true
-  };
+  // Debug logging for Register Button
+  console.log('🔍 Register Button Debug:', {
+    registerButton,
+    url: registerButton?.url,
+    text: registerButton?.text,
+    openInNewTab: registerButton?.openInNewTab
+  });
 
   return (
     <footer
@@ -119,35 +107,24 @@ export default async function Footer() {
                 )}
               </div>
 
-              {/* Register Now Button - ALWAYS VISIBLE FOR DEBUGGING */}
-              <div className="mb-6 p-4 border-2 border-orange-400 rounded-lg bg-orange-50 bg-opacity-10">
-                <div className="text-xs text-orange-300 mb-2">🔍 DEBUG: Register Button Section</div>
-                <a
-                  href={debugRegisterButton.url}
-                  target={debugRegisterButton.openInNewTab ? '_blank' : '_self'}
-                  rel={debugRegisterButton.openInNewTab ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                  onClick={() => {
-                    console.log('🔗 BUTTON CLICKED!');
-                    console.log('Using URL:', debugRegisterButton.url);
-                    console.log('Original registerButton:', registerButton);
-                    console.log('Debug registerButton:', debugRegisterButton);
-                  }}
-                >
-                  {debugRegisterButton.text}
-                  <span className="ml-2 text-xs opacity-75">
-                    {registerButton?.url ? '✓ SANITY' : '⚠️ DEBUG'}
-                  </span>
-                  {debugRegisterButton.openInNewTab && (
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  )}
-                </a>
-                <div className="text-xs text-orange-300 mt-2">
-                  Status: {registerButton?.url ? 'Using Sanity URL' : 'Using Debug Fallback'}
+              {/* Register Now Button - Below logo on all devices */}
+              {registerButton?.url && (
+                <div className="mb-6">
+                  <a
+                    href={registerButton.url}
+                    target={registerButton.openInNewTab ? '_blank' : '_self'}
+                    rel={registerButton.openInNewTab ? 'noopener noreferrer' : undefined}
+                    className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  >
+                    {registerButton.text || 'Register Now'}
+                    {registerButton.openInNewTab && (
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    )}
+                  </a>
                 </div>
-              </div>
+              )}
               <p className="text-gray-300 mb-6 max-w-md">
                 We at Intelli Global Conferences built an ecosystem that brings the Scholars, people in the Scientific Study & Research,
                 knowledge group of the society, the students, learners and more on a common ground – to share their knowledge,
