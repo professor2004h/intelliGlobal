@@ -155,7 +155,7 @@ export default async function RootLayout({
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <PerformanceMonitor enabled={true} />
-                    <AutoRefresh interval={30000} enabled={true} />
+                    <AutoRefresh interval={30000} enabled={false} />
                     <ConnectionStatus />
                   </>
                 )}
