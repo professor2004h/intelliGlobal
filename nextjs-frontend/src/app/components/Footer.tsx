@@ -22,15 +22,25 @@ export default async function Footer() {
   // Get register button config
   const registerButton = siteSettings?.registerButton;
 
-  // Debug footer logo and register button
-  console.log('🔍 Footer Debug - Register Button:', {
-    registerButton,
-    registerButtonUrl: registerButton?.url,
-    registerButtonText: registerButton?.text,
-    registerButtonOpenInNewTab: registerButton?.openInNewTab,
-    fullSiteSettings: siteSettings,
-    footerContent: siteSettings?.footerContent
-  });
+  // Enhanced Debug logging for Register Button
+  console.log('🔍 FOOTER DEBUG - REGISTER BUTTON TROUBLESHOOTING:');
+  console.log('1. Full siteSettings object:', siteSettings);
+  console.log('2. registerButton data:', registerButton);
+  console.log('3. registerButton URL:', registerButton?.url);
+  console.log('4. registerButton text:', registerButton?.text);
+  console.log('5. registerButton openInNewTab:', registerButton?.openInNewTab);
+  console.log('6. Is registerButton truthy?', !!registerButton);
+  console.log('7. Is registerButton.url truthy?', !!registerButton?.url);
+  console.log('8. Expected URL from Sanity:', 'http://icoc04wo0c000ws4kkokgwgk.31.97.203.190.sslip.io/sponsorship');
+  console.log('9. Footer content:', siteSettings?.footerContent);
+  console.log('10. Button should render:', 'ALWAYS (no conditional rendering)');
+
+  // Force button to always show for debugging
+  const debugRegisterButton = registerButton || {
+    text: 'Register Now (Debug)',
+    url: 'https://example.com/debug',
+    openInNewTab: true
+  };
 
   return (
     <footer
@@ -109,25 +119,34 @@ export default async function Footer() {
                 )}
               </div>
 
-              {/* Register Now Button - Below logo on all devices */}
-              <div className="mb-6">
+              {/* Register Now Button - ALWAYS VISIBLE FOR DEBUGGING */}
+              <div className="mb-6 p-4 border-2 border-orange-400 rounded-lg bg-orange-50 bg-opacity-10">
+                <div className="text-xs text-orange-300 mb-2">🔍 DEBUG: Register Button Section</div>
                 <a
-                  href={registerButton?.url || 'https://example.com/register'}
-                  target={registerButton?.openInNewTab ? '_blank' : '_self'}
-                  rel={registerButton?.openInNewTab ? 'noopener noreferrer' : undefined}
+                  href={debugRegisterButton.url}
+                  target={debugRegisterButton.openInNewTab ? '_blank' : '_self'}
+                  rel={debugRegisterButton.openInNewTab ? 'noopener noreferrer' : undefined}
                   className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                  onClick={() => console.log('🔗 Button clicked! URL:', registerButton?.url || 'No URL configured')}
+                  onClick={() => {
+                    console.log('🔗 BUTTON CLICKED!');
+                    console.log('Using URL:', debugRegisterButton.url);
+                    console.log('Original registerButton:', registerButton);
+                    console.log('Debug registerButton:', debugRegisterButton);
+                  }}
                 >
-                  {registerButton?.text || 'Register Now'}
+                  {debugRegisterButton.text}
                   <span className="ml-2 text-xs opacity-75">
-                    {registerButton?.url ? '✓' : '⚠️'}
+                    {registerButton?.url ? '✓ SANITY' : '⚠️ DEBUG'}
                   </span>
-                  {registerButton?.openInNewTab && (
+                  {debugRegisterButton.openInNewTab && (
                     <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                   )}
                 </a>
+                <div className="text-xs text-orange-300 mt-2">
+                  Status: {registerButton?.url ? 'Using Sanity URL' : 'Using Debug Fallback'}
+                </div>
               </div>
               <p className="text-gray-300 mb-6 max-w-md">
                 We at Intelli Global Conferences built an ecosystem that brings the Scholars, people in the Scientific Study & Research,
