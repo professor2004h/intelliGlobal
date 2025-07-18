@@ -1,15 +1,25 @@
-# 🔧 Coolify Environment Variables Setup
+# 🔧 COOLIFY MIGRATION: Vercel → Coolify Setup Guide
 
-## 🚨 CRITICAL: Set These Environment Variables in Coolify
+## 🚨 CRITICAL: Complete Migration Checklist
 
-### **Step 1: Access Coolify Dashboard**
-1. Go to your Coolify dashboard
-2. Navigate to your project
-3. Click on "Environment Variables" tab
+### **📍 DEPLOYMENT DETAILS:**
+- **Previous**: Vercel (d30392757f5f4f6b.vercel-dns-017.com)
+- **New**: Coolify (http://icoc04wo0c000ws4kkokgwgk.31.97.203.190.sslip.io/)
+- **IP Address**: 31.97.203.190
 
-### **Step 2: Add Essential Variables**
+### **Step 1: DNS Records Migration**
 
-**REQUIRED - Add these immediately:**
+**DELETE from your DNS provider:**
+- ❌ CNAME: www → d30392757f5f4f6b.vercel-dns-017.com
+- ❌ All CAA records (digicert, sectigo, letsencrypt, etc.)
+
+**ADD to your DNS provider:**
+- ✅ A Record: @ → 31.97.203.190
+- ✅ A Record: www → 31.97.203.190
+
+### **Step 2: Coolify Environment Variables**
+
+**REQUIRED - Add these in Coolify Dashboard:**
 ```
 NODE_ENV=production
 NEXT_TELEMETRY_DISABLED=1
