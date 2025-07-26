@@ -38,8 +38,7 @@ export interface SiteSettings {
   };
   journal?: {
     showJournal?: boolean;
-    journalUrl?: string;
-    openInNewTab?: boolean;
+    matterDescription?: string;
   };
   adminSettings?: {
     adminEmail?: string;

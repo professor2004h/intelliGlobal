@@ -231,7 +231,7 @@ const siteSettings = defineType({
       name: 'journal',
       title: 'Journal Settings',
       type: 'object',
-      description: 'Configure the Journal button and external link',
+      description: 'Configure the Journal page',
       group: 'journal',
       options: {
         collapsible: true,
@@ -246,23 +246,12 @@ const siteSettings = defineType({
           initialValue: false,
         }),
         defineField({
-          name: 'journalUrl',
-          title: 'Journal Website URL',
-          type: 'url',
-          description: 'Enter the external website URL where users will be redirected when they click the Journal button (e.g., https://journal.example.com)',
-          placeholder: 'https://journal.example.com',
-          validation: (Rule) => Rule.uri({
-            scheme: ['http', 'https']
-          }).error('Please enter a valid URL starting with http:// or https://'),
-          hidden: ({ parent }) => !parent?.showJournal,
-        }),
-        defineField({
-          name: 'openInNewTab',
-          title: 'Open in New Tab',
-          type: 'boolean',
-          description: 'Toggle ON to open the Journal website in a new tab/window. Toggle OFF to open in the same tab.',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.showJournal,
+          name: 'matterDescription',
+          title: 'Journal Matter Description',
+          type: 'text',
+          description: 'Enter the description content that will be displayed on both the Journal and Journals pages. This text will appear prominently on the pages.',
+          rows: 8,
+          placeholder: 'Enter your journal description here. This content will be displayed on both /journal and /journals pages. You can write multiple paragraphs - use line breaks to separate them.',
         }),
       ],
     }),

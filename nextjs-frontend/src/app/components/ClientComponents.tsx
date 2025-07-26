@@ -1,39 +1,13 @@
 'use client';
 
-import dynamic from "next/dynamic";
+// EMERGENCY FIX: Direct imports to eliminate ALL chunk loading issues
+// All dynamic imports have been removed to prevent ChunkLoadError
 
-// Client-side only components with dynamic imports
-export const AutoRefresh = dynamic(() => import("./AutoRefresh"), {
-  ssr: false,
-  loading: () => null
-});
+export { default as AutoRefresh } from "./AutoRefresh";
+export { default as FaviconManager } from "./FaviconManager";
+export { default as CacheBuster } from "./CacheBuster";
+export { default as PerformanceMonitor } from "./PerformanceMonitor";
+export { default as ConnectionStatus } from "./ConnectionStatus";
+export { default as PerformanceInit } from "./PerformanceInit";
 
-export const FaviconManager = dynamic(() => import("./FaviconManager"), {
-  ssr: false,
-  loading: () => null
-});
-
-export const CacheBuster = dynamic(() => import("./CacheBuster"), {
-  ssr: false,
-  loading: () => null
-});
-
-export const ClientErrorBoundary = dynamic(() => import("./ClientErrorBoundary"), {
-  ssr: false,
-  loading: () => null
-});
-
-export const PerformanceMonitor = dynamic(() => import("./PerformanceMonitor"), {
-  ssr: false,
-  loading: () => null
-});
-
-export const ConnectionStatus = dynamic(() => import("./ConnectionStatus"), {
-  ssr: false,
-  loading: () => null
-});
-
-export const PerformanceInit = dynamic(() => import("./PerformanceInit"), {
-  ssr: false,
-  loading: () => null
-});
+// ClientErrorBoundary is imported directly in layout.tsx

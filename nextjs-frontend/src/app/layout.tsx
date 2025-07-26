@@ -7,11 +7,11 @@ import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 // Import client-side components
+import ClientErrorBoundary from "./components/ClientErrorBoundary";
 import {
   AutoRefresh,
   FaviconManager,
   CacheBuster,
-  ClientErrorBoundary,
   PerformanceMonitor,
   ConnectionStatus,
   PerformanceInit
