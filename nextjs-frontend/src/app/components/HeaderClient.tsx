@@ -51,9 +51,9 @@ export default function HeaderClient({ siteSettings }: HeaderClientProps) {
         </Link>
         {siteSettings?.journal?.showJournal && (
           <Link
-            href={siteSettings.journal.journalUrl || "/journal"}
-            target={siteSettings.journal.openInNewTab ? "_blank" : "_self"}
-            rel={siteSettings.journal.openInNewTab ? "noopener noreferrer" : undefined}
+            href={(siteSettings as any)?.journal?.journalUrl || "/journal"}
+            target={(siteSettings as any)?.journal?.openInNewTab ? "_blank" : "_self"}
+            rel={(siteSettings as any)?.journal?.openInNewTab ? "noopener noreferrer" : undefined}
             className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
           >
             Journal
@@ -140,9 +140,9 @@ export default function HeaderClient({ siteSettings }: HeaderClientProps) {
             </Link>
             {siteSettings?.journal?.showJournal && (
               <Link
-                href={siteSettings.journal.journalUrl || "/journal"}
-                target={siteSettings.journal.openInNewTab ? "_blank" : "_self"}
-                rel={siteSettings.journal.openInNewTab ? "noopener noreferrer" : undefined}
+                href={(siteSettings as any)?.journal?.journalUrl || "/journal"}
+                target={(siteSettings as any)?.journal?.openInNewTab ? "_blank" : "_self"}
+                rel={(siteSettings as any)?.journal?.openInNewTab ? "noopener noreferrer" : undefined}
                 className="block px-3 py-3 text-gray-700 hover:text-blue-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >

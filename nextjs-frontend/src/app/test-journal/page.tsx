@@ -15,7 +15,7 @@ export default function TestJournalPage() {
         console.log('Site Settings:', settings);
         console.log('Journal Settings:', settings?.journal);
         console.log('Show Journal:', settings?.journal?.showJournal);
-        console.log('Journal URL:', settings?.journal?.journalUrl);
+        console.log('Journal URL:', (settings as any)?.journal?.journalUrl);
       } catch (error) {
         console.error('Error fetching settings:', error);
       } finally {
@@ -78,8 +78,8 @@ export default function TestJournalPage() {
               <label className="block text-sm font-medium text-gray-700">Journal URL:</label>
               <p className="mt-1 text-sm text-gray-900">
                 {siteSettings?.journal?.journalUrl ?
-                  <a href={siteSettings.journal.journalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                    {siteSettings.journal.journalUrl}
+                  <a href={(siteSettings as any).journal.journalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    {(siteSettings as any).journal.journalUrl}
                   </a> :
                   '⚠️ No URL set (will use default /journal page)'
                 }
@@ -100,7 +100,7 @@ export default function TestJournalPage() {
               <div className="mt-1 text-sm text-gray-900">
                 <p>• Header Navigation: {siteSettings?.journal?.showJournal ? '✅ Journal link should appear' : '❌ Journal link should be hidden'}</p>
                 <p>• Homepage Section: {siteSettings?.journal?.showJournal ? '✅ Journal section should appear' : '❌ Journal section should be hidden'}</p>
-                <p>• Link Target: {siteSettings?.journal?.journalUrl ? `External URL: ${siteSettings.journal.journalUrl}` : 'Default /journal page'}</p>
+                <p>• Link Target: {siteSettings?.journal?.journalUrl ? `External URL: ${(siteSettings as any).journal.journalUrl}` : 'Default /journal page'}</p>
               </div>
             </div>
           </div>
