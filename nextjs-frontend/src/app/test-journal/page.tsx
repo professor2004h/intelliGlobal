@@ -89,8 +89,8 @@ export default function TestJournalPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700">Open in New Tab:</label>
               <p className="mt-1 text-sm text-gray-900">
-                {siteSettings?.journal?.openInNewTab === true ? '✅ Yes (opens in new tab)' :
-                 siteSettings?.journal?.openInNewTab === false ? '❌ No (opens in same tab)' :
+                {(siteSettings as any)?.journal?.openInNewTab === true ? '✅ Yes (opens in new tab)' :
+                 (siteSettings as any)?.journal?.openInNewTab === false ? '❌ No (opens in same tab)' :
                  '⚠️ Default (opens in new tab)'}
               </p>
             </div>
