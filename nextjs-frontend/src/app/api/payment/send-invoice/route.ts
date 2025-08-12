@@ -1,23 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import { generateInvoicePDF } from '../../../utils/invoiceGenerator';
-
-// Configure email transporter with enhanced settings
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, // true for 465, false for other ports like 587
-  auth: {
-    user: process.env.SMTP_USER || 'intelliglobalconferences@gmail.com',
-    pass: process.env.SMTP_PASS || 'dwtt qtud iibo ywbp',
-  },
-  tls: {
-    rejectUnauthorized: false,
-    ciphers: 'SSLv3'
-  },
-  debug: true, // Enable debug logs
-  logger: true // Enable logger
-});
+import { sendEmail, verifyEmailConnection } from '../../../lib/emailService';
 
 export async function POST(request: NextRequest) {
   try {
@@ -153,8 +136,14 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    // Send email with invoice attachment
-    const mailOptions = {
+    // Verify SMTP connection
+    const connectionOK = await verifyEmailConnection();
+    if (!connectionOK) {
+      return NextResponse.json({ error: 'SMTP connection failed. Check SMTP_HOST/PORT/USER/PASS envs.' }, { status: 500 });
+    }
+
+    // Send email through centralized email service
+    const sent = await sendEmail({
       from: `"Intelli Global Conferences" <${process.env.SMTP_USER}>`,
       to: customerEmail,
       subject: emailSubject,
@@ -166,9 +155,11 @@ export async function POST(request: NextRequest) {
           contentType: 'application/pdf',
         },
       ],
-    };
+    });
 
-    await transporter.sendMail(mailOptions);
+    if (!sent) {
+      return NextResponse.json({ error: 'Failed to send invoice email' }, { status: 500 });
+    }
 
     console.log('✅ Invoice email sent successfully to:', customerEmail);
 

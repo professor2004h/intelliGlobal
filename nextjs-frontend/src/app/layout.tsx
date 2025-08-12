@@ -5,6 +5,7 @@ import HeaderWrapper from "./components/HeaderWrapper";
 import { getSiteSettingsSSR, getSiteSettingsFresh, getImageUrl } from './getSiteSettings';
 import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
+import WhatsAppIcon from "./components/WhatsAppIcon";
 
 // Import client-side components
 import ClientErrorBoundary from "./components/ClientErrorBoundary";
@@ -172,6 +173,9 @@ export default async function RootLayout({
 
                 {/* Footer */}
                 <Footer />
+
+                {/* WhatsApp Icon (no text, no hover effects) */}
+                <WhatsAppIcon />
               </NavigationLoadingProvider>
             </ClientErrorBoundary>
           </ErrorBoundary>
