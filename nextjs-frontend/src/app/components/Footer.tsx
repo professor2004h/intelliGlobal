@@ -285,6 +285,9 @@ export default async function Footer() {
               <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Terms & Conditions
               </Link>
+              <Link href="/cancellation-policy" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Cancellation Policy
+              </Link>
               <Link href="/faqs" className="text-gray-400 hover:text-white text-sm transition-colors">
                 FAQs
               </Link>

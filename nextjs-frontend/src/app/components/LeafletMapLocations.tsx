@@ -54,8 +54,9 @@ const MapError: React.FC<{ error: string; onRetry: () => void }> = ({ error, onR
   </div>
 );
 
-// Import the map component directly
-import LeafletMap from './LeafletMap';
+// Import the map component dynamically to avoid SSR evaluation
+import dynamic from 'next/dynamic';
+const LeafletMap = dynamic(() => import('./LeafletMap'), { ssr: false });
 
 const LeafletMapLocations: React.FC = () => {
   const [locations, setLocations] = useState<MapLocation[]>([]);

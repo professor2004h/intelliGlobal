@@ -17,6 +17,8 @@ export default (S) =>
       S.listItem().title('Past Conferences Section Styling').schemaType('pastConferencesSection').child(S.documentTypeList('pastConferencesSection')),
       S.listItem().title('Journal Section Styling').schemaType('journalSection').child(S.documentTypeList('journalSection')),
       S.listItem().title('Custom Content Section').schemaType('customContentSection').child(S.documentTypeList('customContentSection')),
+      S.listItem().title('Cancellation Policy').schemaType('cancellationPolicy').child(S.documentTypeList('cancellationPolicy')),
+
       // Add Map Location with icon
       S.listItem()
         .title('🗺️ Map Locations')
