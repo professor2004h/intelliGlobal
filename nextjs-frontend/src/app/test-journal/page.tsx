@@ -100,7 +100,7 @@ export default function TestJournalPage() {
               <div className="mt-1 text-sm text-gray-900">
                 <p>• Header Navigation: {siteSettings?.journal?.showJournal ? '✅ Journal link should appear' : '❌ Journal link should be hidden'}</p>
                 <p>• Homepage Section: {siteSettings?.journal?.showJournal ? '✅ Journal section should appear' : '❌ Journal section should be hidden'}</p>
-                <p>• Link Target: {siteSettings?.journal?.journalUrl ? `External URL: ${(siteSettings as any).journal.journalUrl}` : 'Default /journal page'}</p>
+                <p>• Link Target: {(siteSettings as any)?.journal?.journalUrl ? `External URL: ${(siteSettings as any).journal.journalUrl}` : 'Default /journal page'}</p>
               </div>
             </div>
           </div>
