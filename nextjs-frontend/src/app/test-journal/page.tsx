@@ -77,7 +77,7 @@ export default function TestJournalPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700">Journal URL:</label>
               <p className="mt-1 text-sm text-gray-900">
-                {siteSettings?.journal?.journalUrl ?
+                {(siteSettings as any)?.journal?.journalUrl ?
                   <a href={(siteSettings as any).journal.journalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                     {(siteSettings as any).journal.journalUrl}
                   </a> :
