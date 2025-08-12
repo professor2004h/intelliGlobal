@@ -77,6 +77,9 @@ const nextConfig: NextConfig = {
       pagesBufferLength: 10,
     },
   }),
+
+  // Production configuration for standalone output
+  output: 'standalone',
 };
 
 export default nextConfig;

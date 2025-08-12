@@ -25,6 +25,8 @@ if [ ! -f "server.js" ]; then
     find . -name "*.js" -type f | head -10
     echo "🔍 Looking in .next directory..."
     ls -la .next/ 2>/dev/null || echo "No .next directory found"
+    echo "🔍 Looking for server.js in .next/standalone..."
+    ls -la .next/standalone/ 2>/dev/null || echo "No .next/standalone directory found"
     exit 1
 fi
 
@@ -40,5 +42,6 @@ head -10 server.js
 echo "🎯 Starting Next.js server on port $PORT..."
 echo "🌐 Server will be available at http://$HOSTNAME:$PORT"
 
-# Start with verbose logging
+# Start with verbose logging and error handling
+echo "🚀 Starting application with exec..."
 exec node server.js
