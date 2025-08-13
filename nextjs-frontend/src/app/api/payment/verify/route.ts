@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
 
 // Payments are disabled. Always return a stubbed success so clients can proceed without errors.
 export async function POST(request: NextRequest) {
@@ -29,6 +28,18 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
       sponsorshipData
     });
+
+  } catch (error) {
+    console.error('❌ Payment verification error (payments disabled):', error);
+    return NextResponse.json({
+      success: true,
+      verified: true,
+      paymentsDisabled: true,
+      message: 'Payments disabled - verification bypassed',
+      error: 'handled'
+    });
+  }
+}
 
 
     // Handle all test payment types

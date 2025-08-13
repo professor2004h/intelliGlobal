@@ -3,9 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_request: NextRequest) {
   return NextResponse.json({ paymentsDisabled: true, message: 'Razorpay disabled' });
 }
-
-/* Legacy implementation kept for reference
-export async function LEGACY_GET(_request: NextRequest) {
   try {
     console.log('🔐 Verifying Razorpay credentials...');
     
