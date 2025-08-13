@@ -1,29 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
 
 export async function GET(_request: NextRequest) {
   try {
-    console.log('🔧 Testing Razorpay Payment Methods...');
-    
-    // Check environment variables
-    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_SECRET_KEY;
-    
-    if (!keyId || !keySecret) {
-      return NextResponse.json({
-        error: 'Razorpay credentials not found',
-        keyId: keyId ? 'SET' : 'NOT SET',
-        keySecret: keySecret ? 'SET' : 'NOT SET'
-      });
-    }
-
-    // Initialize Razorpay
-    const razorpay = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
+    return NextResponse.json({
+      success: true,
+      paymentsDisabled: true,
+      message: 'Payment methods test disabled on this deployment.'
     });
 
-    // Test order creation with comprehensive payment method support
+    // Legacy code kept for reference (removed)
+    // Check environment variables
+    // Initialize Razorpay
+    // Create test order etc.
     const testOrderData = {
       amount: 10000, // ₹100 in paise
       currency: 'INR',

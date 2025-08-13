@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         _type: 'reference',
         _ref: registration._id,
       },
-      paymentGateway: 'razorpay', // All payments go through Razorpay for testing
+      paymentGateway: 'disabled', // Payments disabled
       gatewayTransactionId: paymentId,
       amount: Number(amount),
       currency: 'USD',

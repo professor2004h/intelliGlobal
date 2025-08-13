@@ -1,57 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
 
-// Initialize Razorpay with robust error handling
-let razorpay: Razorpay | null = null;
-
-function initializeRazorpay() {
-  const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_SECRET_KEY;
-
-  console.log('🔧 Initializing Razorpay with credentials check:', {
-    keyIdExists: !!keyId,
-    keyIdValue: keyId ? keyId.substring(0, 8) + '...' : 'NOT SET',
-    keySecretExists: !!keySecret,
-    keySecretLength: keySecret ? keySecret.length : 0
+// Payments are disabled in this deployment. Provide minimal stubs so the app logic can proceed.
+export async function POST(request: NextRequest) {
+  const body = await request.json().catch(() => ({} as any));
+  const amount = typeof body?.amount === 'number' ? body.amount : 0;
+  return NextResponse.json({
+    success: true,
+    paymentsDisabled: true,
+    order: {
+      id: `order_disabled_${Date.now()}`,
+      amount: Math.max(0, Math.round(amount * 100)),
+      currency: body?.currency || 'INR',
+      receipt: body?.receipt || `disabled_receipt_${Date.now()}`,
+      status: 'created',
+    },
+    message: 'Payments are disabled.'
   });
-
-  if (!keyId || !keySecret) {
-    console.error('❌ Razorpay credentials missing:', {
-      NEXT_PUBLIC_RAZORPAY_KEY_ID: keyId ? 'SET' : 'MISSING',
-      RAZORPAY_SECRET_KEY: keySecret ? 'SET' : 'MISSING'
-    });
-    return null;
-  }
-
-  if (keyId.length < 10 || keySecret.length < 10) {
-    console.error('❌ Razorpay credentials appear invalid:', {
-      keyIdLength: keyId.length,
-      keySecretLength: keySecret.length
-    });
-    return null;
-  }
-
-  try {
-    const instance = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    });
-
-    console.log('✅ Razorpay initialized successfully:', {
-      keyId: keyId.substring(0, 8) + '...',
-      keySecretLength: keySecret.length
-    });
-
-    return instance;
-  } catch (error) {
-    console.error('❌ Razorpay initialization failed:', error);
-    return null;
-  }
 }
 
-// Initialize Razorpay
-razorpay = initializeRazorpay();
+export async function GET() {
+  return NextResponse.json({ paymentsDisabled: true, message: 'Payments API disabled' });
+}
 
+export const dynamic = 'force-dynamic';
+
+
+/* Payments code disabled below to ensure clean deploys on Coolify */
+
+/*
 export async function POST(request: NextRequest) {
   console.log('💳 Payment order creation request received');
 
@@ -320,8 +296,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       order: emergencyOrder,
+*/
+/*
       emergency: true,
       message: 'Payment order created with emergency fallback system'
     });
   }
-}
+*/
+

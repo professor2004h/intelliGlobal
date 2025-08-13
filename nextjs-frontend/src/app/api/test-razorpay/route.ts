@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
 
 export async function GET(_request: NextRequest) {
   try {
-    console.log('🔧 Testing Razorpay Configuration...');
-    
-    // Check environment variables
-    const razorpayConfig = {
-      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'not set',
-      secretKey: process.env.RAZORPAY_SECRET_KEY ? 'set (length: ' + process.env.RAZORPAY_SECRET_KEY.length + ')' : 'not set',
-      nodeEnv: process.env.NODE_ENV || 'not set'
-    };
+    return NextResponse.json({ paymentsDisabled: true, message: 'Razorpay tests disabled' });
 
     console.log('💳 Razorpay Config:', razorpayConfig);
 

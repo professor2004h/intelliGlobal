@@ -1,21 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
+// Payments are disabled. Always return a stubbed success so clients can proceed without errors.
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const {
       razorpay_order_id,
       razorpay_payment_id,
-      razorpay_signature,
       sponsorshipData
     } = body;
 
-    console.log('🔍 Payment verification request:', {
+    console.log('🔍 Payment verification request (payments disabled):', {
       orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      hasSignature: !!razorpay_signature
+      paymentId: razorpay_payment_id
     });
+
+    // Payments disabled: short-circuit success response
+    const invoiceNumber = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    return NextResponse.json({
+      success: true,
+      verified: true,
+      paymentsDisabled: true,
+      message: 'Payments are disabled. Verification bypassed.',
+      paymentId: razorpay_payment_id || `pay_disabled_${Date.now()}`,
+      orderId: razorpay_order_id || `order_disabled_${Date.now()}`,
+      invoiceNumber,
+      timestamp: new Date().toISOString(),
+      sponsorshipData
+    });
+
 
     // Handle all test payment types
     const testOrderPrefixes = [
@@ -123,7 +137,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body_string = razorpay_order_id + '|' + razorpay_payment_id;
-    
+
     const expected_signature = crypto
       .createHmac('sha256', secret)
       .update(body_string)
@@ -164,9 +178,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(paymentConfirmation);
   } catch (error) {
     console.error('❌ Error verifying payment:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Payment verification failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       },

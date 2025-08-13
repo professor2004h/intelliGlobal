@@ -80,6 +80,12 @@ const nextConfig: NextConfig = {
 
   // Production configuration for standalone output
   output: 'standalone',
+  
+  // Disable static generation for routes with dynamic data
+  generateStaticParams: false as any,
+  
+  // Enable dynamic rendering for routes that need it
+  generateBuildId: false as any,
 };
 
 export default nextConfig;

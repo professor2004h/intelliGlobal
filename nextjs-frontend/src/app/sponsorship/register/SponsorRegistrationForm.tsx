@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Declare Razorpay type for TypeScript
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
+// Payments are disabled in this deployment
 
 // Define interfaces locally to avoid server/client import issues
 interface SponsorshipTier {
@@ -138,47 +133,20 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
   const [currentStep, setCurrentStep] = useState(initializeCurrentStep);
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false); // deprecated
   const [formData, setFormData] = useState(initializeFormState);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [detailedConferences, setDetailedConferences] = useState<(DetailedConferenceEvent & { isTechnologyRelated?: boolean })[]>([]);
   const [showConferenceDetails, setShowConferenceDetails] = useState(false);
 
-  // Load Razorpay script with better error handling
+  const PAYMENTS_ENABLED = false;
+
+  // Payments are disabled - no external scripts needed
   useEffect(() => {
-    const loadRazorpay = () => {
-      try {
-        // Check if script is already being loaded
-        const existingScript = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
-        if (existingScript) {
-          console.log('🔄 Razorpay script already loading...');
-          return;
-        }
-
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.async = true;
-        script.onload = () => {
-          console.log('✅ Razorpay script loaded successfully');
-          setRazorpayLoaded(true);
-        };
-        script.onerror = () => {
-          console.error('❌ Failed to load Razorpay script');
-          setRazorpayLoaded(false);
-        };
-        document.body.appendChild(script);
-      } catch (error) {
-        console.error('❌ Error loading Razorpay script:', error);
-        setRazorpayLoaded(false);
-      }
-    };
-
-    if (!window.Razorpay) {
-      loadRazorpay();
-    } else {
-      console.log('✅ Razorpay already available');
-      setRazorpayLoaded(true);
+    if (!PAYMENTS_ENABLED) {
+      setRazorpayLoaded(false); // Keep disabled
+      return;
     }
   }, []);
 
@@ -459,6 +427,10 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
   };
 
   const handlePayment = async (paymentMethod: string) => {
+    if (!PAYMENTS_ENABLED) {
+      alert('Payments are currently disabled. Please contact support.');
+      return;
+    }
     if (!validateStep(currentStep)) return;
 
     setPaymentLoading(true);
@@ -1500,124 +1472,43 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
 
                 {/* Payment Options */}
                 <div className="bg-white p-4 md:p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Payment Method</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h3>
 
-                  <div className="mobile-payment-methods tablet-payment-methods grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    <button
-                      type="button"
-                      onClick={() => handlePayment('Stripe')}
-                      disabled={paymentLoading || !razorpayLoaded}
-                      className="mobile-payment-method w-full px-6 md:px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
-                    >
-                      {paymentLoading ? (
-                        <>
-                          <div className="mobile-loading-spinner animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span className="mobile-payment-text">Processing Payment...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="mobile-payment-icon text-xl">💳</span>
-                          <div className="flex flex-col items-center">
-                            <span className="mobile-payment-text">Pay with Stripe</span>
-                            <span className="mobile-payment-subtext text-xs opacity-80">• Secure Payment</span>
-                          </div>
-                        </>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handlePayment('PayPal')}
-                      disabled={paymentLoading || !razorpayLoaded}
-                      className="mobile-payment-method w-full px-6 md:px-8 py-4 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 disabled:opacity-50 flex items-center justify-center space-x-3 transition-colors"
-                    >
-                      {paymentLoading ? (
-                        <>
-                          <div className="mobile-loading-spinner animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span className="mobile-payment-text">Processing Payment...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="mobile-payment-icon text-xl">🅿️</span>
-                          <div className="flex flex-col items-center">
-                            <span className="mobile-payment-text">Pay with PayPal</span>
-                            <span className="mobile-payment-subtext text-xs opacity-80">• Secure Payment</span>
-                          </div>
-                        </>
-                      )}
-                    </button>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="text-2xl">⚠️</span>
+                      <h4 className="text-lg font-semibold text-yellow-800">Payments Currently Disabled</h4>
+                    </div>
+                    <p className="text-yellow-700 mb-4">
+                      Online payments are temporarily disabled on this deployment. To complete your sponsorship registration:
+                    </p>
+                    <div className="space-y-2 text-yellow-700">
+                      <p><strong>📧 Email:</strong> intelliglobalconferences@gmail.com</p>
+                      <p><strong>📞 Phone:</strong> Contact our team for payment arrangements</p>
+                      <p><strong>💼 Bank Transfer:</strong> Wire transfer details available upon request</p>
+                    </div>
+                    <div className="mt-4 p-3 bg-yellow-100 rounded border border-yellow-300">
+                      <p className="text-sm text-yellow-800">
+                        <strong>Note:</strong> Your registration details have been saved. Our team will contact you within 24 hours to arrange payment and finalize your sponsorship.
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Security Information */}
-                <div className="mobile-info-card bg-green-50 p-3 md:p-4 rounded-lg border border-green-200">
-                  <div className="mobile-info-card-header flex items-center space-x-2 mb-2">
-                    <span className="mobile-info-card-icon text-green-600">🔒</span>
-                    <span className="mobile-info-card-title text-sm font-medium text-green-900">Secure Payment Processing</span>
+                {/* Contact Information */}
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="text-blue-600">📞</span>
+                    <span className="text-sm font-medium text-blue-900">Need Assistance?</span>
                   </div>
-                  <p className="mobile-info-card-content text-sm text-green-800">
-                    Your payment is processed securely through Razorpay with 256-bit SSL encryption.
-                    Both payment options support UPI, cards, net banking, and digital wallets.
+                  <p className="text-sm text-blue-800 mb-2">
+                    Our team is ready to help you complete your sponsorship registration.
                   </p>
-                  <ul className="mobile-info-card-list mt-2 text-xs text-green-700">
-                    <li>PCI DSS Level 1 compliant</li>
-                    <li>Your card details are never stored on our servers</li>
-                    <li>Invoice will be automatically generated and emailed after successful payment</li>
+                  <ul className="text-xs text-blue-700 space-y-1">
+                    <li>• Email: intelliglobalconferences@gmail.com</li>
+                    <li>• Response time: Within 24 hours</li>
+                    <li>• Multiple payment options available</li>
                   </ul>
-                </div>
-
-                {/* UPI Payment Information - Prominently Displayed */}
-                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-lg border-2 border-orange-200">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <span className="text-2xl">📱</span>
-                    <span className="text-lg font-semibold text-orange-900">Quick UPI Payments Available</span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    <div>
-                      <p className="text-base font-semibold text-orange-800 mb-3">🚀 Instant UPI Payment Options:</p>
-                      <div className="text-sm text-orange-700 space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          <p><strong>Google Pay</strong> - Tap & Pay</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          <p><strong>PhonePe</strong> - Quick Payment</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          <p><strong>Paytm</strong> - Secure & Fast</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          <p><strong>BHIM UPI</strong> - Government App</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                          <p><strong>Any UPI App</strong> - Universal Support</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-blue-800 mb-2">Other Methods:</p>
-                      <div className="text-xs text-blue-700 space-y-1">
-                        <p>• Credit/Debit Cards</p>
-                        <p>• Net Banking</p>
-                        <p>• Digital Wallets</p>
-                        <p>• EMI Options</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-3 p-2 bg-blue-100 rounded text-xs text-blue-800">
-                    <p className="font-medium">🧪 Test Mode Active:</p>
-                    <p>Use test UPI ID: <code className="bg-blue-200 px-1 rounded">success@razorpay</code> or test cards for testing payments</p>
-                  </div>
-
-                  {/* UPI Testing Note */}
-                  <div className="mt-2 p-2 bg-yellow-100 rounded text-xs text-yellow-800 border border-yellow-300">
-                    <p className="font-medium">⚠️ UPI Testing Note:</p>
-                    <p>If UPI options don't appear in the payment modal, this is due to test account limitations. UPI is fully functional in production mode.</p>
-                  </div>
                 </div>
               </div>
             )}
@@ -1644,11 +1535,11 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                   disabled={loading}
                   className="mobile-form-button mobile-form-button-primary tablet-form-button px-4 md:px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {currentStep === 3 ? 'Proceed to Payment' : 'Next'}
+                  {currentStep === 3 ? 'Submit Registration' : 'Next'}
                 </button>
               ) : (
                 <div className="text-sm text-gray-600 text-center md:text-left">
-                  Select a payment method above to complete your registration
+                  Your registration will be submitted and our team will contact you for payment arrangements
                 </div>
               )}
             </div>
@@ -1661,7 +1552,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                   <span className="text-sm font-medium text-blue-900">Review Your Registration</span>
                 </div>
                 <p className="text-sm text-blue-800">
-                  Please review all information above. Click "Proceed to Payment" to continue to the secure payment processing step.
+                  Please review all information above. Our team will contact you to arrange payment after you submit this form.
                 </p>
                 {selectedTier && (
                   <div className="mt-3 p-3 bg-white rounded border">
