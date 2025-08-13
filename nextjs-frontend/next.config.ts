@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   // EMERGENCY WEBPACK CONFIGURATION - Zero chunk splitting
-  webpack: (config, { dev, isServer, webpack }) => {
+  webpack: (config, { dev }) => {
     // Add SVG support
     config.module.rules.push({
       test: /\.svg$/,
@@ -80,12 +80,6 @@ const nextConfig: NextConfig = {
 
   // Production configuration for standalone output
   output: 'standalone',
-  
-  // Disable static generation for routes with dynamic data
-  generateStaticParams: false as any,
-  
-  // Enable dynamic rendering for routes that need it
-  generateBuildId: false as any,
 };
 
 export default nextConfig;
