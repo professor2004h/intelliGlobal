@@ -1,6 +1,21 @@
-export default function WhatsAppIcon() {
-  // Simple hardcoded approach for now to ensure it renders
-  const href = `https://wa.me/442045718752`; // Default number
+import { client } from "../sanity/client";
+
+function sanitizeNumber(number: string) {
+  return number.replace(/[^0-9]/g, "");
+}
+
+export default async function WhatsAppIcon() {
+  // Fetch WhatsApp number from Sanity Site Settings
+  const data = await client.fetch(
+    `*[_type == "siteSettings"][0]{ "whatsappNumber": contactInfo.whatsapp }`,
+    {},
+    { next: { revalidate: 1800, tags: ["site-settings"] } }
+  );
+
+  const number: string | undefined = data?.whatsappNumber;
+  if (!number) return null;
+
+  const href = `https://wa.me/${sanitizeNumber(number)}`;
 
   return (
     <a
