@@ -330,7 +330,7 @@ function HomePageContent({
                         href={event.conferenceImageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors cursor-pointer block conference-title-wrap"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors cursor-pointer block conference-title-wrap !normal-case !whitespace-normal !text-left"
                       >
                         {event.title}
                       </a>

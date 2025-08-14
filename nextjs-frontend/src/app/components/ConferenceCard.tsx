@@ -55,7 +55,7 @@ export default function ConferenceCard({ event }: ConferenceCardProps) {
             href={event.conferenceImageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-lg sm:text-xl font-bold text-gray-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors duration-200 cursor-pointer block conference-title-wrap"
+            className="text-lg sm:text-xl font-bold text-gray-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors duration-200 cursor-pointer block conference-title-wrap !whitespace-normal !text-left"
           >
             {event.title}
           </a>

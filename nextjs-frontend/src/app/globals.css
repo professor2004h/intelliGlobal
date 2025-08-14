@@ -842,7 +842,7 @@ a:hover {
   }
 
   /* Enhanced Mobile Conference Grid Button Styling */
-  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 a:not(.conference-title-wrap),
   .grid.grid-cols-2 button {
     /* Ensure minimum touch target size */
     min-height: 44px !important;
@@ -2449,7 +2449,7 @@ select:focus {
   }
 
   /* Extra small mobile conference grid buttons */
-  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 a:not(.conference-title-wrap),
   .grid.grid-cols-2 button {
     min-height: 44px !important;
     padding: 10px 6px !important;
@@ -2475,7 +2475,7 @@ select:focus {
   }
 
   /* Medium mobile conference grid buttons */
-  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 a:not(.conference-title-wrap),
   .grid.grid-cols-2 button {
     min-height: 46px !important;
     padding: 12px 8px !important;
@@ -2500,7 +2500,7 @@ select:focus {
   }
 
   /* Large mobile conference grid buttons */
-  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 a:not(.conference-title-wrap),
   .grid.grid-cols-2 button {
     min-height: 48px !important;
     padding: 14px 10px !important;
@@ -2516,9 +2516,9 @@ select:focus {
 
 /* Tablet and Desktop Conference Grid Button Enhancements */
 @media (min-width: 640px) {
-  .grid.grid-cols-2 a,
+  .grid.grid-cols-2 a:not(.conference-title-wrap),
   .grid.grid-cols-2 button,
-  .grid.grid-cols-3 a,
+  .grid.grid-cols-3 a:not(.conference-title-wrap),
   .grid.grid-cols-3 button {
     min-height: 48px !important;
     font-weight: 700 !important;
@@ -3278,17 +3278,34 @@ select:focus {
   line-clamp: 6;
 }
 
-/* Force text wrapping for conference titles - override any line-clamp */
-.conference-title-wrap {
+/* Force text wrapping for conference titles - override any line-clamp/ellipsis utilities */
+.conference-title-wrap,
+a.conference-title-wrap,
+h3.conference-title-wrap {
   display: block !important;
+  /* Neutralize any clamp utilities */
   -webkit-line-clamp: unset !important;
   line-clamp: unset !important;
   -webkit-box-orient: unset !important;
-  overflow: visible !important;
+  /* Ensure wrapping and no clipping */
   white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  /* Robust word breaking */
   word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
   hyphens: auto !important;
+  /* Undo grid-wide button styles on small screens */
+  align-items: normal !important;
+  justify-content: normal !important;
+  text-align: left !important;
+}
+
+/* When titles live inside 2-col mobile grids, make sure they still wrap */
+.grid.grid-cols-2 a.conference-title-wrap,
+.grid.grid-cols-2 h3.conference-title-wrap {
+  display: block !important;
 }
 
 /* Additional responsive utilities */
