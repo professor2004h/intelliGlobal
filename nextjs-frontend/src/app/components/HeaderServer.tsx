@@ -3,9 +3,8 @@ import Image from 'next/image';
 import { getSiteSettingsForHeader, getLogoImageUrl } from '../getSiteSettings';
 import HeaderClient from './HeaderClient';
 
-// Force this component to be dynamic to prevent caching
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Allow static generation with ISR
+export const revalidate = 60;
 
 export default async function HeaderServer() {
   // Always fetch fresh data for header to ensure manual refresh works

@@ -199,7 +199,7 @@ export async function getSiteSettings(forceRefresh = false): Promise<SiteSetting
   }
 }
 
-// Function to get fresh site settings without any caching
+// Function to get fresh site settings with minimal caching for build compatibility
 export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
   try {
     const query = `*[_type == "siteSettings"][0]{
@@ -261,9 +261,9 @@ export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
 
     const siteSettings = await client.fetch(query, {}, {
       next: {
-        revalidate: 0, // No caching - always fresh
-      },
-      cache: 'no-store', // Bypass all caching layers
+        revalidate: 1, // Very short cache for near-fresh data
+        tags: ['site-settings-fresh']
+      }
     });
 
     return siteSettings;
@@ -273,15 +273,9 @@ export async function getSiteSettingsFresh(): Promise<SiteSettings | null> {
   }
 }
 
-// Function specifically for header component that always fetches fresh data
+// Function specifically for header component that works with static generation
 export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
   try {
-    // Add timestamp to ensure unique requests
-    const timestamp = Date.now();
-    // Use crypto.getRandomValues for better randomness and avoid hydration issues
-    const randomArray = new Uint32Array(1);
-    crypto.getRandomValues(randomArray);
-    const randomId = randomArray[0].toString(36);
     const query = `*[_type == "siteSettings"][0]{
       _id,
       logo{
@@ -340,22 +334,13 @@ export async function getSiteSettingsForHeader(): Promise<SiteSettings | null> {
       _updatedAt
     }`;
 
-    // Use headerClient (no CDN) with cache busting parameters
-    const siteSettings = await headerClient.fetch(query, {
-      timestamp,
-      randomId,
-      cacheBust: `header-${timestamp}-${randomId}`
-    }, {
+    // Use regular client with ISR-compatible caching
+    const siteSettings = await client.fetch(query, {}, {
       next: {
-        revalidate: 0, // No caching
-      },
-      cache: 'no-store', // Bypass all caching layers
+        revalidate: 60, // Revalidate every 60 seconds
+        tags: ['site-settings-header']
+      }
     });
-
-    // Clear any existing cache when fetching for header
-    clearSiteSettingsCache();
-
-    console.warn('Header data fetched fresh');
 
     return siteSettings;
   } catch (error) {
