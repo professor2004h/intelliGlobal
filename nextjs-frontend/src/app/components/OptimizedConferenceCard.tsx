@@ -12,6 +12,7 @@ interface ConferenceCardProps {
     date: string;
     location: string;
     imageUrl?: string;
+    conferenceImageUrl?: string;
   };
   priority?: boolean;
   className?: string;
@@ -84,9 +85,21 @@ const OptimizedConferenceCard = memo(function ConferenceCard({
             {formattedDate}
           </div>
 
-          <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors duration-300">
-            {conference.title}
-          </h3>
+          {conference.conferenceImageUrl ? (
+            <a
+              href={conference.conferenceImageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 line-clamp-2 transition-colors duration-300 cursor-pointer block"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {conference.title}
+            </a>
+          ) : (
+            <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors duration-300">
+              {conference.title}
+            </h3>
+          )}
 
           <div className="flex items-center text-slate-600 mb-4">
             <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

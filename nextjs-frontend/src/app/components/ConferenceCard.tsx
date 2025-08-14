@@ -11,13 +11,14 @@ interface ConferenceCardProps {
     imageUrl?: string;
     registerNowUrl?: string;
     submitAbstractUrl?: string;
+    conferenceImageUrl?: string;
   };
 }
 
 export default function ConferenceCard({ event }: ConferenceCardProps) {
   return (
-    <Link href={`/events/${event.slug.current}`} className="block">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 card-hover conference-card min-h-[44px] focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 card-hover conference-card min-h-[44px] focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+      <Link href={`/events/${event.slug.current}`} className="block">
         {event.imageUrl && (
           <div className="relative h-48 sm:h-52 md:h-48 overflow-hidden">
             <Image
@@ -30,8 +31,20 @@ export default function ConferenceCard({ event }: ConferenceCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
         )}
-        <div className="p-4 sm:p-6">
+      </Link>
+      <div className="p-4 sm:p-6">
+        {event.conferenceImageUrl ? (
+          <a
+            href={event.conferenceImageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-lg sm:text-xl font-bold text-gray-900 hover:text-orange-600 mb-2 sm:mb-3 line-clamp-2 leading-tight transition-colors duration-200 cursor-pointer block"
+          >
+            {event.title}
+          </a>
+        ) : (
           <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-tight">{event.title}</h3>
+        )}
           <div className="flex items-center text-gray-600 mb-2 sm:mb-3">
             <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -99,7 +112,6 @@ export default function ConferenceCard({ event }: ConferenceCardProps) {
             )}
           </div>
         </div>
-      </div>
-    </Link>
+    </div>
   );
 }

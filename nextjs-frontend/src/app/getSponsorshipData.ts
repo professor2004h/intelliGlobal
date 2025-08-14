@@ -107,6 +107,7 @@ export interface DetailedConferenceEvent extends ConferenceEvent {
   email?: string;
   registerNowUrl?: string;
   submitAbstractUrl?: string;
+  conferenceImageUrl?: string;
   description?: string;
   shortDescription?: string;
   attendeeCount?: number;
@@ -189,6 +190,7 @@ export async function getDetailedConferences(): Promise<DetailedConferenceEvent[
       email,
       registerNowUrl,
       submitAbstractUrl,
+      conferenceImageUrl,
       description,
       shortDescription,
       attendeeCount,

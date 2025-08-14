@@ -66,9 +66,21 @@ export default async function ConferencesPage() {
                     )}
 
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
-                        {event.title}
-                      </h3>
+                      {event.conferenceImageUrl ? (
+                        <a
+                          href={event.conferenceImageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 line-clamp-2 leading-tight transition-colors cursor-pointer block"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {event.title}
+                        </a>
+                      ) : (
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
+                          {event.title}
+                        </h3>
+                      )}
 
                       <div className="flex items-center text-slate-600 mb-4">
                         <svg className="w-4 h-4 mr-2 flex-shrink-0 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

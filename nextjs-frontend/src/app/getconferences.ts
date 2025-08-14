@@ -17,6 +17,7 @@ export interface ConferenceEventType {
   email?: string;
   registerNowUrl?: string;
   submitAbstractUrl?: string;
+  conferenceImageUrl?: string;
 }
 
 // Get conferences section content (title and description)
@@ -64,6 +65,7 @@ export async function getConferenceEvents(limit: number = 12): Promise<Conferenc
       email,
       registerNowUrl,
       submitAbstractUrl,
+      conferenceImageUrl,
       "imageUrl": image.asset->url
     }`;
 

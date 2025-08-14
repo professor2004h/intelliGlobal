@@ -165,9 +165,20 @@ export default function DetailedConferenceDisplay({
               <div className="p-6">
                 {/* Title and Basic Info */}
                 <div className="mb-4">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2 line-clamp-2">
-                    {conference.title}
-                  </h2>
+                  {conference.conferenceImageUrl ? (
+                    <a
+                      href={conference.conferenceImageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-2xl font-bold text-gray-900 hover:text-blue-600 mb-2 line-clamp-2 transition-colors duration-200 cursor-pointer block"
+                    >
+                      {conference.title}
+                    </a>
+                  ) : (
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2 line-clamp-2">
+                      {conference.title}
+                    </h2>
+                  )}
                   
                   <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
                     <div className="flex items-center">
