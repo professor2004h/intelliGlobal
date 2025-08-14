@@ -46,7 +46,7 @@ export default function ConferenceCard({ event }: ConferenceCardProps) {
               />
             </Link>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
         </div>
       )}
       <div className="p-4 sm:p-6">

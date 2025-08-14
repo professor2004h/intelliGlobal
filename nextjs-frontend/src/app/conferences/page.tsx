@@ -37,7 +37,7 @@ export default async function ConferencesPage() {
           {events && events.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {events.map((event) => (
-                <Link href={`/events/${event.slug.current}`} key={event._id}>
+                <div key={event._id}>
                   <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-slate-200 hover:border-orange-200">
                     {event.imageUrl && (
                       <div className="relative h-56 overflow-hidden">
@@ -57,15 +57,17 @@ export default async function ConferencesPage() {
                             />
                           </a>
                         ) : (
-                          <Image
-                            src={event.imageUrl}
-                            alt={event.title}
-                            width={400}
-                            height={250}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
+                          <Link href={`/events/${event.slug.current}`} className="block w-full h-full">
+                            <Image
+                              src={event.imageUrl}
+                              alt={event.title}
+                              width={400}
+                              height={250}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          </Link>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none"></div>
 
                         {/* Date Badge */}
                         <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg">
@@ -93,9 +95,11 @@ export default async function ConferencesPage() {
                           {event.title}
                         </a>
                       ) : (
-                        <h3 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-orange-600 transition-colors conference-title-wrap">
-                          {event.title}
-                        </h3>
+                        <Link href={`/events/${event.slug.current}`}>
+                          <h3 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-orange-600 transition-colors conference-title-wrap">
+                            {event.title}
+                          </h3>
+                        </Link>
                       )}
 
                       <div className="flex items-center text-slate-600 mb-4">
@@ -145,7 +149,7 @@ export default async function ConferencesPage() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (
