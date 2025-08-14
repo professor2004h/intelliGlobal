@@ -55,12 +55,12 @@ export default function ConferenceCard({ event }: ConferenceCardProps) {
             href={event.conferenceImageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-lg sm:text-xl font-bold text-gray-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors duration-200 cursor-pointer block"
+            className="text-lg sm:text-xl font-bold text-gray-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors duration-200 cursor-pointer block conference-title-wrap"
           >
             {event.title}
           </a>
         ) : (
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight">{event.title}</h3>
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight conference-title-wrap">{event.title}</h3>
         )}
           <div className="flex items-center text-gray-600 mb-2 sm:mb-3">
             <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

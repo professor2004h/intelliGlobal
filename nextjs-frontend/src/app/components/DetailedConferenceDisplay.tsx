@@ -187,12 +187,12 @@ export default function DetailedConferenceDisplay({
                       href={conference.conferenceImageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-2xl font-bold text-gray-900 hover:text-blue-600 mb-2 transition-colors duration-200 cursor-pointer block"
+                      className="text-2xl font-bold text-gray-900 hover:text-blue-600 mb-2 transition-colors duration-200 cursor-pointer block conference-title-wrap"
                     >
                       {conference.title}
                     </a>
                   ) : (
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2 conference-title-wrap">
                       {conference.title}
                     </h2>
                   )}

@@ -3278,6 +3278,19 @@ select:focus {
   line-clamp: 6;
 }
 
+/* Force text wrapping for conference titles - override any line-clamp */
+.conference-title-wrap {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+}
+
 /* Additional responsive utilities */
 .container-responsive {
   width: 100%;

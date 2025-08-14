@@ -88,12 +88,12 @@ export default async function ConferencesPage() {
                           href={event.conferenceImageUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 leading-tight transition-colors cursor-pointer block"
+                          className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 leading-tight transition-colors cursor-pointer block conference-title-wrap"
                         >
                           {event.title}
                         </a>
                       ) : (
-                        <h3 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-orange-600 transition-colors">
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-orange-600 transition-colors conference-title-wrap">
                           {event.title}
                         </h3>
                       )}

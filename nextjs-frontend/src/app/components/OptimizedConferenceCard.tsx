@@ -113,12 +113,12 @@ const OptimizedConferenceCard = memo(function ConferenceCard({
               href={conference.conferenceImageUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 transition-colors duration-300 cursor-pointer block"
+              className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 transition-colors duration-300 cursor-pointer block conference-title-wrap"
             >
               {conference.title}
             </a>
           ) : (
-            <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors duration-300">
+            <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors duration-300 conference-title-wrap">
               {conference.title}
             </h3>
           )}
