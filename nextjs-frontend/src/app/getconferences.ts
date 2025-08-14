@@ -75,6 +75,15 @@ export async function getConferenceEvents(limit: number = 12): Promise<Conferenc
       useCache: false
     });
 
+    // Debug: Log the fetched data to see if conferenceImageUrl is included
+    console.log('🔍 getConferenceEvents: Raw data from Sanity:', data?.length || 0);
+    data?.forEach((event, index) => {
+      console.log(`📋 getConferenceEvents Event ${index + 1}: ${event.title}`);
+      console.log(`  Conference Image URL: ${event.conferenceImageUrl || 'NOT SET'}`);
+      console.log(`  Register URL: ${event.registerNowUrl || 'NOT SET'}`);
+      console.log(`  Submit URL: ${event.submitAbstractUrl || 'NOT SET'}`);
+    });
+
     // Debug logging
     console.log('🔍 getConferenceEvents: Raw data from Sanity:', data?.length || 0);
     data?.forEach((event, index) => {

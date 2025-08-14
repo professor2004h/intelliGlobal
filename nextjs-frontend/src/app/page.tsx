@@ -306,11 +306,22 @@ function HomePageContent({
                   )}
 
                   <div className="p-3 sm:p-4 md:p-6">
-                    <Link href={`/events/${event.slug.current}`}>
-                      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight hover:text-orange-600 transition-colors cursor-pointer">
+                    {event.conferenceImageUrl ? (
+                      <a
+                        href={event.conferenceImageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 hover:text-orange-600 mb-2 sm:mb-3 line-clamp-2 leading-tight transition-colors cursor-pointer block"
+                      >
                         {event.title}
-                      </h3>
-                    </Link>
+                      </a>
+                    ) : (
+                      <Link href={`/events/${event.slug.current}`}>
+                        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight hover:text-orange-600 transition-colors cursor-pointer">
+                          {event.title}
+                        </h3>
+                      </Link>
+                    )}
 
                     <div className="flex items-center text-slate-600 mb-3 sm:mb-4">
                       <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
