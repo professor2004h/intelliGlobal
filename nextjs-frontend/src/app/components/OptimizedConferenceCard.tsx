@@ -91,7 +91,6 @@ const OptimizedConferenceCard = memo(function ConferenceCard({
               target="_blank"
               rel="noopener noreferrer"
               className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 line-clamp-2 transition-colors duration-300 cursor-pointer block"
-              onClick={(e) => e.stopPropagation()}
             >
               {conference.title}
             </a>
