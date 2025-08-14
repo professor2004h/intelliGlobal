@@ -281,13 +281,32 @@ function HomePageContent({
                 <div key={event._id} className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 sm:hover:-translate-y-3 border border-slate-200 hover:border-orange-200">
                   {event.imageUrl && (
                     <div className="relative h-32 sm:h-40 md:h-48 lg:h-56 overflow-hidden">
-                      <Image
-                        src={event.imageUrl}
-                        alt={event.title}
-                        width={400}
-                        height={250}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      {event.conferenceImageUrl ? (
+                        <a
+                          href={event.conferenceImageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full h-full"
+                        >
+                          <Image
+                            src={event.imageUrl}
+                            alt={event.title}
+                            width={400}
+                            height={250}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                          />
+                        </a>
+                      ) : (
+                        <Link href={`/events/${event.slug.current}`} className="block w-full h-full">
+                          <Image
+                            src={event.imageUrl}
+                            alt={event.title}
+                            width={400}
+                            height={250}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                          />
+                        </Link>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
 
                       {/* Date Badge - Responsive sizing */}
@@ -311,13 +330,13 @@ function HomePageContent({
                         href={event.conferenceImageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 hover:text-orange-600 mb-2 sm:mb-3 line-clamp-2 leading-tight transition-colors cursor-pointer block"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 hover:text-orange-600 mb-2 sm:mb-3 leading-tight transition-colors cursor-pointer block"
                       >
                         {event.title}
                       </a>
                     ) : (
                       <Link href={`/events/${event.slug.current}`}>
-                        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight hover:text-orange-600 transition-colors cursor-pointer">
+                        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 mb-2 sm:mb-3 leading-tight hover:text-orange-600 transition-colors cursor-pointer">
                           {event.title}
                         </h3>
                       </Link>

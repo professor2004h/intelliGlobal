@@ -145,13 +145,30 @@ export default function DetailedConferenceDisplay({
               {/* Conference Image */}
               {conference.image?.asset?.url && (
                 <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={conference.image.asset.url}
-                    alt={conference.title}
-                    width={600}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
+                  {conference.conferenceImageUrl ? (
+                    <a
+                      href={conference.conferenceImageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full h-full"
+                    >
+                      <Image
+                        src={conference.image.asset.url}
+                        alt={conference.title}
+                        width={600}
+                        height={300}
+                        className="w-full h-full object-cover cursor-pointer"
+                      />
+                    </a>
+                  ) : (
+                    <Image
+                      src={conference.image.asset.url}
+                      alt={conference.title}
+                      width={600}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   {conference.isTechnologyRelated && (
                     <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -170,12 +187,12 @@ export default function DetailedConferenceDisplay({
                       href={conference.conferenceImageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-2xl font-bold text-gray-900 hover:text-blue-600 mb-2 line-clamp-2 transition-colors duration-200 cursor-pointer block"
+                      className="text-2xl font-bold text-gray-900 hover:text-blue-600 mb-2 transition-colors duration-200 cursor-pointer block"
                     >
                       {conference.title}
                     </a>
                   ) : (
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2 line-clamp-2">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
                       {conference.title}
                     </h2>
                   )}

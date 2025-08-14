@@ -41,13 +41,30 @@ export default async function ConferencesPage() {
                   <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-slate-200 hover:border-orange-200">
                     {event.imageUrl && (
                       <div className="relative h-56 overflow-hidden">
-                        <Image
-                          src={event.imageUrl}
-                          alt={event.title}
-                          width={400}
-                          height={250}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        {event.conferenceImageUrl ? (
+                          <a
+                            href={event.conferenceImageUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block w-full h-full"
+                          >
+                            <Image
+                              src={event.imageUrl}
+                              alt={event.title}
+                              width={400}
+                              height={250}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                            />
+                          </a>
+                        ) : (
+                          <Image
+                            src={event.imageUrl}
+                            alt={event.title}
+                            width={400}
+                            height={250}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
 
                         {/* Date Badge */}
@@ -71,12 +88,12 @@ export default async function ConferencesPage() {
                           href={event.conferenceImageUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 line-clamp-2 leading-tight transition-colors cursor-pointer block"
+                          className="text-xl font-bold text-slate-900 hover:text-orange-600 mb-3 leading-tight transition-colors cursor-pointer block"
                         >
                           {event.title}
                         </a>
                       ) : (
-                        <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-orange-600 transition-colors">
                           {event.title}
                         </h3>
                       )}
