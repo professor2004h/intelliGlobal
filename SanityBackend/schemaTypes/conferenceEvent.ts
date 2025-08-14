@@ -67,6 +67,15 @@ export const conferenceEvent = defineType({
         scheme: ['http', 'https']
       }).error('Must be a valid URL (http:// or https://)'),
     }),
+    defineField({
+      name: 'conferenceImageUrl',
+      title: 'Conference Image URL',
+      type: 'url',
+      description: 'URL for the main conference image - this will be used as the primary visual for the conference',
+      validation: (Rule) => Rule.uri({
+        scheme: ['http', 'https']
+      }).error('Must be a valid URL (http:// or https://)'),
+    }),
   ],
 })
 
