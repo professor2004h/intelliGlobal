@@ -18,6 +18,7 @@ export default (S) =>
       S.listItem().title('Journal Section Styling').schemaType('journalSection').child(S.documentTypeList('journalSection')),
       S.listItem().title('Custom Content Section').schemaType('customContentSection').child(S.documentTypeList('customContentSection')),
       S.listItem().title('Cancellation Policy').schemaType('cancellationPolicy').child(S.documentTypeList('cancellationPolicy')),
+      S.listItem().title('Shipping Policy').schemaType('shippingPolicy').child(S.documentTypeList('shippingPolicy')),
 
       // Add Map Location with icon
       S.listItem()

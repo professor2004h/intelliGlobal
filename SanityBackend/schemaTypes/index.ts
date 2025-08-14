@@ -12,6 +12,7 @@ import pastConferencesSection from './pastConferencesSection';
 import journalSection from './journalSection';
 import customContentSection from './customContentSection';
 import cancellationPolicy from './cancellationPolicy';
+import shippingPolicy from './shippingPolicy';
 
 import mapLocation from './mapLocation';
 
@@ -33,5 +34,6 @@ export const schemaTypes = [
   journalSection,
   customContentSection,
   cancellationPolicy,
+  shippingPolicy,
   mapLocation
 ]
