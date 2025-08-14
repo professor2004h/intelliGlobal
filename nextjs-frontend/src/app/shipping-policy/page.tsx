@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { client } from '../lib/sanityClient';
+import { client } from '../sanity/client';
 import { notFound } from 'next/navigation';
 
 // Define the shipping policy interface
