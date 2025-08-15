@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { client } from '../sanity/client';
+import { getImageUrl } from '../getSiteSettings';
 
 // Types
 interface GalleryImageItem {
@@ -59,23 +60,13 @@ async function getGalleryPageData(): Promise<GalleryPageData | null> {
   }
 }
 
-// Next Image requires domain allowlist (cdn.sanity.io configured in next.config.ts)
-function getSanityImageUrl(img?: { asset?: { url?: string } }, w = 1600, q = 80) {
-  const url = img?.asset?.url;
-  if (!url) return null;
-  const params = new URLSearchParams();
-  params.set('w', String(w));
-  params.set('q', String(q));
-  params.set('auto', 'format');
-  params.set('fit', 'max');
-  return `${url}?${params.toString()}`;
-}
+// Use the existing getImageUrl helper from getSiteSettings
 
 function HeroSection({ data }: { data: GalleryPageData }) {
-  const bgUrl = getSanityImageUrl(data.heroBackgroundImage, 1920, 85);
+  const bgUrl = getImageUrl(data.heroBackgroundImage, { width: 1920, quality: 85, format: 'webp' });
   const styleOverlay = overlayStyle(data.heroOverlayOpacity);
   return (
-    <section className="relative min-h-[60vh] md:min-h-[80vh] w-full flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[40vh] md:min-h-[50vh] w-full flex items-center justify-center overflow-hidden">
       {bgUrl && (
         <Image
           src={bgUrl}
@@ -90,10 +81,10 @@ function HeroSection({ data }: { data: GalleryPageData }) {
       <div className="absolute inset-0" style={styleOverlay} />
 
       {/* Centered text */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-white text-3xl md:text-5xl font-extrabold tracking-tight">{data.heroTitle}</h1>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12 text-center">
+        <h1 className="text-white text-2xl md:text-4xl font-bold tracking-tight">{data.heroTitle}</h1>
         {data.heroSubtitle && (
-          <p className="mt-4 text-white/90 text-base md:text-lg leading-relaxed">{data.heroSubtitle}</p>
+          <p className="mt-3 text-white/90 text-sm md:text-base leading-relaxed">{data.heroSubtitle}</p>
         )}
       </div>
     </section>
@@ -114,7 +105,7 @@ function GalleryGrid({ items }: { items: GalleryImageItem[] }) {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {items.map((item) => {
-            const url = getSanityImageUrl(item.image, 800, 80);
+            const url = getImageUrl(item.image, { width: 800, quality: 80, format: 'webp' });
             if (!url) return null;
             return (
               <figure key={item._key} className="relative group overflow-hidden rounded-lg bg-white shadow-sm">
