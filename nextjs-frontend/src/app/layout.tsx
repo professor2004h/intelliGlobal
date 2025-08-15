@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
 import WhatsAppIcon from "./components/WhatsAppIcon";
 
+export const dynamic = 'force-static';
+
 // Import client-side components
 import ClientErrorBoundary from "./components/ClientErrorBoundary";
 import {
