@@ -112,8 +112,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
         wheelListener = (e: WheelEvent) => {
           if (!mapInstanceRef.current) return;
           // Only handle when map is fully initialized and panes exist and container is in DOM
-          // @ts-expect-error private props on Leaflet Map for safety checks
-          if (!map._loaded || !map._panes || !map._panes.mapPane || !document.body.contains(container)) return;
+          const m: any = map;
+          if (!m._loaded || !m._panes || !m._panes.mapPane || !document.body.contains(container)) return;
 
           if (e.ctrlKey) {
             // zoom the map and prevent page scroll
