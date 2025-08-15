@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // NOTE: Do NOT import 'leaflet' or its CSS at the module level because it accesses `window`.
 // We'll dynamically import both inside useEffect to avoid SSR "window is not defined" errors.
 
@@ -23,11 +23,19 @@ interface LeafletMapProps {
 }
 
 const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any | null>(null);
 
+  const [showHint, setShowHint] = useState(false);
+  const [hintText, setHintText] = useState('');
+
   useEffect(() => {
     let L: any;
+    let wheelListener: ((e: WheelEvent) => void) | null = null;
+    let touchStartListener: ((ev: TouchEvent) => void) | null = null;
+    let isTouchDevice = false;
+    let hintTimeout: any = null;
 
     const init = async () => {
       // Only run on client side
@@ -70,15 +78,75 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
         try { (mapRef.current as any)._leaflet_id = undefined; } catch {}
         try { mapRef.current.innerHTML = ''; } catch {}
       }
+
+      // Detect device capabilities
+      isTouchDevice = ('ontouchstart' in window) || ((navigator as any).maxTouchPoints ? ((navigator as any).maxTouchPoints > 0) : false);
+
       const map = L.map(mapRef.current, {
         zoomControl: true,
-        scrollWheelZoom: true,
+        scrollWheelZoom: false, // disable by default; we'll implement ctrl+wheel ourselves on desktop
         doubleClickZoom: true,
-        touchZoom: true,
-        dragging: true,
+        touchZoom: true, // allow pinch on touch devices
+        dragging: !isTouchDevice, // disable single-finger drag on touch to allow page scroll
+        tap: false,
       });
 
+      // Apply per-device interaction tweaks
+      if (isTouchDevice) {
+        map.dragging.disable(); // ensure single-finger scroll goes to page
+        map.touchZoom.enable(); // ensure two-finger pinch works
+      } else {
+        map.scrollWheelZoom.disable(); // keep disabled; we handle ctrl+wheel
+      }
+
       mapInstanceRef.current = map;
+
+      // Show initial hint overlay for 5s
+      setHintText(isTouchDevice ? 'Use two fingers to zoom' : 'Ctrl + scroll to zoom');
+      setShowHint(true);
+      hintTimeout = setTimeout(() => setShowHint(false), 5000);
+
+      // Desktop: implement Ctrl + wheel zoom without page-scroll conflicts
+      if (!isTouchDevice && mapRef.current) {
+        const container = mapRef.current;
+        wheelListener = (e: WheelEvent) => {
+          if (!mapInstanceRef.current) return;
+          // Only handle when map is fully initialized and panes exist and container is in DOM
+          // @ts-expect-error private props on Leaflet Map for safety checks
+          if (!map._loaded || !map._panes || !map._panes.mapPane || !document.body.contains(container)) return;
+
+          if (e.ctrlKey) {
+            // zoom the map and prevent page scroll
+            e.preventDefault();
+            const stepIn = e.deltaY < 0;
+            if (stepIn) {
+              map.zoomIn(1, { animate: true });
+            } else {
+              map.zoomOut(1, { animate: true });
+            }
+          } else {
+            // show hint briefly but allow normal page scroll
+            setHintText('Ctrl + scroll to zoom');
+            setShowHint(true);
+            if (hintTimeout) clearTimeout(hintTimeout);
+            hintTimeout = setTimeout(() => setShowHint(false), 3000);
+          }
+        };
+        container.addEventListener('wheel', wheelListener, { passive: false });
+      }
+
+      // Mobile: show hint when user touches with one finger on the map
+      if (isTouchDevice && mapRef.current) {
+        touchStartListener = (ev: TouchEvent) => {
+          if (ev.touches && ev.touches.length === 1) {
+            setHintText('Use two fingers to zoom');
+            setShowHint(true);
+            if (hintTimeout) clearTimeout(hintTimeout);
+            hintTimeout = setTimeout(() => setShowHint(false), 3000);
+          }
+        };
+        mapRef.current.addEventListener('touchstart', touchStartListener as EventListener, { passive: true });
+      }
 
       // Add CartoDB Positron tiles (English-only labels, clean design)
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -265,6 +333,13 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
     // Cleanup function
     return () => {
       try {
+        if (hintTimeout) clearTimeout(hintTimeout);
+        if (wheelListener && mapRef.current) {
+          mapRef.current.removeEventListener('wheel', wheelListener as EventListener);
+        }
+        if (touchStartListener && mapRef.current) {
+          mapRef.current.removeEventListener('touchstart', touchStartListener as EventListener);
+        }
         if (mapInstanceRef.current) {
           mapInstanceRef.current.remove();
           mapInstanceRef.current = null;
@@ -280,44 +355,59 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
 
   return (
     <>
-      <div
-        ref={mapRef}
-        className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] relative overflow-hidden"
-        style={{
-          minHeight: '400px',
-          position: 'relative',
-          zIndex: 1,
-          isolation: 'isolate'
-        }}
-      />
+      <div ref={wrapperRef} className="relative">
+        {/* Map Container */}
+        <div
+          ref={mapRef}
+          className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] relative overflow-hidden"
+          style={{
+            minHeight: '400px',
+            position: 'relative',
+            zIndex: 1,
+            isolation: 'isolate'
+          }}
+        />
+
+        {/* Instruction overlay top-right */}
+        {showHint && (
+          <div
+            className="pointer-events-none absolute top-3 right-3 bg-black/60 text-white text-xs md:text-sm px-2.5 py-1.5 rounded-md shadow"
+            style={{ zIndex: 1000 }}
+          >
+            {hintText}
+          </div>
+        )}
+      </div>
+
       <style jsx global>{`
         .custom-popup .leaflet-popup-content-wrapper {
           border-radius: 12px;
           box-shadow: 0 10px 25px rgba(0,0,0,0.15);
           border: 1px solid #e5e7eb;
         }
-        
+
         .custom-popup .leaflet-popup-content {
           margin: 12px 16px;
           line-height: 1.4;
         }
-        
+
         .custom-popup .leaflet-popup-tip {
           background: white;
           border: 1px solid #e5e7eb;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .custom-marker {
           background: transparent !important;
           border: none !important;
         }
-        
+
         .leaflet-container {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           position: relative !important;
           z-index: 1 !important;
           overflow: hidden !important;
+          touch-action: pan-y pinch-zoom; /* allow page scroll on Y and pinch zoom */
         }
 
         /* Fix for mobile scrolling issues */
@@ -337,23 +427,23 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
           left: 10px !important;
           z-index: 1000 !important;
         }
-        
+
         .leaflet-control-zoom {
           border: none !important;
           box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         }
-        
+
         .leaflet-control-zoom a {
           border: none !important;
           background: white !important;
           color: #374151 !important;
           font-weight: 600 !important;
         }
-        
+
         .leaflet-control-zoom a:hover {
           background: #f3f4f6 !important;
         }
-        
+
         .leaflet-control-attribution {
           display: none !important;
         }
