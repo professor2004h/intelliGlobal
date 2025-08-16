@@ -501,11 +501,7 @@ export interface TestimonialsData {
 // Function to fetch testimonials data
 export async function getTestimonialsData(): Promise<TestimonialsData | null> {
   try {
-    // First check if any testimonialsSection documents exist at all
-    const allTestimonials = await client.fetch(`*[_type == "testimonialsSection"]{_id, isActive, testimonials}`);
-    console.log('🔍 All testimonials documents:', allTestimonials);
-
-    const query = `*[_type == "testimonialsSection"] | order(_createdAt desc)[0]{
+    const query = `*[_type == "testimonialsSection" && isActive == true] | order(_createdAt desc)[0]{
       _id,
       sectionTitle,
       sectionSubtitle,
@@ -527,8 +523,6 @@ export async function getTestimonialsData(): Promise<TestimonialsData | null> {
       }
     }`;
 
-    console.log('🔍 Fetching testimonials data with query:', query);
-
     const data = await client.fetch<TestimonialsData>(query, {}, {
       next: {
         revalidate: 300, // Revalidate every 5 minutes
@@ -536,11 +530,9 @@ export async function getTestimonialsData(): Promise<TestimonialsData | null> {
       }
     });
 
-    console.log('📊 Testimonials data fetched:', JSON.stringify(data, null, 2));
-
     return data || null;
   } catch (error) {
-    console.error('❌ Error fetching testimonials data:', error);
+    console.error('Error fetching testimonials data:', error);
     return null;
   }
 }

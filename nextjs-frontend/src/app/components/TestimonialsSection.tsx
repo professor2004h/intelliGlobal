@@ -102,14 +102,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
-  // Debug logging
-  console.log('🎭 TestimonialsSection received data:', data);
-  console.log('🎭 Data conditions:', {
-    hasData: !!data,
-    isActive: data?.isActive,
-    hasTestimonials: !!data?.testimonials?.length,
-    testimonialsCount: data?.testimonials?.length || 0
-  });
+
 
   useEffect(() => {
     setIsClient(true);
@@ -125,35 +118,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     return () => clearInterval(interval);
   }, [data?.testimonials?.length]);
 
-  if (!data || !data.testimonials?.length) {
-    console.log('🚫 TestimonialsSection not rendering due to conditions:', {
-      noData: !data,
-      notActive: data && !data.isActive,
-      noTestimonials: data && !data.testimonials?.length
-    });
-
-    // Show placeholder for debugging
-    return (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Testimonials Section (No Data)
-            </h2>
-            <p className="text-lg text-gray-600">
-              No testimonials data found. Create testimonials in Sanity Studio to see them here.
-            </p>
-            <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-              <p className="text-sm text-gray-500">
-                Debug: data = {data ? 'exists' : 'null'},
-                isActive = {data?.isActive ? 'true' : 'false'},
-                testimonials = {data?.testimonials?.length || 0}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+  if (!data || !data.isActive || !data.testimonials?.length) {
+    return null;
   }
 
   const nextSlide = () => {
