@@ -126,6 +126,7 @@ export default async function HomePage() {
       pastConferencesStyling={null}
       journalStyling={null}
       customContentData={null}
+      testimonialsData={null}
     />;
   }
 }
@@ -141,7 +142,8 @@ function HomePageContent({
   siteSettings,
   pastConferencesStyling,
   journalStyling,
-  customContentData
+  customContentData,
+  testimonialsData
 }: {
   events: ConferenceEventType[];
   pastConferences: PastConferenceType[];
