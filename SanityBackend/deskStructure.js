@@ -20,6 +20,7 @@ export default (S) =>
       S.listItem().title('Cancellation Policy').schemaType('cancellationPolicy').child(S.documentTypeList('cancellationPolicy')),
       S.listItem().title('Shipping Policy').schemaType('shippingPolicy').child(S.documentTypeList('shippingPolicy')),
       S.listItem().title('Gallery Page').schemaType('galleryPage').child(S.documentTypeList('galleryPage')),
+      S.listItem().title('Testimonials Section').schemaType('testimonialsSection').child(S.documentTypeList('testimonialsSection')),
 
       // Add Map Location with icon
       S.listItem()

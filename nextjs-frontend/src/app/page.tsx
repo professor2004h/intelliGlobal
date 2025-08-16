@@ -33,6 +33,8 @@ import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
 import LeafletMapLocations from "./components/LeafletMapLocations";
+import { getTestimonialsSection } from "./getTestimonialsSection";
+import TestimonialsCarousel from "./components/TestimonialsCarousel";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -54,7 +56,8 @@ export default async function HomePage() {
       siteSettings,
       pastConferencesStyling,
       journalStyling,
-      customContentData
+      customContentData,
+      testimonials
     ] = await Promise.allSettled([
       getConferenceEvents(12),
       getFeaturedPastConferences(4),
@@ -65,7 +68,8 @@ export default async function HomePage() {
       getSiteSettingsSSR(),
       getPastConferencesSectionStyling(),
       getJournalSectionStyling(),
-      getCustomContentSectionData()
+      getCustomContentSectionData(),
+      getTestimonialsSection()
     ]);
 
     // Only log detailed results in development
@@ -101,7 +105,8 @@ export default async function HomePage() {
       siteSettings: siteSettings.status === 'fulfilled' ? siteSettings.value : null,
       pastConferencesStyling: pastConferencesStyling.status === 'fulfilled' ? pastConferencesStyling.value : null,
       journalStyling: journalStyling.status === 'fulfilled' ? journalStyling.value : null,
-      customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null
+      customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null,
+      testimonials: testimonials.status === 'fulfilled' ? testimonials.value : null
     };
 
 
@@ -121,6 +126,7 @@ export default async function HomePage() {
       pastConferencesStyling={null}
       journalStyling={null}
       customContentData={null}
+      testimonials={null}
     />;
   }
 }
@@ -136,7 +142,8 @@ function HomePageContent({
   siteSettings,
   pastConferencesStyling,
   journalStyling,
-  customContentData
+  customContentData,
+  testimonials
 }: {
   events: ConferenceEventType[];
   pastConferences: PastConferenceType[];
@@ -148,6 +155,7 @@ function HomePageContent({
   pastConferencesStyling: PastConferencesSectionStyling | null;
   journalStyling: JournalSectionStyling | null;
   customContentData: CustomContentSectionData | null;
+  testimonials: import('./getTestimonialsSection').TestimonialsSectionData | null;
 }) {
   // Use fallback data if needed
   const safeStatistics = statistics || getDefaultStatistics();
@@ -802,8 +810,21 @@ function HomePageContent({
               </div>
             </div>
           </div>
+
+
         </section>
       )}
+
+      {/* Testimonials Section (Below Journal) */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 md:mb-10">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900">What Our Attendees Say</h3>
+          </div>
+          <TestimonialsCarousel data={testimonials} />
+        </div>
+      </section>
+
 
       {/* Conference Locations Map Section - OpenStreetMap with Leaflet */}
       <LeafletMapLocations />

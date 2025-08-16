@@ -36,10 +36,41 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
     let touchStartListener: ((ev: TouchEvent) => void) | null = null;
     let isTouchDevice = false;
     let hintTimeout: any = null;
+    let initTimeout: any = null;
+    let retryCount = 0;
+    const maxRetries = 10;
 
     const init = async () => {
       // Only run on client side
       if (typeof window === 'undefined' || !mapRef.current || locations.length === 0) return;
+
+      // Ensure the container has dimensions before initializing
+      const container = mapRef.current;
+      if (!container.offsetWidth || !container.offsetHeight) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.warn(`Map container has no dimensions, retrying in 100ms... (${retryCount}/${maxRetries})`);
+          setTimeout(init, 100);
+          return;
+        } else {
+          console.error('Map container failed to get dimensions after maximum retries');
+          return;
+        }
+      }
+
+      // Additional check: ensure container is visible and has computed styles
+      const computedStyle = window.getComputedStyle(container);
+      if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.warn(`Map container is not visible, retrying in 100ms... (${retryCount}/${maxRetries})`);
+          setTimeout(init, 100);
+          return;
+        } else {
+          console.error('Map container failed to become visible after maximum retries');
+          return;
+        }
+      }
 
       // Avoid double-initialization in React Strict Mode / hot reloads
       if (mapInstanceRef.current) {
@@ -328,12 +359,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
       }
     };
 
-    init();
+    // Add a small delay to ensure DOM is fully rendered
+    initTimeout = setTimeout(init, 50);
 
     // Cleanup function
     return () => {
       try {
         if (hintTimeout) clearTimeout(hintTimeout);
+        if (initTimeout) clearTimeout(initTimeout);
         if (wheelListener && mapRef.current) {
           mapRef.current.removeEventListener('wheel', wheelListener as EventListener);
         }
@@ -362,9 +395,13 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locations, getMarkerColor }) =>
           className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] relative overflow-hidden"
           style={{
             minHeight: '400px',
+            minWidth: '300px',
+            width: '100%',
+            height: '400px',
             position: 'relative',
             zIndex: 1,
-            isolation: 'isolate'
+            isolation: 'isolate',
+            display: 'block'
           }}
         />
 
