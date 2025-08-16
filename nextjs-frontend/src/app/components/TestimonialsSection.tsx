@@ -128,9 +128,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     setCurrentSlide((prev) => (prev - 1 + data.testimonials.length) % data.testimonials.length);
   };
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
+
 
   // Show static grid on server side to avoid hydration issues
   if (!isClient) {
@@ -251,22 +249,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             </>
           )}
 
-          {/* Pagination Dots */}
-          {data.testimonials.length > 1 && (
-            <div className="flex justify-center mt-8 space-x-2">
-              {data.testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentSlide
-                      ? 'bg-blue-600 scale-125'
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
+
         </div>
       </div>
     </section>
