@@ -21,6 +21,7 @@ import {
 } from "./components/ClientComponents";
 import { NavigationLoadingProvider } from "./components/NavigationLoadingProvider";
 import { testSanityConnectionWithRetry } from './sanity/client';
+import { CurrencyProvider } from '../contexts/CurrencyContext';
 
 // Optimized font loading with display swap for better performance
 const inter = Inter({
@@ -154,30 +155,32 @@ export default async function RootLayout({
                 enableProgressBar={true}
                 enableOverlay={true}
               >
-                <PerformanceInit />
-                {process.env.NODE_ENV === 'development' && (
-                  <>
-                    <PerformanceMonitor enabled={true} />
-                    <AutoRefresh interval={30000} enabled={false} />
-                    <ConnectionStatus />
-                  </>
-                )}
-                <CacheBuster />
-                <FaviconManager faviconUrl={faviconUrl} />
+                <CurrencyProvider>
+                  <PerformanceInit />
+                  {process.env.NODE_ENV === 'development' && (
+                    <>
+                      <PerformanceMonitor enabled={true} />
+                      <AutoRefresh interval={30000} enabled={false} />
+                      <ConnectionStatus />
+                    </>
+                  )}
+                  <CacheBuster />
+                  <FaviconManager faviconUrl={faviconUrl} />
 
-                {/* Header */}
-                <HeaderWrapper />
+                  {/* Header */}
+                  <HeaderWrapper />
 
-                {/* Main Content */}
-                <main className="flex-1 relative">
-                  {children}
-                </main>
+                  {/* Main Content */}
+                  <main className="flex-1 relative">
+                    {children}
+                  </main>
 
-                {/* Footer */}
-                <Footer />
+                  {/* Footer */}
+                  <Footer />
 
-                {/* WhatsApp Icon (no text, no hover effects) */}
-                <WhatsAppIcon />
+                  {/* WhatsApp Icon (no text, no hover effects) */}
+                  <WhatsAppIcon />
+                </CurrencyProvider>
               </NavigationLoadingProvider>
             </ClientErrorBoundary>
           </ErrorBoundary>

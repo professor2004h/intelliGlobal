@@ -24,11 +24,41 @@ const sponsorshipTiers = defineType({
       description: 'URL-friendly version of the tier name',
     }),
     defineField({
-      name: 'price',
-      title: 'Price (USD)',
-      type: 'number',
-      validation: (Rule) => Rule.required().min(0),
-      description: 'Price in USD for this sponsorship tier',
+      name: 'pricing',
+      title: 'Multi-Currency Pricing',
+      type: 'object',
+      description: 'Set prices for this sponsorship tier in different currencies',
+      fields: [
+        defineField({
+          name: 'usd',
+          title: 'Price (USD)',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(0),
+          description: 'Price in US Dollars',
+        }),
+        defineField({
+          name: 'eur',
+          title: 'Price (EUR)',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(0),
+          description: 'Price in Euros',
+        }),
+        defineField({
+          name: 'gbp',
+          title: 'Price (GBP)',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(0),
+          description: 'Price in British Pounds',
+        }),
+        defineField({
+          name: 'inr',
+          title: 'Price (INR)',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(0),
+          description: 'Price in Indian Rupees',
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'order',
@@ -129,17 +159,18 @@ const sponsorshipTiers = defineType({
   preview: {
     select: {
       title: 'name',
-      price: 'price',
+      pricing: 'pricing',
       order: 'order',
       featured: 'featured',
       active: 'active',
     },
     prepare(selection) {
-      const { title, price, order, featured, active } = selection;
+      const { title, pricing, order, featured, active } = selection;
       const status = !active ? '🚫' : featured ? '⭐' : '';
+      const priceDisplay = pricing?.usd ? `$${pricing.usd} USD` : 'No price set';
       return {
         title: `${status} ${title}`,
-        subtitle: `$${price} USD - Order: ${order}`,
+        subtitle: `${priceDisplay} - Order: ${order}`,
       };
     },
   },

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useCurrency } from '../../../contexts/CurrencyContext';
 
 // Payments are disabled in this deployment
 
@@ -10,7 +11,12 @@ interface SponsorshipTier {
   _id: string;
   name: string;
   slug: { current: string };
-  price: number;
+  pricing: {
+    usd: number;
+    eur: number;
+    gbp: number;
+    inr: number;
+  };
   order: number;
   featured: boolean;
   description?: string;
@@ -22,6 +28,40 @@ interface SponsorshipTier {
     hex: string;
   };
   active: boolean;
+}
+
+// Currency types
+type Currency = 'USD' | 'EUR' | 'GBP' | 'INR';
+
+// Currency helper functions
+function getPriceForCurrency(tier: SponsorshipTier, currency: Currency): number {
+  switch (currency) {
+    case 'USD':
+      return tier.pricing.usd;
+    case 'EUR':
+      return tier.pricing.eur;
+    case 'GBP':
+      return tier.pricing.gbp;
+    case 'INR':
+      return tier.pricing.inr;
+    default:
+      return tier.pricing.usd;
+  }
+}
+
+// Format currency with proper locale and symbol
+function formatCurrency(amount: number, currency: Currency = 'INR'): string {
+  const localeMap: Record<Currency, string> = {
+    'USD': 'en-US',
+    'EUR': 'de-DE',
+    'GBP': 'en-GB',
+    'INR': 'en-IN',
+  };
+
+  return new Intl.NumberFormat(localeMap[currency], {
+    style: 'currency',
+    currency: currency,
+  }).format(amount);
 }
 
 interface ConferenceEvent {
@@ -54,12 +94,6 @@ interface DetailedConferenceEvent extends ConferenceEvent {
 }
 
 // Client-side utility functions
-const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
-};
 
 const generateRegistrationId = (): string => {
   const timestamp = Date.now().toString(36);
@@ -80,6 +114,9 @@ interface SponsorRegistrationFormProps {
 export default function SponsorRegistrationForm({ sponsorshipTiers, conferences }: SponsorRegistrationFormProps) {
   console.log('🎯 CLIENT: Form received conferences:', conferences);
   console.log('🎯 CLIENT: Form received tiers:', sponsorshipTiers);
+
+  // Currency context
+  const { selectedCurrency } = useCurrency();
 
   // State for site settings (admin contact info)
   const [siteSettings, setSiteSettings] = useState<any>(null);
@@ -454,7 +491,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
         if (!selectedTier) {
           throw new Error('Please select a sponsorship tier');
         }
-        usdAmount = selectedTier.price;
+        usdAmount = getPriceForCurrency(selectedTier, selectedCurrency);
         tierName = selectedTier.name;
       }
 
@@ -746,7 +783,10 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
     name: 'Custom Sponsorship',
     price: parseFloat(formData.customAmount) || 0,
     description: 'Custom sponsorship package - details to be discussed with admin team'
-  } : selectedTier;
+  } : selectedTier ? {
+    ...selectedTier,
+    price: getPriceForCurrency(selectedTier, selectedCurrency)
+  } : null;
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 md:py-12">
@@ -878,7 +918,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                             <option value="">Choose a sponsorship tier...</option>
                             {sponsorshipTiers.map((tier) => (
                               <option key={tier._id} value={tier._id}>
-                                {tier.name} - {formatCurrency(tier.price)}
+                                {tier.name} - {formatCurrency(getPriceForCurrency(tier, selectedCurrency), selectedCurrency)}
                               </option>
                             ))}
                           </select>
@@ -1021,7 +1061,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                         <p className="text-sm md:text-base text-blue-800 mb-2">{displayTier.description || 'No description available'}</p>
                       </div>
                       <div className="text-center md:text-right">
-                        <p className="mobile-summary-price text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(displayTier.price)}</p>
+                        <p className="mobile-summary-price text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(displayTier.price, selectedCurrency)}</p>
                         <p className="text-xs md:text-sm text-blue-700">Total Amount</p>
                       </div>
                     </div>
@@ -1337,7 +1377,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                         )}
                       </p>
                       {displayTier && (
-                        <p className="text-2xl font-bold text-blue-600">{formatCurrency(displayTier.price)}</p>
+                        <p className="text-2xl font-bold text-blue-600">{formatCurrency(displayTier.price, selectedCurrency)}</p>
                       )}
                     </div>
                     <div>
@@ -1416,7 +1456,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                 </h2>
 
                 {/* Final Registration Summary */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+                <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
                   <h3 className="text-lg font-semibold text-blue-900 mb-4">Final Registration Summary</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1461,7 +1501,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                         <div className="flex justify-between items-center">
                           <span className="font-semibold text-blue-900">Total Amount:</span>
                           <span className="text-3xl font-bold text-blue-600">
-                            {displayTier ? formatCurrency(displayTier.price) : '$0.00'}
+                            {displayTier ? formatCurrency(displayTier.price, selectedCurrency) : formatCurrency(0, selectedCurrency)}
                           </span>
                         </div>
                         <p className="text-sm text-blue-700 mt-1">One-time sponsorship fee</p>
@@ -1558,7 +1598,7 @@ export default function SponsorRegistrationForm({ sponsorshipTiers, conferences 
                   <div className="mt-3 p-3 bg-white rounded border">
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-gray-900">Total Amount:</span>
-                      <span className="text-2xl font-bold text-blue-600">{formatCurrency(selectedTier.price)}</span>
+                      <span className="text-2xl font-bold text-blue-600">{formatCurrency(getPriceForCurrency(selectedTier, selectedCurrency), selectedCurrency)}</span>
                     </div>
                   </div>
                 )}

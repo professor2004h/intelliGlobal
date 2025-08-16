@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getSponsorshipTiers, formatCurrency, type SponsorshipTier } from "../getSponsorshipData";
+import { getSponsorshipTiers, type SponsorshipTier } from "../getSponsorshipData";
 import { getSiteSettingsSSR, type SiteSettings } from "../getSiteSettings";
+import SponsorshipTiersSection from "../../components/SponsorshipTiersSection";
 
 export const metadata = {
   title: "Sponsorship Opportunities - Intelli Global Conferences",
@@ -23,7 +24,7 @@ export default async function SponsorshipPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-blue-900 via-slate-800 to-blue-900">
+      <section className="py-16 md:py-24 bg-blue-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             For Sponsor / Exhibitor
@@ -60,97 +61,7 @@ export default async function SponsorshipPage() {
       </section>
 
       {/* Sponsorship Tiers Section */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Sponsorship Packages
-            </h2>
-            <div className="w-24 h-1 bg-orange-500 mx-auto"></div>
-          </div>
-
-          {/* Sponsorship Tiers Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-            {sponsorshipTiers.map((tier) => (
-              <div 
-                key={tier._id} 
-                className={`bg-white rounded-xl shadow-lg border-2 p-8 ${
-                  tier.featured 
-                    ? 'border-orange-500 ring-4 ring-orange-100' 
-                    : 'border-gray-200 hover:border-blue-300'
-                } transition-all duration-300 hover:shadow-xl`}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900">{tier.name}</h3>
-                  {tier.featured && (
-                    <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      Popular
-                    </span>
-                  )}
-                </div>
-                
-                {tier.description && (
-                  <p className="text-gray-600 mb-6">{tier.description}</p>
-                )}
-
-                <div className="mb-6">
-                  <div className="text-3xl font-bold text-blue-900 mb-2">
-                    {formatCurrency(tier.price)}
-                  </div>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {tier.benefits.map((benefit, benefitIndex) => (
-                    <li 
-                      key={benefitIndex} 
-                      className={`flex items-start ${
-                        benefit.highlighted ? 'text-orange-600 font-semibold' : 'text-gray-700'
-                      }`}
-                    >
-                      <svg 
-                        className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${
-                          benefit.highlighted ? 'text-orange-500' : 'text-green-500'
-                        }`} 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                      >
-                        <path 
-                          fillRule="evenodd" 
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                          clipRule="evenodd" 
-                        />
-                      </svg>
-                      {benefit.benefit}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Call to Action */}
-          <div className="text-center">
-            <div className="bg-gradient-to-r from-blue-900 to-slate-800 rounded-2xl p-8 md:p-12 text-white">
-              <h3 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Become a Sponsor?
-              </h3>
-              <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                Join industry leaders in supporting cutting-edge research and innovation. 
-                Choose your sponsorship package and make a lasting impact.
-              </p>
-              <Link
-                href="/sponsorship/register"
-                className="inline-flex items-center bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group"
-              >
-                Become a Sponsor
-                <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <SponsorshipTiersSection sponsorshipTiers={sponsorshipTiers} />
 
       {/* Contact Information */}
       <section className="py-16 bg-gray-50">

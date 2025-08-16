@@ -1,11 +1,26 @@
 import { client } from './sanity/client';
 
+// Currency constants
+export const CURRENCIES: CurrencyInfo[] = [
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
+  { code: 'USD', symbol: '$', name: 'US Dollar' },
+  { code: 'EUR', symbol: '€', name: 'Euro' },
+  { code: 'GBP', symbol: '£', name: 'British Pound' },
+];
+
 // TypeScript interfaces
 export interface SponsorshipTier {
   _id: string;
   name: string;
   slug: { current: string };
-  price: number;
+  pricing?: {
+    usd: number;
+    eur: number;
+    gbp: number;
+    inr: number;
+  };
+  // Legacy field for backward compatibility
+  price?: number;
   order: number;
   featured: boolean;
   description?: string;
@@ -17,6 +32,15 @@ export interface SponsorshipTier {
     hex: string;
   };
   active: boolean;
+}
+
+// Currency types
+export type Currency = 'USD' | 'EUR' | 'GBP' | 'INR';
+
+export interface CurrencyInfo {
+  code: Currency;
+  symbol: string;
+  name: string;
 }
 
 export interface ConferenceEvent {
@@ -85,6 +109,7 @@ export async function getSponsorshipTiers(): Promise<SponsorshipTier[]> {
       _id,
       name,
       slug,
+      pricing,
       price,
       order,
       featured,
@@ -93,7 +118,7 @@ export async function getSponsorshipTiers(): Promise<SponsorshipTier[]> {
       color,
       active
     }`;
-    
+
     const tiers = await client.fetch(query);
     return tiers || [];
   } catch (error) {
@@ -378,9 +403,59 @@ export function isValidEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
-// Format currency
-export function formatCurrency(amount: number, currency: string = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
+// Get price for a specific currency from sponsorship tier
+export function getPriceForCurrency(tier: SponsorshipTier, currency: Currency): number {
+  // Fallback for legacy data that might still have the old 'price' field
+  if (!tier.pricing) {
+    console.warn('Tier missing pricing object, using fallback:', tier.name);
+    const legacyPrice = (tier as any).price || 0;
+    // Convert USD to other currencies using approximate rates
+    switch (currency) {
+      case 'USD':
+        return legacyPrice;
+      case 'EUR':
+        return Math.round(legacyPrice * 0.85);
+      case 'GBP':
+        return Math.round(legacyPrice * 0.73);
+      case 'INR':
+        return Math.round(legacyPrice * 83);
+      default:
+        return Math.round(legacyPrice * 83); // Default to INR
+    }
+  }
+
+  switch (currency) {
+    case 'USD':
+      return tier.pricing.usd || 0;
+    case 'EUR':
+      return tier.pricing.eur || 0;
+    case 'GBP':
+      return tier.pricing.gbp || 0;
+    case 'INR':
+      return tier.pricing.inr || 0;
+    default:
+      return tier.pricing.inr || 0;
+  }
+}
+
+// Get currency info by code
+export function getCurrencyInfo(currency: Currency): CurrencyInfo {
+  return CURRENCIES.find(c => c.code === currency) || CURRENCIES[0];
+}
+
+// Format currency with proper locale and symbol
+export function formatCurrency(amount: number, currency: Currency = 'INR'): string {
+  const currencyInfo = getCurrencyInfo(currency);
+
+  // Use appropriate locale for each currency
+  const localeMap: Record<Currency, string> = {
+    'USD': 'en-US',
+    'EUR': 'de-DE',
+    'GBP': 'en-GB',
+    'INR': 'en-IN',
+  };
+
+  return new Intl.NumberFormat(localeMap[currency], {
     style: 'currency',
     currency: currency,
   }).format(amount);
