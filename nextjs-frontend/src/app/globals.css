@@ -2001,6 +2001,38 @@ select:focus {
   object-position: left center;
 }
 
+/* Enhanced responsive navigation */
+@media (max-width: 768px) {
+  .header-container nav {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-container .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .header-container nav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-container nav {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
 /* Ensure proper spacing between header and hero section - merged with main rule above */
 
 /* Responsive Hero Image Container - Desktop Cover, Mobile Contain */

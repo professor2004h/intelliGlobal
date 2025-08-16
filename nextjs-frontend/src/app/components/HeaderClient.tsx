@@ -18,7 +18,7 @@ export default function HeaderClient({ siteSettings }: HeaderClientProps) {
   return (
     <>
       {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center space-x-8">
+      <div className="hidden md:flex items-center space-x-4 lg:space-x-6 xl:space-x-8">
         <Link
           href="/"
           className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
@@ -42,6 +42,12 @@ export default function HeaderClient({ siteSettings }: HeaderClientProps) {
           className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
         >
           Past Conferences
+        </Link>
+        <Link
+          href="/gallery"
+          className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+        >
+          Gallery
         </Link>
         <Link
           href="/sponsorship"
@@ -130,6 +136,13 @@ export default function HeaderClient({ siteSettings }: HeaderClientProps) {
               onClick={() => setIsMenuOpen(false)}
             >
               Past Conferences
+            </Link>
+            <Link
+              href="/gallery"
+              className="block px-3 py-3 text-gray-700 hover:text-blue-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Gallery
             </Link>
             <Link
               href="/sponsorship"

@@ -205,8 +205,8 @@ export default function Header() {
       )}
 
       {/* Main Navigation */}
-      <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20 md:h-24">
+      <nav className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16 md:h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             {siteSettings?.logo && getImageUrl(siteSettings.logo) ? (
@@ -215,13 +215,13 @@ export default function Header() {
                 alt={siteSettings.logo.alt || 'Intelli Global Conferences Logo'}
                 width={250}
                 height={80}
-                className="h-12 sm:h-16 md:h-20 w-auto object-contain"
+                className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto object-contain"
                 priority
               />
             ) : (
               <div className="flex items-center">
                 {/* Fallback logo */}
-                <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg sm:text-xl md:text-2xl">IG</span>
                 </div>
               </div>
@@ -229,7 +229,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6 xl:space-x-8">
             <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Home
             </Link>
@@ -241,6 +241,9 @@ export default function Header() {
             </Link>
             <Link href="/past-conferences" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Past Conferences
+            </Link>
+            <Link href="/gallery" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              Gallery
             </Link>
             {siteSettings?.journal?.showJournal && (
               <Link href="/journal" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
@@ -304,6 +307,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Past Conferences
+              </Link>
+              <Link
+                href="/gallery"
+                className="block px-3 py-3 text-gray-700 hover:text-blue-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Gallery
               </Link>
               {siteSettings?.journal?.showJournal && (
                 <Link
