@@ -534,7 +534,7 @@ export async function getTestimonialsData(): Promise<TestimonialsData | null> {
 
     const data = await client.fetch<TestimonialsData>(query, {}, {
       next: {
-        revalidate: 300, // Revalidate every 5 minutes
+        revalidate: 60, // Cache for 1 minute - faster updates
         tags: ['testimonials']
       }
     });
