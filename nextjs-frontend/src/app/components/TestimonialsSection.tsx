@@ -178,20 +178,51 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         <div className="relative">
           {/* Desktop: Show 3 cards, Tablet: Show 2 cards, Mobile: Show 1 card */}
           <div className="hidden lg:grid lg:grid-cols-3 gap-8">
-            {data.testimonials.slice(currentSlide, currentSlide + 3).concat(
-              data.testimonials.slice(0, Math.max(0, currentSlide + 3 - data.testimonials.length))
-            ).slice(0, 3).map((testimonial) => (
-              <TestimonialCard key={testimonial._key} testimonial={testimonial} />
-            ))}
+            {(() => {
+              if (data.testimonials.length === 1) {
+                // If only one testimonial, show it once in the center
+                return (
+                  <div className="col-start-2">
+                    <TestimonialCard key={data.testimonials[0]._key} testimonial={data.testimonials[0]} />
+                  </div>
+                );
+              } else if (data.testimonials.length === 2) {
+                // If two testimonials, show both
+                return data.testimonials.map((testimonial) => (
+                  <TestimonialCard key={testimonial._key} testimonial={testimonial} />
+                ));
+              } else {
+                // If 3 or more testimonials, use carousel logic
+                return data.testimonials.slice(currentSlide, currentSlide + 3).concat(
+                  data.testimonials.slice(0, Math.max(0, currentSlide + 3 - data.testimonials.length))
+                ).slice(0, 3).map((testimonial, index) => (
+                  <TestimonialCard key={`${testimonial._key}-${currentSlide}-${index}`} testimonial={testimonial} />
+                ));
+              }
+            })()}
           </div>
 
           {/* Tablet: Show 2 cards */}
           <div className="hidden md:grid md:grid-cols-2 lg:hidden gap-6">
-            {data.testimonials.slice(currentSlide, currentSlide + 2).concat(
-              data.testimonials.slice(0, Math.max(0, currentSlide + 2 - data.testimonials.length))
-            ).slice(0, 2).map((testimonial) => (
-              <TestimonialCard key={testimonial._key} testimonial={testimonial} />
-            ))}
+            {(() => {
+              if (data.testimonials.length === 1) {
+                // If only one testimonial, show it once in the center
+                return (
+                  <div className="col-span-2 flex justify-center">
+                    <div className="max-w-md">
+                      <TestimonialCard key={data.testimonials[0]._key} testimonial={data.testimonials[0]} />
+                    </div>
+                  </div>
+                );
+              } else {
+                // If 2 or more testimonials, use carousel logic
+                return data.testimonials.slice(currentSlide, currentSlide + 2).concat(
+                  data.testimonials.slice(0, Math.max(0, currentSlide + 2 - data.testimonials.length))
+                ).slice(0, 2).map((testimonial, index) => (
+                  <TestimonialCard key={`${testimonial._key}-${currentSlide}-${index}`} testimonial={testimonial} />
+                ));
+              }
+            })()}
           </div>
 
           {/* Mobile: Show 1 card */}
