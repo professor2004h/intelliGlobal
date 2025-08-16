@@ -27,14 +27,14 @@ import {
   getCustomContentSectionData,
   type CustomContentSectionData
 } from "./getCustomContentSectionStyling";
+import { getTestimonialsData, type TestimonialsData } from "./getSiteSettings";
 
 // Direct imports to avoid SSR bailout
 import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
 import LeafletMapLocations from "./components/LeafletMapLocations";
-import { getTestimonialsSection } from "./getTestimonialsSection";
-import TestimonialsCarousel from "./components/TestimonialsCarousel";
+import TestimonialsSection from "./components/TestimonialsSection";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -57,7 +57,7 @@ export default async function HomePage() {
       pastConferencesStyling,
       journalStyling,
       customContentData,
-      testimonials
+      testimonialsData
     ] = await Promise.allSettled([
       getConferenceEvents(12),
       getFeaturedPastConferences(4),
@@ -69,14 +69,14 @@ export default async function HomePage() {
       getPastConferencesSectionStyling(),
       getJournalSectionStyling(),
       getCustomContentSectionData(),
-      getTestimonialsSection()
+      getTestimonialsData()
     ]);
 
     // Only log detailed results in development
     if (process.env.NODE_ENV === 'development') {
-      const failedFetches = [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData]
+      const failedFetches = [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData, testimonialsData]
         .map((result, index) => {
-          const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData'];
+          const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData', 'testimonialsData'];
           return result.status === 'rejected' ? names[index] : null;
         })
         .filter(Boolean);
@@ -106,7 +106,7 @@ export default async function HomePage() {
       pastConferencesStyling: pastConferencesStyling.status === 'fulfilled' ? pastConferencesStyling.value : null,
       journalStyling: journalStyling.status === 'fulfilled' ? journalStyling.value : null,
       customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null,
-      testimonials: testimonials.status === 'fulfilled' ? testimonials.value : null
+      testimonialsData: testimonialsData.status === 'fulfilled' ? testimonialsData.value : null
     };
 
 
@@ -126,7 +126,7 @@ export default async function HomePage() {
       pastConferencesStyling={null}
       journalStyling={null}
       customContentData={null}
-      testimonials={null}
+      testimonialsData={null}
     />;
   }
 }
@@ -143,7 +143,7 @@ function HomePageContent({
   pastConferencesStyling,
   journalStyling,
   customContentData,
-  testimonials
+  testimonialsData
 }: {
   events: ConferenceEventType[];
   pastConferences: PastConferenceType[];
@@ -155,7 +155,7 @@ function HomePageContent({
   pastConferencesStyling: PastConferencesSectionStyling | null;
   journalStyling: JournalSectionStyling | null;
   customContentData: CustomContentSectionData | null;
-  testimonials: import('./getTestimonialsSection').TestimonialsSectionData | null;
+  testimonialsData: TestimonialsData | null;
 }) {
   // Use fallback data if needed
   const safeStatistics = statistics || getDefaultStatistics();
@@ -815,16 +815,8 @@ function HomePageContent({
         </section>
       )}
 
-      {/* Testimonials Section (Below Journal) */}
-      <section className="py-12 md:py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 md:mb-10">
-            <h3 className="text-3xl md:text-4xl font-bold text-slate-900">What Our Attendees Say</h3>
-          </div>
-          <TestimonialsCarousel data={testimonials} />
-        </div>
-      </section>
-
+      {/* Testimonials Section */}
+      <TestimonialsSection data={testimonialsData} />
 
       {/* Conference Locations Map Section - OpenStreetMap with Leaflet */}
       <LeafletMapLocations />

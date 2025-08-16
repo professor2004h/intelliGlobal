@@ -2033,6 +2033,56 @@ select:focus {
   }
 }
 
+/* Testimonials Carousel Styles */
+.testimonials-section {
+  position: relative;
+}
+
+.testimonials-grid {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Navigation button hover effects */
+.testimonials-nav-btn {
+  transition: all 0.3s ease;
+}
+
+.testimonials-nav-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Pagination dots */
+.testimonials-dot {
+  transition: all 0.3s ease;
+}
+
+.testimonials-dot:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .testimonials-nav-btn {
+    left: -8px;
+    right: -8px;
+  }
+
+  .testimonials-nav-btn:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
+/* Card hover effects */
+.testimonial-card {
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
 /* Ensure proper spacing between header and hero section - merged with main rule above */
 
 /* Responsive Hero Image Container - Desktop Cover, Mobile Contain */

@@ -15,7 +15,10 @@ export interface TestimonialsSectionData {
 
 export async function getTestimonialsSection(): Promise<TestimonialsSectionData | null> {
   try {
-    const query = `*[_type == "testimonialsSection"][0]{
+    const query = `*[_type == "testimonialsSection" && isActive == true] | order(_createdAt desc)[0]{
+      sectionTitle,
+      sectionSubtitle,
+      isActive,
       testimonials[]{
         customerName,
         review,
@@ -26,16 +29,16 @@ export async function getTestimonialsSection(): Promise<TestimonialsSectionData 
       }
     }`;
 
-    const data = await optimizedFetch<TestimonialsSectionData>(query, {}, {
+    const data = await optimizedFetch<any>(query, {}, {
       ttl: 5 * 60 * 1000,
       tags: ['testimonials-section'],
       useCache: true
     });
 
-    if (!data || !Array.isArray(data.testimonials)) return { testimonials: [] };
+    if (!data || !data.isActive || !Array.isArray(data.testimonials)) return { testimonials: [] };
 
     // Sanitize ratings into 1..5 and trim text
-    const normalized = data.testimonials.map((t) => ({
+    const normalized = data.testimonials.map((t: any) => ({
       imageUrl: t.imageUrl || null,
       customerName: (t.customerName || '').slice(0, 100),
       review: (t.review || '').slice(0, 500),
