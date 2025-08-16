@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getImageUrl } from '../getSiteSettings';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 interface Testimonial {
   _key: string;
@@ -64,7 +57,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const imageUrl = getImageUrl(testimonial.customerImage, { width: 80, height: 80, quality: 90 });
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 h-full border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+    <div className="testimonial-card bg-white rounded-xl shadow-lg p-6 h-full border border-gray-100">
       <StarRating rating={testimonial.rating} />
       
       <blockquote className="text-gray-700 text-base leading-relaxed mb-6 flex-grow">
@@ -106,17 +99,40 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 };
 
 export default function TestimonialsSection({ data }: TestimonialsSectionProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    if (!data?.testimonials?.length) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % data.testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [data?.testimonials?.length]);
+
   if (!data || !data.isActive || !data.testimonials?.length) {
     return null;
   }
 
-  // Don't render Swiper on server side to avoid hydration issues
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % data.testimonials.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + data.testimonials.length) % data.testimonials.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // Show static grid on server side to avoid hydration issues
   if (!isClient) {
     return (
       <section className="py-16 bg-white">
@@ -158,61 +174,68 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
         {/* Testimonials Carousel */}
         <div className="relative">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={24}
-            slidesPerView={1}
-            navigation={{
-              nextEl: '.testimonials-next',
-              prevEl: '.testimonials-prev',
-            }}
-            pagination={{
-              clickable: true,
-              el: '.testimonials-pagination',
-            }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 24,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 32,
-              },
-            }}
-            className="testimonials-swiper"
-          >
-            {data.testimonials.map((testimonial) => (
-              <SwiperSlide key={testimonial._key} className="h-auto">
-                <TestimonialCard testimonial={testimonial} />
-              </SwiperSlide>
+          {/* Desktop: Show 3 cards, Tablet: Show 2 cards, Mobile: Show 1 card */}
+          <div className="hidden lg:grid lg:grid-cols-3 gap-8">
+            {data.testimonials.slice(currentSlide, currentSlide + 3).concat(
+              data.testimonials.slice(0, Math.max(0, currentSlide + 3 - data.testimonials.length))
+            ).slice(0, 3).map((testimonial) => (
+              <TestimonialCard key={testimonial._key} testimonial={testimonial} />
             ))}
-          </Swiper>
+          </div>
 
-          {/* Custom Navigation Arrows */}
-          <button className="testimonials-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          
-          <button className="testimonials-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* Tablet: Show 2 cards */}
+          <div className="hidden md:grid md:grid-cols-2 lg:hidden gap-6">
+            {data.testimonials.slice(currentSlide, currentSlide + 2).concat(
+              data.testimonials.slice(0, Math.max(0, currentSlide + 2 - data.testimonials.length))
+            ).slice(0, 2).map((testimonial) => (
+              <TestimonialCard key={testimonial._key} testimonial={testimonial} />
+            ))}
+          </div>
 
-          {/* Custom Pagination */}
-          <div className="testimonials-pagination flex justify-center mt-8 space-x-2"></div>
+          {/* Mobile: Show 1 card */}
+          <div className="md:hidden">
+            <TestimonialCard testimonial={data.testimonials[currentSlide]} />
+          </div>
+
+          {/* Navigation Arrows */}
+          {data.testimonials.length > 1 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </>
+          )}
+
+          {/* Pagination Dots */}
+          {data.testimonials.length > 1 && (
+            <div className="flex justify-center mt-8 space-x-2">
+              {data.testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentSlide
+                      ? 'bg-blue-600 scale-125'
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
