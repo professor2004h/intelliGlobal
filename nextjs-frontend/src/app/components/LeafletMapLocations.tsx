@@ -155,9 +155,9 @@ const LeafletMapLocations: React.FC = () => {
         {!loading && !error && locations.length > 0 && (
           <div className="mt-8 lg:hidden">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-                <h3 className="text-xl font-semibold text-white">All Locations</h3>
-                <p className="text-blue-100 text-sm mt-1">Tap any location to view details</p>
+              <div className="bg-white px-6 py-4 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-black">All Locations</h3>
+                <p className="text-gray-600 text-sm mt-1">Tap any location to view details</p>
               </div>
               <div className="divide-y divide-gray-100">
                 {locations
