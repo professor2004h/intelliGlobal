@@ -814,6 +814,17 @@ function HomePageContent({
       )}
 
       {/* Testimonials Section */}
+      <section className="py-16 bg-yellow-100 border-4 border-yellow-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl font-bold text-yellow-800 mb-4">
+            🚧 TESTIMONIALS SECTION PLACEHOLDER 🚧
+          </h2>
+          <p className="text-yellow-700">
+            This is where the testimonials section should appear.
+            Data: {testimonialsData ? 'EXISTS' : 'NULL'}
+          </p>
+        </div>
+      </section>
       <TestimonialsSection data={testimonialsData} />
 
       {/* Conference Locations Map Section - OpenStreetMap with Leaflet */}
