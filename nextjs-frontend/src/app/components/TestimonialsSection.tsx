@@ -102,6 +102,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
+
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -253,16 +255,23 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
           {/* Pagination Dots */}
           {data.testimonials.length > 1 && (
-            <div className="flex justify-center mt-8 space-x-2">
-              {data.testimonials.map((_, index) => (
+            <div className="flex justify-center mt-6 sm:mt-8 space-x-1.5 sm:space-x-2 md:space-x-3">
+              {data.testimonials.map((_, index: number) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentSlide
-                      ? 'bg-blue-600 scale-125'
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
+                  className={`
+                    w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4
+                    rounded-full transition-all duration-300 ease-in-out
+                    ${index === currentSlide
+                      ? 'bg-blue-600 scale-110 sm:scale-125 shadow-md ring-2 ring-blue-200'
+                      : 'bg-gray-300 hover:bg-gray-400 hover:scale-105'
+                    }
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
+                    active:scale-95
+                  `}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                  aria-current={index === currentSlide ? 'true' : 'false'}
                 />
               ))}
             </div>
