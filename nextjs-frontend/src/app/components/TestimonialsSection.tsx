@@ -102,8 +102,6 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
-
-
   useEffect(() => {
     setIsClient(true);
   }, []);
