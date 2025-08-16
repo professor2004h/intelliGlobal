@@ -38,13 +38,23 @@ function overlayStyle(opacityPercent: number | undefined) {
 async function getGalleryPageData(): Promise<GalleryPageData | null> {
   const query = `*[_type == "galleryPage"] | order(_createdAt desc)[0]{
     _id,
-    heroBackgroundImage,
+    heroBackgroundImage{
+      asset->{
+        _id,
+        url
+      }
+    },
     heroTitle,
     heroSubtitle,
     heroOverlayOpacity,
     galleryImages[]{
       _key,
-      image,
+      image{
+        asset->{
+          _id,
+          url
+        }
+      },
       alt,
       caption,
       tags
@@ -53,6 +63,7 @@ async function getGalleryPageData(): Promise<GalleryPageData | null> {
 
   try {
     const data = await client.fetch<GalleryPageData>(query, {}, { next: { revalidate: 300, tags: ['gallery-page'] } });
+    console.log('Gallery page data fetched:', JSON.stringify(data, null, 2));
     return data || null;
   } catch (err) {
     console.error('Failed to fetch gallery page data:', err);
@@ -64,6 +75,7 @@ async function getGalleryPageData(): Promise<GalleryPageData | null> {
 
 function HeroSection({ data }: { data: GalleryPageData }) {
   const bgUrl = getImageUrl(data.heroBackgroundImage, { width: 1920, quality: 85, format: 'webp' });
+  console.log('Hero background image:', data.heroBackgroundImage, 'Generated URL:', bgUrl);
   const styleOverlay = overlayStyle(data.heroOverlayOpacity);
   return (
     <section className="relative min-h-[40vh] md:min-h-[50vh] w-full flex items-center justify-center overflow-hidden">
@@ -106,6 +118,7 @@ function GalleryGrid({ items }: { items: GalleryImageItem[] }) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {items.map((item) => {
             const url = getImageUrl(item.image, { width: 800, quality: 80, format: 'webp' });
+            console.log('Gallery item:', item._key, 'Image:', item.image, 'Generated URL:', url);
             if (!url) return null;
             return (
               <figure key={item._key} className="relative group overflow-hidden rounded-lg bg-white shadow-sm">
