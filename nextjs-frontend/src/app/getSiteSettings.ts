@@ -474,3 +474,65 @@ export function getLogoImageUrl(imageAsset: { asset?: { url?: string } } | null 
     format: 'webp'
   });
 }
+
+// Testimonials data interface
+export interface TestimonialsData {
+  _id: string;
+  sectionTitle?: string;
+  sectionSubtitle?: string;
+  isActive: boolean;
+  testimonials: Array<{
+    _key: string;
+    customerImage: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
+    };
+    customerName: string;
+    review: string;
+    rating: number;
+    position?: string;
+    company?: string;
+  }>;
+}
+
+// Function to fetch testimonials data
+export async function getTestimonialsData(): Promise<TestimonialsData | null> {
+  try {
+    const query = `*[_type == "testimonialsSection" && isActive == true] | order(_createdAt desc)[0]{
+      _id,
+      sectionTitle,
+      sectionSubtitle,
+      isActive,
+      testimonials[]{
+        _key,
+        customerImage{
+          asset->{
+            _id,
+            url
+          },
+          alt
+        },
+        customerName,
+        review,
+        rating,
+        position,
+        company
+      }
+    }`;
+
+    const data = await client.fetch<TestimonialsData>(query, {}, {
+      next: {
+        revalidate: 300, // Revalidate every 5 minutes
+        tags: ['testimonials']
+      }
+    });
+
+    return data || null;
+  } catch (error) {
+    console.error('Error fetching testimonials data:', error);
+    return null;
+  }
+}

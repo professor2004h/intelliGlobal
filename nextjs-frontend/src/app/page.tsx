@@ -27,12 +27,14 @@ import {
   getCustomContentSectionData,
   type CustomContentSectionData
 } from "./getCustomContentSectionStyling";
+import { getTestimonialsData, type TestimonialsData } from "./getSiteSettings";
 
 // Direct imports to avoid SSR bailout
 import ContactForm from "./components/ContactForm";
 import HeroSlideshow from "./components/HeroSlideshow";
 import StatisticsSection from "./components/StatisticsSection";
 import LeafletMapLocations from "./components/LeafletMapLocations";
+import TestimonialsSection from "./components/TestimonialsSection";
 
 export default async function HomePage() {
   // Optimized parallel data fetching with error handling
@@ -54,7 +56,8 @@ export default async function HomePage() {
       siteSettings,
       pastConferencesStyling,
       journalStyling,
-      customContentData
+      customContentData,
+      testimonialsData
     ] = await Promise.allSettled([
       getConferenceEvents(12),
       getFeaturedPastConferences(4),
@@ -65,14 +68,15 @@ export default async function HomePage() {
       getSiteSettingsSSR(),
       getPastConferencesSectionStyling(),
       getJournalSectionStyling(),
-      getCustomContentSectionData()
+      getCustomContentSectionData(),
+      getTestimonialsData()
     ]);
 
     // Only log detailed results in development
     if (process.env.NODE_ENV === 'development') {
-      const failedFetches = [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData]
+      const failedFetches = [events, pastConferences, about, hero, conference, statistics, siteSettings, pastConferencesStyling, journalStyling, customContentData, testimonialsData]
         .map((result, index) => {
-          const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData'];
+          const names = ['events', 'pastConferences', 'about', 'hero', 'conference', 'statistics', 'siteSettings', 'pastConferencesStyling', 'journalStyling', 'customContentData', 'testimonialsData'];
           return result.status === 'rejected' ? names[index] : null;
         })
         .filter(Boolean);
@@ -101,7 +105,8 @@ export default async function HomePage() {
       siteSettings: siteSettings.status === 'fulfilled' ? siteSettings.value : null,
       pastConferencesStyling: pastConferencesStyling.status === 'fulfilled' ? pastConferencesStyling.value : null,
       journalStyling: journalStyling.status === 'fulfilled' ? journalStyling.value : null,
-      customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null
+      customContentData: customContentData.status === 'fulfilled' ? customContentData.value : null,
+      testimonialsData: testimonialsData.status === 'fulfilled' ? testimonialsData.value : null
     };
 
 
@@ -148,6 +153,7 @@ function HomePageContent({
   pastConferencesStyling: PastConferencesSectionStyling | null;
   journalStyling: JournalSectionStyling | null;
   customContentData: CustomContentSectionData | null;
+  testimonialsData: TestimonialsData | null;
 }) {
   // Use fallback data if needed
   const safeStatistics = statistics || getDefaultStatistics();
@@ -804,6 +810,9 @@ function HomePageContent({
           </div>
         </section>
       )}
+
+      {/* Testimonials Section */}
+      <TestimonialsSection data={testimonialsData} />
 
       {/* Conference Locations Map Section - OpenStreetMap with Leaflet */}
       <LeafletMapLocations />

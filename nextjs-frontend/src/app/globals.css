@@ -2033,6 +2033,60 @@ select:focus {
   }
 }
 
+/* Testimonials Carousel Styles */
+.testimonials-swiper {
+  padding-bottom: 2rem;
+}
+
+.testimonials-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.testimonials-swiper .swiper-slide > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Custom pagination styles */
+.testimonials-pagination .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: #d1d5db;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.testimonials-pagination .swiper-pagination-bullet-active {
+  background-color: #3b82f6;
+  transform: scale(1.2);
+}
+
+/* Navigation button hover effects */
+.testimonials-prev:hover,
+.testimonials-next:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .testimonials-prev {
+    left: -8px;
+    transform: translateX(0) translateY(-50%);
+  }
+
+  .testimonials-next {
+    right: -8px;
+    transform: translateX(0) translateY(-50%);
+  }
+
+  .testimonials-prev:hover,
+  .testimonials-next:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
 /* Ensure proper spacing between header and hero section - merged with main rule above */
 
 /* Responsive Hero Image Container - Desktop Cover, Mobile Contain */

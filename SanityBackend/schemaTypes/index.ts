@@ -14,6 +14,7 @@ import customContentSection from './customContentSection';
 import cancellationPolicy from './cancellationPolicy';
 import shippingPolicy from './shippingPolicy';
 import galleryPage from './galleryPage';
+import testimonialsSection from './testimonialsSection';
 
 import mapLocation from './mapLocation';
 
@@ -35,5 +36,6 @@ export const schemaTypes = [
   cancellationPolicy,
   shippingPolicy,
   galleryPage,
+  testimonialsSection,
   mapLocation
 ]
