@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { generateInvoiceHTML } from '../components/InvoiceTemplate';
+import { type Currency } from '../getSponsorshipData';
 
 interface EmailData {
   to: string | string[];
@@ -24,7 +25,7 @@ interface InvoiceEmailData {
   conference: string;
   sponsorshipTier: string;
   amount: number;
-  currency: string;
+  currency: Currency;
   paymentId: string;
   billingAddress: {
     street: string;
