@@ -102,6 +102,12 @@ export default function SponsorRegistrationFormWrapper() {
           name: 'Platinum Elite Sponsor',
           slug: { current: 'platinum-elite' },
           price: 25000,
+          pricing: {
+            usd: 25000,
+            eur: 21250,
+            gbp: 18750,
+            inr: 2075000
+          },
           description: 'Premium sponsorship package with maximum visibility and benefits',
           benefits: [
             { benefit: 'Prime exhibition booth (20x20 ft) in high-traffic area', highlighted: true },
@@ -121,6 +127,12 @@ export default function SponsorRegistrationFormWrapper() {
           name: 'Gold Premier Sponsor',
           slug: { current: 'gold-premier' },
           price: 15000,
+          pricing: {
+            usd: 15000,
+            eur: 12750,
+            gbp: 11250,
+            inr: 1245000
+          },
           description: 'Comprehensive sponsorship with excellent visibility and networking opportunities',
           benefits: [
             { benefit: 'Premium exhibition booth (15x15 ft)', highlighted: true },
@@ -140,6 +152,12 @@ export default function SponsorRegistrationFormWrapper() {
           name: 'Silver Professional Sponsor',
           slug: { current: 'silver-professional' },
           price: 8500,
+          pricing: {
+            usd: 8500,
+            eur: 7225,
+            gbp: 6375,
+            inr: 705500
+          },
           description: 'Professional sponsorship package with solid brand exposure',
           benefits: [
             { benefit: 'Standard exhibition booth (10x10 ft)', highlighted: true },
@@ -159,6 +177,12 @@ export default function SponsorRegistrationFormWrapper() {
           name: 'Bronze Startup Sponsor',
           slug: { current: 'bronze-startup' },
           price: 3500,
+          pricing: {
+            usd: 3500,
+            eur: 2975,
+            gbp: 2625,
+            inr: 290500
+          },
           description: 'Entry-level sponsorship perfect for startups and smaller companies',
           benefits: [
             { benefit: 'Shared exhibition space (6x6 ft)', highlighted: true },
