@@ -9,7 +9,7 @@ interface LocalSponsorshipTier {
   _id: string;
   name: string;
   slug: { current: string };
-  pricing?: {
+  pricing: {
     usd: number;
     eur: number;
     gbp: number;
@@ -222,6 +222,12 @@ export default function SponsorRegistrationFormWrapper() {
           order: tier.order || index + 1,
           featured: tier.featured || false,
           active: tier.active !== false,
+          pricing: tier.pricing || {
+            usd: tier.price || 1000,
+            eur: Math.round((tier.price || 1000) * 0.85),
+            gbp: Math.round((tier.price || 1000) * 0.75),
+            inr: Math.round((tier.price || 1000) * 83)
+          },
           benefits: tier.benefits?.map(b => ({
             benefit: typeof b === 'string' ? b : b.benefit,
             highlighted: typeof b === 'object' && 'highlighted' in b ? b.highlighted : false
