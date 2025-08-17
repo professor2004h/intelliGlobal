@@ -9,7 +9,14 @@ interface LocalSponsorshipTier {
   _id: string;
   name: string;
   slug: { current: string };
-  price: number;
+  pricing?: {
+    usd: number;
+    eur: number;
+    gbp: number;
+    inr: number;
+  };
+  // Legacy field for backward compatibility
+  price?: number;
   description?: string;
   benefits: Array<{ benefit: string; highlighted: boolean }>;
   color?: { hex: string };
