@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency, formatDate } from '../getSponsorshipData';
+import { formatCurrency, formatDate, type Currency } from '../getSponsorshipData';
 
 interface InvoiceData {
   invoiceNumber: string;
@@ -10,7 +10,7 @@ interface InvoiceData {
   conference: string;
   sponsorshipTier: string;
   amount: number;
-  currency: string;
+  currency: Currency;
   paymentId: string;
   billingAddress: {
     street: string;
