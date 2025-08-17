@@ -15,15 +15,27 @@ Type error: Argument of type 'string' is not assignable to parameter of type 'Cu
 ### **Root Cause:**
 The `InvoiceTemplate.tsx` component was using a `string` type for currency, but the `formatCurrency` function expects a `Currency` union type (`'USD' | 'EUR' | 'GBP' | 'INR'`).
 
-### **Solution Applied:**
-1. **Updated Import**: Added `Currency` type import from `getSponsorshipData`
-2. **Fixed Interface**: Changed `currency: string` to `currency: Currency` in `InvoiceData` interface
-3. **Type Safety**: Ensured proper type compatibility throughout the component
+### **Solutions Applied:**
+
+#### **1. InvoiceTemplate.tsx Fix:**
+- **Import Added**: `import { type Currency } from '../getSponsorshipData'`
+- **Interface Updated**: `currency: string` → `currency: Currency`
+- **Result**: Fixed formatCurrency function compatibility
+
+#### **2. EmailService.ts Fix:**
+- **Import Added**: `import { type Currency } from '../getSponsorshipData'`
+- **Interface Updated**: `InvoiceEmailData.currency: string` → `currency: Currency`
+- **Result**: Fixed generateInvoiceHTML function compatibility
+
+#### **3. Payment API Routes Fix:**
+- **Import Added**: `import { type Currency } from '../../../getSponsorshipData'`
+- **Type Casting**: `'USD'` → `'USD' as Currency`
+- **Result**: Fixed all hardcoded currency string assignments
 
 ## 🚀 **GitHub Deployment Status**
 
 ### **Repository**: https://github.com/professor-blion/Event-website.git
-### **Latest Commit**: `bca49a7` - TypeScript fix applied
+### **Latest Commit**: `460f981` - All TypeScript fixes applied
 ### **Status**: ✅ Successfully Pushed
 
 **Changes Deployed:**
@@ -73,10 +85,18 @@ The `InvoiceTemplate.tsx` component was using a `string` type for currency, but 
 ## 📊 **Commit History**
 
 ### **Recent Commits:**
-1. `bca49a7` - **TypeScript Fix** (Latest)
-   - Fixed Currency type error in InvoiceTemplate
-   - Resolved Docker build failure
-   - Maintained all existing functionality
+1. `460f981` - **Complete TypeScript Fix** (Latest)
+   - Fixed Currency type errors in payment API routes
+   - Added proper type casting for all currency fields
+   - Resolved all remaining TypeScript compilation issues
+
+2. `ab74b1a` - **EmailService TypeScript Fix**
+   - Fixed Currency type error in emailService.ts
+   - Updated InvoiceEmailData interface
+
+3. `bca49a7` - **InvoiceTemplate TypeScript Fix**
+   - Fixed Currency type error in InvoiceTemplate.tsx
+   - Updated InvoiceData interface
 
 2. `4dfd683` - **Documentation Update**
    - Added comprehensive deployment summary
