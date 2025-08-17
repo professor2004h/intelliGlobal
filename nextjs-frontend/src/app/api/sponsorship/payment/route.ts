@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
-import { generateInvoiceNumber } from '../../../getSponsorshipData';
+import { generateInvoiceNumber, type Currency } from '../../../getSponsorshipData';
 import { sendInvoiceEmail, sendPaymentConfirmationEmail, sendSponsorshipNotification, type SponsorshipNotificationData } from '../../../lib/emailService';
 
 const client = createClient({
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       paymentId,
       paymentMethod: 'razorpay',
       amount: Number(amount),
-      currency: 'USD',
+      currency: 'USD' as Currency,
       paymentDate: new Date().toISOString(),
       invoiceNumber,
     };
@@ -209,7 +209,7 @@ async function generateInvoice(registration: any, paymentDetails: any) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = 'USD', registrationId } = body;
+    const { amount, currency = 'USD' as Currency, registrationId } = body;
 
     // In a real implementation, you would create a Razorpay order here
     // const Razorpay = require('razorpay');
