@@ -5,6 +5,10 @@ import { PortableTextBlock } from '@portabletext/types';
 export interface ConferenceType {
   title: string;
   description: PortableTextBlock[]; // Portable Text content
+  backgroundImage?: {
+    url: string;
+    alt?: string;
+  };
 }
 
 export interface ConferenceEventType {
@@ -25,7 +29,11 @@ export async function getConferences(): Promise<ConferenceType | null> {
   try {
     const query = `*[_type == "conferences"][0]{
       title,
-      description
+      description,
+      "backgroundImage": backgroundImage{
+        "url": asset->url,
+        alt
+      }
     }`;
 
     const data = await optimizedFetch<ConferenceType>(query, {}, {

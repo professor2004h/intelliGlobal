@@ -310,15 +310,8 @@ export default function SponsorRegistrationFormWrapper() {
     return () => clearTimeout(timer);
   }, [fetchData]);
 
-  // Auto-refresh data every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('⏰ CLIENT: Auto-refresh triggered...');
-      fetchData();
-    }, 30000); // 30-second refresh
-
-    return () => clearInterval(interval);
-  }, [fetchData]);
+  // Auto-refresh removed to prevent form disruption during user input
+  // Data is loaded once on component mount and can be manually refreshed if needed
 
   if (loading) {
     return (

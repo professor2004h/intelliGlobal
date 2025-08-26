@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // EMERGENCY WEBPACK CONFIGURATION - Zero chunk splitting
+  // Simplified webpack configuration for stability
   webpack: (config, { dev }) => {
     // Add SVG support
     config.module.rules.push({
@@ -36,47 +36,25 @@ const nextConfig: NextConfig = {
       use: ['@svgr/webpack'],
     });
 
+    // Only apply minimal optimizations in development
     if (dev) {
-      // EMERGENCY: Completely disable ALL chunk splitting and optimization
-      config.optimization = {
-        splitChunks: false,
-        runtimeChunk: false,
-        minimize: false,
-        concatenateModules: false,
-        usedExports: false,
-        sideEffects: false,
-      };
-
-      // EMERGENCY: Single bundle configuration
+      // Increase chunk loading timeout for slower systems
       config.output = {
         ...config.output,
-        chunkLoadTimeout: 60000,
-        crossOriginLoading: false,
-        filename: 'static/js/[name].js',
-        chunkFilename: 'static/js/[name].js',
+        chunkLoadTimeout: 120000, // 2 minutes
       };
 
-      // EMERGENCY: Disable all module resolution optimizations
+      // Ensure proper module resolution
       config.resolve = {
         ...config.resolve,
         symlinks: false,
-        cacheWithContext: false,
       };
-
-      // EMERGENCY: Disable caching
-      config.cache = false;
     }
 
     return config;
   },
 
-  // EMERGENCY: Disable on-demand entries
-  ...(isDev && {
-    onDemandEntries: {
-      maxInactiveAge: 1000 * 60 * 60, // 1 hour
-      pagesBufferLength: 10,
-    },
-  }),
+
 
   // Production configuration for standalone output
   output: 'standalone',

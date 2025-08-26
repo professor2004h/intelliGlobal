@@ -18,6 +18,25 @@ const conferences = defineType({
       of: [{ type: 'block' }],
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'backgroundImage',
+      title: 'Hero Section Background Image',
+      type: 'image',
+      description: 'Upload a background image for the conferences page hero section. If no image is provided, the default gradient background will be used.',
+      options: {
+        hotspot: true,
+        accept: '.png,.jpg,.jpeg,.webp',
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alt Text',
+          description: 'Describe the background image for accessibility',
+          validation: (Rule) => Rule.max(100),
+        }
+      ],
+    }),
   ],
 });
 
