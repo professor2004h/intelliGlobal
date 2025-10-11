@@ -2,7 +2,7 @@ const { createClient } = require('next-sanity');
 
 // Create a fresh client (no CDN) to test FAQ data
 const freshClient = createClient({
-  projectId: 'tq1qdk3m',
+  projectId: '80vqb77v',
   dataset: 'production',
   apiVersion: '2023-05-03',
   useCdn: false, // No CDN to get fresh data

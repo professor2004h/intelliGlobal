@@ -18,7 +18,7 @@ export async function GET(_request: NextRequest) {
       services: {
         sanity: {
           status: sanityConnected ? 'connected' : 'disconnected',
-          projectId: 'tq1qdk3m',
+          projectId: '80vqb77v',
           dataset: 'production',
           apiVersion: '2023-05-03'
         },

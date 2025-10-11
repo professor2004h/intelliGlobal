@@ -10,7 +10,7 @@ export default defineConfig({
   name: 'default',
   title: 'Eventapp',
 
-  projectId: 'tq1qdk3m',
+  projectId: '80vqb77v',
   dataset: 'production',
   apiVersion: '2023-05-03',
 

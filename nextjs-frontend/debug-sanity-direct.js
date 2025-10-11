@@ -5,7 +5,7 @@ console.log('🔍 DIRECT SANITY CONNECTION TEST');
 console.log('================================');
 
 const client = createClient({
-  projectId: 'tq1qdk3m',
+  projectId: '80vqb77v',
   dataset: 'production',
   apiVersion: '2023-05-03',
   useCdn: true,
