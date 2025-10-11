@@ -1,5 +1,5 @@
 {
-  "name": "eventapp",
+  "name": "intelli-vizax",
   "private": true,
   "version": "1.0.0",
   "main": "package.json",
@@ -18,12 +18,12 @@
   ],
   "dependencies": {
     "@sanity/color-input": "^3.1.0",
-    "@sanity/vision": "^4.4.1",
+    "@sanity/vision": "^4.10.2",
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "sanity": "^4.4.1",
+    "sanity": "^4.10.2",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {

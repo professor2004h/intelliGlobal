@@ -9,12 +9,12 @@ async function deploy() {
     await runCommand('npx', ['sanity', 'build']);
 
     // Deploy with hostname
-    console.log('🌐 Deploying to intelliglobalconferences.sanity.studio...');
+    console.log('🌐 Deploying to intelli-vizax.sanity.studio...');
     const deployProcess = spawn('npx', ['sanity', 'deploy'], { stdio: ['pipe', 'inherit', 'inherit'] });
 
     // Send the hostname when prompted
     setTimeout(() => {
-      deployProcess.stdin.write('intelliglobalconferences\n');
+      deployProcess.stdin.write('intelli-vizax\n');
     }, 2000);
 
     await new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ async function deploy() {
     });
 
     console.log('✅ Deployment completed successfully!');
-    console.log('🔗 Studio URL: https://intelliglobalconferences.sanity.studio');
+    console.log('🔗 Studio URL: https://intelli-vizax.sanity.studio');
 
   } catch (error) {
     console.error('❌ Deployment failed:', error.message);

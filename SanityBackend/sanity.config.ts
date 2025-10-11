@@ -8,11 +8,11 @@ import deskStructure from './deskStructure'
 
 export default defineConfig({
   name: 'default',
-  title: 'Eventapp',
+  title: 'Intelli-Vizax',
 
   projectId: '80vqb77v',
   dataset: 'production',
-  apiVersion: '2023-05-03',
+  apiVersion: '2023-05-05',
 
   plugins: [structureTool({structure: deskStructure}), visionTool(), colorInput()],
 
