@@ -2,7 +2,7 @@ const https = require('https');
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-const PROJECT_ID = '80vqb77v';
+const PROJECT_ID = '99kpz7t0';
 const DESIRED_HOSTNAME = 'intelli-vizax';
 
 // Try to get the auth token from Sanity CLI config

@@ -15,7 +15,7 @@ All Sanity CMS credentials have been successfully migrated from the old project 
 ## ✅ COMPLETED TASKS
 
 ### 1. Credential Replacement
-- ✅ Replaced old project ID `tq1qdk3m` with new project ID `80vqb77v`
+- ✅ Replaced old project ID `tq1qdk3m` with new project ID `99kpz7t0`
 - ✅ Updated API token in `.env.example` and `.env.local`
 - ✅ Updated 50+ files across the codebase
 - ✅ Verified no old credentials remain
@@ -47,10 +47,10 @@ All Sanity CMS credentials have been successfully migrated from the old project 
 
 ### Sanity Project Configuration
 ```
-Project ID: 80vqb77v
+Project ID: 99kpz7t0
 Dataset: production
 API Version: 2023-05-03
-API Token: skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7RpaXmkuUtFvnDIho7RcAN4WqRPiDr5lJl3Vi7MRED50PyXPY5FxtGbg63IEym8mYKl2vl5xwqMNLxYng7NgissgXJ71oSyet3KEdAkOxsvvY4r49Fv
+API Token: sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES
 ```
 
 ### Server URLs
@@ -65,7 +65,7 @@ API Token: skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7Rpa
 ### Backend (Sanity Studio)
 ```
 ✅ Running on: http://localhost:3333/
-✅ Project ID: 80vqb77v
+✅ Project ID: 99kpz7t0
 ✅ Dataset: production
 ✅ Status: Ready and operational
 ```
@@ -90,7 +90,7 @@ API Token: skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7Rpa
 ## ⚠️ IMPORTANT NOTES
 
 ### Expected Behavior
-The new Sanity project (80vqb77v) is currently empty, so you may see errors like:
+The new Sanity project (99kpz7t0) is currently empty, so you may see errors like:
 - "Invalid site settings data structure"
 - "No valid cached site settings available"
 - Missing register button data
@@ -108,7 +108,7 @@ You need to add content to the new Sanity project. You can either:
 
 **Option B: Import from Old Project**
 1. Export data from old project (tq1qdk3m)
-2. Import into new project (80vqb77v)
+2. Import into new project (99kpz7t0)
 3. Use Sanity CLI tools for migration
 
 **Option C: Use Population Scripts**
@@ -122,8 +122,8 @@ node populate-sponsorship-data.js
 #### 2. Update Production Environment
 When deploying to production (Coolify), update these environment variables:
 ```
-NEXT_PUBLIC_SANITY_PROJECT_ID=80vqb77v
-SANITY_API_TOKEN=skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7RpaXmkuUtFvnDIho7RcAN4WqRPiDr5lJl3Vi7MRED50PyXPY5FxtGbg63IEym8mYKl2vl5xwqMNLxYng7NgissgXJ71oSyet3KEdAkOxsvvY4r49Fv
+NEXT_PUBLIC_SANITY_PROJECT_ID=99kpz7t0
+SANITY_API_TOKEN=sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES
 ```
 
 #### 3. Revoke Old Credentials
@@ -143,7 +143,7 @@ For security, revoke the old API tokens from the old Sanity project:
 ✅ Old project ID (fl5uetho): NOT FOUND
 ✅ Old project ID (zt8218vh): NOT FOUND
 ✅ Old project ID (n3no08m3): NOT FOUND
-✅ New project ID (80vqb77v): FOUND in 50+ files
+✅ New project ID (99kpz7t0): FOUND in 50+ files
 ```
 
 ### Manual Verification

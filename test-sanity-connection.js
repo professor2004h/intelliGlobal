@@ -1,7 +1,7 @@
 const { createClient } = require('@sanity/client');
 
 const client = createClient({
-  projectId: '80vqb77v',
+  projectId: '99kpz7t0',
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
@@ -68,7 +68,7 @@ async function testConnection() {
     
     console.log('\n🎉 All tests passed! Sanity backend is properly connected.');
     console.log('\n📋 Summary:');
-    console.log('- Project ID: 80vqb77v');
+    console.log('- Project ID: 99kpz7t0');
     console.log('- Dataset: production');
     console.log('- API Version: 2024-01-01');
     console.log('- CDN: Disabled for real-time updates');

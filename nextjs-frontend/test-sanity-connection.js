@@ -4,7 +4,7 @@ console.log('🔍 Testing Sanity CMS Connection...\n');
 
 // Create Sanity client with exact same config as the app
 const client = createClient({
-  projectId: '80vqb77v',
+  projectId: '99kpz7t0',
   dataset: 'production',
   apiVersion: '2023-05-03',
   useCdn: true,
@@ -117,7 +117,7 @@ async function testConnection() {
       console.error('Check project ID and dataset permissions');
     } else {
       console.error('\n🔧 Configuration issue detected');
-      console.error('Check project ID: 80vqb77v');
+      console.error('Check project ID: 99kpz7t0');
       console.error('Check dataset: production');
     }
     

@@ -8,7 +8,7 @@ To ensure that changes made in the Sanity backend immediately reflect on the Nex
 ### 1. Access Sanity Management Console
 1. Go to [https://www.sanity.io/manage](https://www.sanity.io/manage)
 2. Log in with your Sanity account
-3. Select your project: **Eventapp** (Project ID: `80vqb77v`)
+3. Select your project: **Eventapp** (Project ID: `99kpz7t0`)
 
 ### 2. Navigate to Webhooks
 1. In the project dashboard, click on **"API"** in the left sidebar

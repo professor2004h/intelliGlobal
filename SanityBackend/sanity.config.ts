@@ -10,7 +10,7 @@ export default defineConfig({
   name: 'default',
   title: 'Intelli-Vizax',
 
-  projectId: '80vqb77v',
+  projectId: '99kpz7t0',
   dataset: 'production',
   apiVersion: '2023-05-05',
 

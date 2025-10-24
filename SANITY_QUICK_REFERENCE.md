@@ -13,7 +13,7 @@ npm run dev
 **URL:** http://localhost:3333/
 
 ### Management Console
-**URL:** https://www.sanity.io/manage/project/80vqb77v
+**URL:** https://www.sanity.io/manage/project/99kpz7t0
 
 ---
 
@@ -39,7 +39,7 @@ start-server.bat     # Start local server (Windows)
 
 | Setting | Value |
 |---------|-------|
-| **Project ID** | 80vqb77v |
+| **Project ID** | 99kpz7t0 |
 | **Dataset** | production |
 | **Studio Hostname** | intelli-vizax |
 | **App ID** | rjzxyvu2ny8ddn5f5nfcpml9 |
@@ -99,7 +99,7 @@ The Next.js frontend is configured to connect to this Sanity project:
 **File:** `nextjs-frontend/src/app/sanity/client.ts`
 
 ```typescript
-const projectId = "80vqb77v";
+const projectId = "99kpz7t0";
 const dataset = "production";
 const apiVersion = "2023-05-03";
 ```
@@ -242,20 +242,20 @@ npx sanity schema validate
 ## 📊 Monitoring & Analytics
 
 ### Check Studio Usage
-Visit: https://www.sanity.io/manage/project/80vqb77v/usage
+Visit: https://www.sanity.io/manage/project/99kpz7t0/usage
 
 ### View API Logs
-Visit: https://www.sanity.io/manage/project/80vqb77v/api
+Visit: https://www.sanity.io/manage/project/99kpz7t0/api
 
 ### Monitor Performance
-Visit: https://www.sanity.io/manage/project/80vqb77v/insights
+Visit: https://www.sanity.io/manage/project/99kpz7t0/insights
 
 ---
 
 ## 🔗 Important Links
 
 - **Live Studio:** https://intelli-vizax.sanity.studio/
-- **Project Management:** https://www.sanity.io/manage/project/80vqb77v
+- **Project Management:** https://www.sanity.io/manage/project/99kpz7t0
 - **Sanity Documentation:** https://www.sanity.io/docs
 - **Sanity Community:** https://snty.link/community
 - **GitHub Issues:** https://github.com/sanity-io/sanity/issues

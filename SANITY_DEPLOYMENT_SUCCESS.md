@@ -9,7 +9,7 @@
 ## ✅ Deployment Summary
 
 ### **Studio Information**
-- **Project ID:** 80vqb77v
+- **Project ID:** 99kpz7t0
 - **Dataset:** production
 - **Studio Hostname:** intelli-vizax
 - **App ID:** rjzxyvu2ny8ddn5f5nfcpml9
@@ -27,7 +27,7 @@ import {defineCliConfig} from 'sanity/cli'
 
 export default defineCliConfig({
   api: {
-    projectId: '80vqb77v',
+    projectId: '99kpz7t0',
     dataset: 'production'
   },
   
@@ -59,7 +59,7 @@ Already had the correct title:
 export default defineConfig({
   name: 'default',
   title: 'Intelli-Vizax',  // ✅ Correct
-  projectId: '80vqb77v',
+  projectId: '99kpz7t0',
   dataset: 'production',
   // ...
 })
@@ -123,7 +123,7 @@ npm run dev
 ```
 
 ### **Sanity Management Console:**
-https://www.sanity.io/manage/project/80vqb77v
+https://www.sanity.io/manage/project/99kpz7t0
 
 ---
 

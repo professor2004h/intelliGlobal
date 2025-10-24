@@ -1,7 +1,7 @@
 const https = require('https');
 const fs = require('fs');
 
-const PROJECT_ID = '80vqb77v';
+const PROJECT_ID = '99kpz7t0';
 
 function getSanityAuthToken() {
   try {

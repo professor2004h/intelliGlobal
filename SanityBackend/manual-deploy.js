@@ -4,7 +4,7 @@ const path = require('path');
 const https = require('https');
 const FormData = require('form-data');
 
-const PROJECT_ID = '80vqb77v';
+const PROJECT_ID = '99kpz7t0';
 const STUDIO_HOSTNAME = 'intelli-vizax';
 
 function getSanityAuthToken() {

@@ -1,7 +1,7 @@
 # 🚀 Sanity Studio Deployment Status - "Intelli-Vizax"
 
 **Date:** October 11, 2025  
-**Project ID:** 80vqb77v  
+**Project ID:** 99kpz7t0  
 **Studio Name:** Intelli-Vizax  
 **Studio Hostname:** intelli-vizax
 
@@ -64,7 +64,7 @@ The Sanity CLI deploy command is generating the hostname from the organization n
 
 1. **Open Sanity Management:**
    ```
-   https://www.sanity.io/manage/project/80vqb77v
+   https://www.sanity.io/manage/project/99kpz7t0
    ```
 
 2. **Navigate to Studio/Hosting Section:**
@@ -144,7 +144,7 @@ Once deployment is complete:
 ### **Project Details:**
 ```json
 {
-  "id": "80vqb77v",
+  "id": "99kpz7t0",
   "displayName": "Intelli.Vizax",
   "studioHost": "intelli-vizax",
   "organizationId": "oe1LyuLxG",
@@ -218,7 +218,7 @@ npm run dev
 - ⏳ Verify deployment at https://intelli-vizax.sanity.studio
 
 ### **Recommended Action:**
-Visit https://www.sanity.io/manage/project/80vqb77v and manually complete the deployment by uploading the `dist/` folder or using the deploy button in the management interface.
+Visit https://www.sanity.io/manage/project/99kpz7t0 and manually complete the deployment by uploading the `dist/` folder or using the deploy button in the management interface.
 
 ---
 

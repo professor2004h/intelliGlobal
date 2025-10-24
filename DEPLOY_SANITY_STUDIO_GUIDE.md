@@ -1,6 +1,6 @@
 # 🚀 Deploy Sanity Studio as "Intelli-Vizax" - Guide
 
-**Project ID:** 80vqb77v  
+**Project ID:** 99kpz7t0  
 **Desired Studio Name:** Intelli-Vizax  
 **Issue:** Hostname "intelliglobalconferences" is already taken
 
@@ -14,7 +14,7 @@ File: `SanityBackend/sanity.config.ts`
 export default defineConfig({
   name: 'default',
   title: 'Intelli-Vizax',  // ✅ Updated from 'Eventapp'
-  projectId: '80vqb77v',
+  projectId: '99kpz7t0',
   dataset: 'production',
   apiVersion: '2023-05-05',  // ✅ Updated
   // ... rest of config
@@ -60,7 +60,7 @@ You need to manually set the studio hostname through the Sanity management inter
    ```bash
    npx sanity manage
    ```
-   Or visit: https://www.sanity.io/manage/project/80vqb77v
+   Or visit: https://www.sanity.io/manage/project/99kpz7t0
 
 2. **Navigate to Settings:**
    - Click on "Settings" in the left sidebar
@@ -130,7 +130,7 @@ Once the hostname is set and deployment is successful, you will see:
 ### **Access Your Studio:**
 - **URL:** https://[your-hostname].sanity.studio
 - **Local Dev:** http://localhost:3333/
-- **Project Dashboard:** https://www.sanity.io/manage/project/80vqb77v
+- **Project Dashboard:** https://www.sanity.io/manage/project/99kpz7t0
 
 ---
 

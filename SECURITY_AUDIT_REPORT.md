@@ -27,8 +27,8 @@ A comprehensive security audit was performed across the entire codebase to ident
 - **Old API Tokens:** None found in codebase
 
 ### New Credentials (DEPLOYED)
-- **New Project ID:** `80vqb77v`
-- **New API Token:** `skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7RpaXmkuUtFvnDIho7RcAN4WqRPiDr5lJl3Vi7MRED50PyXPY5FxtGbg63IEym8mYKl2vl5xwqMNLxYng7NgissgXJ71oSyet3KEdAkOxsvvY4r49Fv`
+- **New Project ID:** `99kpz7t0`
+- **New API Token:** `sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES`
 - **Dataset:** `production` (unchanged)
 - **API Version:** `2023-05-03` (unchanged)
 
@@ -138,7 +138,7 @@ Key configuration files verified:
    - Create `.env.local` file in `nextjs-frontend/` directory
    - Add the new Sanity API token:
      ```
-     SANITY_API_TOKEN=skIbpWoMJVxOPmjivtDcEctbnIIWH5avfIZHokPP57bb6oFcWTFYPS8TpqfTzDITy7RpaXmkuUtFvnDIho7RcAN4WqRPiDr5lJl3Vi7MRED50PyXPY5FxtGbg63IEym8mYKl2vl5xwqMNLxYng7NgissgXJ71oSyet3KEdAkOxsvvY4r49Fv
+     SANITY_API_TOKEN=sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES
      ```
 
 3. **Test Connection**
@@ -201,7 +201,7 @@ All credential replacement complete!
 
 ## 📝 NOTES
 
-- The new Sanity project ID `80vqb77v` is now active across the entire codebase
+- The new Sanity project ID `99kpz7t0` is now active across the entire codebase
 - All references to the old project ID `tq1qdk3m` have been successfully removed
 - The API token has been updated in the `.env.example` file
 - Developers need to create their own `.env.local` file with the new token
