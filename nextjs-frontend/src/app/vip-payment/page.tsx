@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
-import '@/types/paypal-global';
 
 interface Conference {
   _id: string;
