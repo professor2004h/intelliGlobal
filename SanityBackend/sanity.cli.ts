@@ -9,7 +9,7 @@ export default defineCliConfig({
   /**
    * Studio hostname and deployment configuration
    */
-  studioHost: 'intelli-vizax',
+  studioHost: 'intelliglobal',
 
   deployment: {
     /**
@@ -17,6 +17,6 @@ export default defineCliConfig({
      * Learn more at https://www.sanity.io/docs/cli#auto-updates
      */
     autoUpdates: true,
-    appId: 'rjzxyvu2ny8ddn5f5nfcpml9'
+    appId: 'cknicz692k90iqgb49uln3g2'
   }
 })

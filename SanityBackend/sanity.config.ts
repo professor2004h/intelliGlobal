@@ -8,7 +8,7 @@ import deskStructure from './deskStructure'
 
 export default defineConfig({
   name: 'default',
-  title: 'Intelli-Vizax',
+  title: 'IntelliGlobal',
 
   projectId: '99kpz7t0',
   dataset: 'production',
