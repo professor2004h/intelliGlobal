@@ -17,6 +17,7 @@ import galleryPage from './galleryPage';
 import testimonialsSection from './testimonialsSection';
 
 import mapLocation from './mapLocation';
+import specialRegistration from './specialRegistration';
 
 
 export const schemaTypes = [
@@ -37,5 +38,6 @@ export const schemaTypes = [
   shippingPolicy,
   galleryPage,
   testimonialsSection,
-  mapLocation
+  mapLocation,
+  specialRegistration
 ]

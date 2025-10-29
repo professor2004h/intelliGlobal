@@ -1,4 +1,5 @@
 // Custom Sanity Studio structure to include Map Location in the sidebar
+import {SpecialRegistrationsTable} from './components/SpecialRegistrationsTable'
 
 export default (S) =>
   S.list()
@@ -26,5 +27,14 @@ export default (S) =>
       S.listItem()
         .title('🗺️ Map Locations')
         .schemaType('mapLocation')
-        .child(S.documentTypeList('mapLocation').title('Map Locations'))
+        .child(S.documentTypeList('mapLocation').title('Map Locations')),
+
+      // Add Special Registrations (VIP Clients) with table view
+      S.listItem()
+        .title('💎 Special Registrations (VIP Clients)')
+        .schemaType('specialRegistration')
+        .child(
+          S.component(SpecialRegistrationsTable)
+            .title('Registration Management Table')
+        )
     ])
