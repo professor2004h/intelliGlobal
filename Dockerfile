@@ -29,6 +29,14 @@ COPY nextjs-frontend/ ./
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Sanity environment variables (required at build time)
+ENV NEXT_PUBLIC_SANITY_PROJECT_ID=99kpz7t0
+ENV NEXT_PUBLIC_SANITY_DATASET=production
+ENV NEXT_PUBLIC_SANITY_API_VERSION=2023-05-03
+
+# PayPal environment variables (required at build time for client-side)
+ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AUmI5g_PA8vHr0HSeZq7PukrblnMLeOLQbW60lNHoJGLAqTg3JZjAeracZmAh1WSuuqmZnUIJxLdzGXc
+
 # Build the application
 RUN npm run build
 
@@ -47,6 +55,25 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
+# Sanity environment variables
+ENV NEXT_PUBLIC_SANITY_PROJECT_ID=99kpz7t0
+ENV NEXT_PUBLIC_SANITY_DATASET=production
+ENV NEXT_PUBLIC_SANITY_API_VERSION=2023-05-03
+ENV SANITY_API_TOKEN=sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES
+
+# PayPal environment variables
+ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AUmI5g_PA8vHr0HSeZq7PukrblnMLeOLQbW60lNHoJGLAqTg3JZjAeracZmAh1WSuuqmZnUIJxLdzGXc
+ENV PAYPAL_CLIENT_SECRET=EMzGihvUsifDMxblEl3j9CGXLbOACaFsC8ykdBwMv3gK8f_a5S7NulJ9sSqe4atrt2d_2bCo7TBZ6x01
+
+# SMTP Configuration
+ENV SMTP_HOST=smtp.titan.email
+ENV SMTP_USER=contactus@intelliglobalconferences.com
+ENV SMTP_PASS=October@2025
+ENV SMTP_PORT=587
+ENV SMTP_SECURE=false
+ENV EMAIL_FROM=contactus@intelliglobalconferences.com
+ENV EMAIL_FROM_NAME="Intelli Global Conferences"
 
 # Create user and group
 RUN addgroup --system --gid 1001 nodejs
