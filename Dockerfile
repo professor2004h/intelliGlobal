@@ -1,5 +1,5 @@
 # Multi-stage Docker build for Next.js Event Website v2
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # Force rebuild timestamp
 RUN echo "Build timestamp: $(date)" > /build-info.txt

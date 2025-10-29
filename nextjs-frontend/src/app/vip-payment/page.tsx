@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import '@/types/paypal-global';
 
 interface Conference {
   _id: string;
@@ -108,7 +109,7 @@ export default function VIPPaymentPage() {
 
   const initializePayPal = () => {
     const paypalContainer = document.getElementById('paypal-button-container');
-    if (!paypalContainer || paypalContainer.innerHTML) return;
+    if (!paypalContainer || paypalContainer.innerHTML || !window.paypal) return;
 
     window.paypal.Buttons({
       createOrder: (data: any, actions: any) => {
