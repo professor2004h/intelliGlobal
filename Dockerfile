@@ -34,8 +34,8 @@ ENV NEXT_PUBLIC_SANITY_PROJECT_ID=99kpz7t0
 ENV NEXT_PUBLIC_SANITY_DATASET=production
 ENV NEXT_PUBLIC_SANITY_API_VERSION=2023-05-03
 
-# PayPal environment variables (required at build time for client-side)
-ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AUmI5g_PA8vHr0HSeZq7PukrblnMLeOLQbW60lNHoJGLAqTg3JZjAeracZmAh1WSuuqmZnUIJxLdzGXc
+# PayPal environment variables (required at build time for client-side) - Test Credentials
+ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AU0SNxErLtvJ4QOpiAmqkhSCt4pTo11oFWDIklLoyPeAygFhKizEDY_CymzfZk0DyaH7fcsGH5uYmu03
 
 # Build the application
 RUN npm run build
@@ -62,9 +62,9 @@ ENV NEXT_PUBLIC_SANITY_DATASET=production
 ENV NEXT_PUBLIC_SANITY_API_VERSION=2023-05-03
 ENV SANITY_API_TOKEN=sk9AT29IvzRfmgY689QmLwq0DjIvPznQlIyXqLgsS3x1heb7HMZnYQvVzdvsOKaW96yBW6At143GLei8Ss9eXEe2DdxrS4Gop6KAP3tbTbGYXC8m2mq3D9UHRloFdDQbvEmF2ZKqkE9wd3NbD1q5an7vIqLzCpY80BkM0LfAYZBVLZg86cES
 
-# PayPal environment variables
-ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AUmI5g_PA8vHr0HSeZq7PukrblnMLeOLQbW60lNHoJGLAqTg3JZjAeracZmAh1WSuuqmZnUIJxLdzGXc
-ENV PAYPAL_CLIENT_SECRET=EMzGihvUsifDMxblEl3j9CGXLbOACaFsC8ykdBwMv3gK8f_a5S7NulJ9sSqe4atrt2d_2bCo7TBZ6x01
+# PayPal environment variables - Test Credentials
+ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID=AU0SNxErLtvJ4QOpiAmqkhSCt4pTo11oFWDIklLoyPeAygFhKizEDY_CymzfZk0DyaH7fcsGH5uYmu03
+ENV PAYPAL_CLIENT_SECRET=EEkou7VpyhjgY8JY_MaMLGN15buiU_DhtIaBGIuBF5YkMQabQg2xBRXewfE6jv8H-1Dqd72hFrdilGXy
 
 # SMTP Configuration
 ENV SMTP_HOST=smtp.titan.email

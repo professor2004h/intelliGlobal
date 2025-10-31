@@ -195,7 +195,7 @@ export default function VIPPaymentPage() {
   return (
     <>
       <Script
-        src={`https://www.paypal.com/sdk/js?client-id=AUmI5g_PA8vHr0HSeZq7PukrblnMLeOLQbW60lNHoJGLAqTg3JZjAeracZmAh1WSuuqmZnUIJxLdzGXc&currency=USD`}
+        src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=USD`}
         onLoad={() => setPaypalLoaded(true)}
       />
 
